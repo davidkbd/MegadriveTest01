@@ -28,3 +28,4 @@ void lifecycle_openScreen_portada();
  * Abre
  */
 void lifecycle_openScreen_testIngame();
+void lifecycle_openScreen_ingame_platforms();

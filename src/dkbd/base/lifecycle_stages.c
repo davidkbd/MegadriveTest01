@@ -4,6 +4,7 @@
 #include "../screens/logo_inicial.h"
 #include "../screens/portada.h"
 #include "../screens/testingame.h"
+#include "../screens/ingame_platforms.h"
 
 void lifecycle_openScreen_logoInicial() {
 	lifecycle_changeScreen(logoInicial_initialize, logoInicial_update);
@@ -86,5 +87,34 @@ void lifecycle_openScreen_testIngame() {
 			testIngame_onKeyReleaseDownFunction,
 			testIngame_onKeyReleaseLeftFunction,
 			testIngame_onKeyReleaseRightFunction
+			);
+}
+
+
+void lifecycle_openScreen_ingame_platforms() {
+	lifecycle_changeScreen(ingamePlatforms_initialize, ingamePlatforms_update);
+	lifecycle_configureControls(
+			ingamePlatforms_onKeyPressStartFunction,
+			ingamePlatforms_onKeyPressAFunction,
+			ingamePlatforms_onKeyPressBFunction,
+			ingamePlatforms_onKeyPressCFunction,
+			ingamePlatforms_onKeyPressXFunction,
+			ingamePlatforms_onKeyPressYFunction,
+			ingamePlatforms_onKeyPressZFunction,
+			ingamePlatforms_onKeyPressUpFunction,
+			ingamePlatforms_onKeyPressDownFunction,
+			ingamePlatforms_onKeyPressLeftFunction,
+			ingamePlatforms_onKeyPressRightFunction,
+			ingamePlatforms_onKeyReleaseStartFunction,
+			ingamePlatforms_onKeyReleaseAFunction,
+			ingamePlatforms_onKeyReleaseBFunction,
+			ingamePlatforms_onKeyReleaseCFunction,
+			ingamePlatforms_onKeyReleaseXFunction,
+			ingamePlatforms_onKeyReleaseYFunction,
+			ingamePlatforms_onKeyReleaseZFunction,
+			ingamePlatforms_onKeyReleaseUpFunction,
+			ingamePlatforms_onKeyReleaseDownFunction,
+			ingamePlatforms_onKeyReleaseLeftFunction,
+			ingamePlatforms_onKeyReleaseRightFunction
 			);
 }

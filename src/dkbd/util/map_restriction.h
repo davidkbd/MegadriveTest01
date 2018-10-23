@@ -1,5 +1,8 @@
 #include <genesis.h>
 
+#ifndef MAP_RESTRICTION_
+#define MAP_RESTRICTION_
+
 const u8 map_restrictions[27] = {
 0,//Hueco
 0,//Suelo
@@ -32,3 +35,6 @@ const u8 map_restrictions[27] = {
 0b00000011, //DL1
 0b00000011  //DL2
 };
+
+#endif
+
