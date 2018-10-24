@@ -36,6 +36,7 @@ void ingamePlatforms_initData() {
 	map_load(&level01_b, &level01);
 	IngamePlatforms_DATA->screenData.frameCount = 0;
 	IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
+	IngamePlatforms_DATA->gravity = 9;
 	hud_reset();
 
 	ingamePlatforms_initializePlayer(1800, 1400);

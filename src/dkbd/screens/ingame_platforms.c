@@ -9,6 +9,7 @@
 #include "../base/hud.h"
 #include "../base/viewport.h"
 #include "../util/map.h"
+#include "../util/limits.h"
 
 //#include "../../../res/sprite.h"
 //#include "../../../res/gfx.h"
@@ -107,25 +108,45 @@ void ingamePlatforms_applyMapRestrictions() {
 	u16 restrictionUR = map_getRestriction(cell.pos2.x, cell.pos1.y);
 	u16 restrictionDR = map_getRestriction(cell.pos2.x, cell.pos2.y);
 	u16 restrictionDL = map_getRestriction(cell.pos1.x, cell.pos2.y);
+	Vector2 *speed = &IngamePlatforms_DATA->playerSpritePTR->speed;
+	Vector2 *sprPos = &IngamePlatforms_DATA->playerSpritePTR->position;
 
-	Vector2 *sprPos = &(IngamePlatforms_DATA->playerSpritePTR->position);
+	if ((0b00000010 & restrictionUR)) {
+		if (speed->x > 0) {
+			speed->x = 0;
+		}
+		if (posInCell.pos2.x < 80 && posInCell.pos2.x >= 0) {
+			sprPos->x -= 1;
+		}
+	}
+	if ((0b00001000 & restrictionUL)) {
+		if (speed->x < 0) {
+			speed->x = 0;
+		}
+		if (posInCell.pos1.x > 79 && posInCell.pos1.x < 160) {
+			sprPos->x += 1;
+		}
+	}
+	if (!((0b00000100 & restrictionDL) || (0b00000100 & restrictionDR))) {
+		IngamePlatforms_DATA->playerSpritePTR->onFloor = 0;
+	} else if ((0b00000100 & restrictionDL) || (0b00000100 & restrictionDR)) {
+		if (speed->y > 0) {
+			IngamePlatforms_DATA->playerSpritePTR->onFloor = 1;
+			speed->y = 0;
+		}
+		if (posInCell.pos2.y < 160) {
+			sprPos->y -= 1;
+		}
+	}
+	if ((0b00000001 & restrictionUL) || (0b00000001 & restrictionUR)) {
+		if (speed->y < 0) {
+			speed->y = 0;
+		}
+//		if (posInCell.pos1.y < 80 && posInCell.pos1.y >= 0) {
+			sprPos->y += 1;
+//		}
+	}
 
-	if (posInCell.pos2.x < 40 && ((0b00000010 & restrictionUR) || (0b00000010 & restrictionDR))) {
-		IngamePlatforms_DATA->playerData.xSpeed = 0;
-		sprPos->x -= 2;
-	}
-	if (posInCell.pos1.x > 120 && ((0b00001000 & restrictionUL) || (0b00001000 & restrictionDL))) {
-		IngamePlatforms_DATA->playerData.xSpeed = 0;
-		sprPos->x += 2;
-	}
-	if (posInCell.pos2.y < 40 && ((0b00000100 & restrictionDL) || (0b00000100 & restrictionDR))) {
-		IngamePlatforms_DATA->playerData.ySpeed = 0;
-		sprPos->y -= 2;
-	}
-	if (posInCell.pos1.y > 120 && ((0b00000001 & restrictionUL) || (0b00000001 & restrictionUR))) {
-		IngamePlatforms_DATA->playerData.ySpeed = 0;
-		sprPos->y += 2;
-	}
 }
 
 void ingamePlatforms_getColliderPositions(Rect *cell, Rect *posInCell) {
@@ -147,11 +168,21 @@ void ingamePlatforms_getColliderPositions(Rect *cell, Rect *posInCell) {
 }
 
 void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite) {
-	if (IngamePlatforms_DATA->playerData.xSpeed != 0 || IngamePlatforms_DATA->playerData.ySpeed != 0) {
-		ingamePlatforms_applyMapRestrictions();
-		sprite->position.x += IngamePlatforms_DATA->playerData.xSpeed;
-		sprite->position.y += IngamePlatforms_DATA->playerData.ySpeed;
+	Vector2 *speed = &IngamePlatforms_DATA->playerSpritePTR->speed;
+	if (!IngamePlatforms_DATA->playerSpritePTR->onFloor) {
+		speed->y = limits_incr_s16(
+				speed->y,
+				IngamePlatforms_DATA->gravity,
+				-80,
+				60);
 	}
+
+	if (speed->x != 0 || speed->y != 0) {
+		ingamePlatforms_applyMapRestrictions();
+		sprite->position.x += speed->x;
+		sprite->position.y += speed->y;
+	}
+
 	if (ingamePlatforms_isPressingUp()) {
 		if (ingamePlatforms_isPressingLeft()) {
 			SPR_setAnim(sprite->sprite, 8);
@@ -178,3 +209,5 @@ void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite) {
 		}
 	}
 }
+
+

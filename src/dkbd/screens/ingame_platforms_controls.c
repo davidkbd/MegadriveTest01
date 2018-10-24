@@ -5,12 +5,10 @@
 #include "../util/limits.h"
 
 #define MAX_VEL_X 34
-#define MAX_VEL_Y 17
+#define MAX_VEL_Y 30
 
 void ingamePlatforms_pressingXAxis();
-void ingamePlatforms_pressingYAxis();
 void ingamePlatforms_notPressingXAxis();
-void ingamePlatforms_notPressingYAxis();
 
 void ingamePlatforms_onKeyPressStartFunction(u16 joy) {
 	ingamePlatforms_beginExit();
@@ -20,6 +18,10 @@ void ingamePlatforms_onKeyPressAFunction(u16 joy) {
 }
 
 void ingamePlatforms_onKeyPressBFunction(u16 joy) {
+	if (IngamePlatforms_DATA->playerSpritePTR->onFloor) {
+		IngamePlatforms_DATA->playerSpritePTR->onFloor = 0;
+		IngamePlatforms_DATA->playerSpritePTR->speed.y = -80;
+	}
 }
 
 void ingamePlatforms_onKeyPressCFunction(u16 joy) {
@@ -90,8 +92,6 @@ void ingamePlatforms_onKeyReleaseRightFunction(u16 joy) {
 void ingamePlatforms_updateControls() {
 	ingamePlatforms_pressingXAxis();
 	ingamePlatforms_notPressingXAxis();
-	ingamePlatforms_pressingYAxis();
-	ingamePlatforms_notPressingYAxis();
 }
 
 u8 ingamePlatforms_isPressingUp() {
@@ -111,50 +111,27 @@ u8 ingamePlatforms_isPressingDown() {
 }
 
 void ingamePlatforms_pressingXAxis() {
-	if (ingamePlatforms_isPressingLeft() && IngamePlatforms_DATA->playerData.xSpeed > -MAX_VEL_X) {
-		IngamePlatforms_DATA->playerData.xSpeed -= 2;
+	Vector2 *speed = &IngamePlatforms_DATA->playerSpritePTR->speed;
+	if (ingamePlatforms_isPressingLeft() && speed->x > -MAX_VEL_X) {
+		speed->x -= 2;
 	}
-	if (ingamePlatforms_isPressingRight() && IngamePlatforms_DATA->playerData.xSpeed < MAX_VEL_X) {
-		IngamePlatforms_DATA->playerData.xSpeed += 2;
-	}
-}
-
-void ingamePlatforms_pressingYAxis() {
-	if (ingamePlatforms_isPressingUp() && IngamePlatforms_DATA->playerData.ySpeed > -MAX_VEL_Y) {
-		IngamePlatforms_DATA->playerData.ySpeed -= 2;
-	}
-	if (ingamePlatforms_isPressingDown() && IngamePlatforms_DATA->playerData.ySpeed < MAX_VEL_Y) {
-		IngamePlatforms_DATA->playerData.ySpeed += 2;
+	if (ingamePlatforms_isPressingRight() && speed->x < MAX_VEL_X) {
+		speed->x += 2;
 	}
 }
 
 void ingamePlatforms_notPressingXAxis() {
 	if (!ingamePlatforms_isPressingLeft() && !ingamePlatforms_isPressingRight()) {
-		if (IngamePlatforms_DATA->playerData.xSpeed > 0) {
-			IngamePlatforms_DATA->playerData.xSpeed /= 2;
-			if (IngamePlatforms_DATA->playerData.xSpeed < 1) {
-				IngamePlatforms_DATA->playerData.xSpeed = 0;
+		Vector2 *speed = &IngamePlatforms_DATA->playerSpritePTR->speed;
+		if (speed->x > 0) {
+			speed->x /= 2;
+			if (speed->x < 1) {
+				speed->x = 0;
 			}
-		} else if (IngamePlatforms_DATA->playerData.xSpeed < 0) {
-			IngamePlatforms_DATA->playerData.xSpeed /= 2;
-			if (IngamePlatforms_DATA->playerData.xSpeed > -1) {
-				IngamePlatforms_DATA->playerData.xSpeed = 0;
-			}
-		}
-	}
-}
-
-void ingamePlatforms_notPressingYAxis() {
-	if (!ingamePlatforms_isPressingUp() && !ingamePlatforms_isPressingDown()) {
-		if (IngamePlatforms_DATA->playerData.ySpeed > 0) {
-			IngamePlatforms_DATA->playerData.ySpeed /= 2;
-			if (IngamePlatforms_DATA->playerData.ySpeed < 1) {
-				IngamePlatforms_DATA->playerData.ySpeed = 0;
-			}
-		} else if (IngamePlatforms_DATA->playerData.ySpeed < 0) {
-			IngamePlatforms_DATA->playerData.ySpeed /= 2;
-			if (IngamePlatforms_DATA->playerData.ySpeed > -1) {
-				IngamePlatforms_DATA->playerData.ySpeed = 0;
+		} else if (speed->x < 0) {
+			speed->x /= 2;
+			if (speed->x > -1) {
+				speed->x = 0;
 			}
 		}
 	}

@@ -26,7 +26,9 @@ struct IngamePlatforms_Sprite_st {
 	Sprite* sprite;
 	Vector2 position;
 	Vector2 posInViewport;
+	Vector2 speed;
 	Vector2 size; // Visualmente, utilizado para saber si cargar o destruir al hacer scroll
+	u8 onFloor;
 	u8 xCenter;
 	Rect collider;
 	//0xFFFF
@@ -42,10 +44,7 @@ struct IngamePlatforms_ScreenData {
 		u8 sceneAnimationFrame;
 	} screenData;
 
-	struct PlayerData {
-		s8 xSpeed;
-		s8 ySpeed;
-	} playerData;
+	s8 gravity;
 
 	IngamePlatforms_Sprite hudTimeSprite;
 	IngamePlatforms_Sprite hudAnimalsSprite;
