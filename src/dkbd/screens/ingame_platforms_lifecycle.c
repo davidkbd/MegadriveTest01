@@ -127,7 +127,7 @@ void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	s->collider.pos1.x = -140;
 	s->collider.pos1.y = -90;
 	s->collider.pos2.x = 140;
-	s->collider.pos2.y = -20;
+	s->collider.pos2.y = 0;
 	s->data = 0;
 	s->update = ingamePlatforms_onPlayerUpdate;
 }

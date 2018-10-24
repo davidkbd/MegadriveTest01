@@ -20,6 +20,7 @@ void ingamePlatforms_updateOrDestroySprites(IngamePlatforms_Sprite *sprite);
 void ingamePlatforms_applySprites();
 void ingamePlatforms_moveViewport();
 void ingamePlatforms_applyMapRestrictions();
+void ingamePlatforms_applyGravity();
 void ingamePlatforms_getColliderPositions(Rect *cell, Rect *posInCell);
 
 void ingamePlatforms_update() {
@@ -111,7 +112,7 @@ void ingamePlatforms_applyMapRestrictions() {
 	Vector2 *speed = &IngamePlatforms_DATA->playerSpritePTR->speed;
 	Vector2 *sprPos = &IngamePlatforms_DATA->playerSpritePTR->position;
 
-	if ((0b00000010 & restrictionUR)) {
+	if (((0b00000010 & restrictionUR) || (0b00000010 & restrictionDR)) && !(IngamePlatforms_DATA->playerSpritePTR->onFloor && (0b00000110 & restrictionDR))) {
 		if (speed->x > 0) {
 			speed->x = 0;
 		}
@@ -119,7 +120,7 @@ void ingamePlatforms_applyMapRestrictions() {
 			sprPos->x -= 1;
 		}
 	}
-	if ((0b00001000 & restrictionUL)) {
+	if (((0b00001000 & restrictionUL) || (0b00001000 & restrictionDL)) && !(IngamePlatforms_DATA->playerSpritePTR->onFloor && (0b00001100 & restrictionDL))) {
 		if (speed->x < 0) {
 			speed->x = 0;
 		}
@@ -134,19 +135,32 @@ void ingamePlatforms_applyMapRestrictions() {
 			IngamePlatforms_DATA->playerSpritePTR->onFloor = 1;
 			speed->y = 0;
 		}
-		if (posInCell.pos2.y < 160) {
-			sprPos->y -= 1;
+		while (posInCell.pos2.y > 10) {
+			--sprPos->y;
+			--posInCell.pos2.y;
 		}
-	}
-	if ((0b00000001 & restrictionUL) || (0b00000001 & restrictionUR)) {
+	} else if ((0b00000001 & restrictionUL) || (0b00000001 & restrictionUR)) {
 		if (speed->y < 0) {
 			speed->y = 0;
 		}
-//		if (posInCell.pos1.y < 80 && posInCell.pos1.y >= 0) {
-			sprPos->y += 1;
-//		}
+		sprPos->y += 1;
 	}
 
+}
+
+void ingamePlatforms_applyGravity() {
+	Vector2 *speed = &IngamePlatforms_DATA->playerSpritePTR->speed;
+	if (IngamePlatforms_DATA->playerSpritePTR->onFloor) {
+		if (speed->y < 0) {
+			speed->y = 0;
+		}
+	} else {
+		speed->y = limits_incr_s16(
+				speed->y,
+				IngamePlatforms_DATA->gravity,
+				-80,
+				60);
+	}
 }
 
 void ingamePlatforms_getColliderPositions(Rect *cell, Rect *posInCell) {
@@ -169,19 +183,12 @@ void ingamePlatforms_getColliderPositions(Rect *cell, Rect *posInCell) {
 
 void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite) {
 	Vector2 *speed = &IngamePlatforms_DATA->playerSpritePTR->speed;
-	if (!IngamePlatforms_DATA->playerSpritePTR->onFloor) {
-		speed->y = limits_incr_s16(
-				speed->y,
-				IngamePlatforms_DATA->gravity,
-				-80,
-				60);
-	}
 
-	if (speed->x != 0 || speed->y != 0) {
-		ingamePlatforms_applyMapRestrictions();
-		sprite->position.x += speed->x;
-		sprite->position.y += speed->y;
-	}
+	ingamePlatforms_applyMapRestrictions();
+	ingamePlatforms_applyGravity();
+
+	sprite->position.x += speed->x;
+	sprite->position.y += speed->y;
 
 	if (ingamePlatforms_isPressingUp()) {
 		if (ingamePlatforms_isPressingLeft()) {
