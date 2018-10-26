@@ -3,17 +3,19 @@
 #include "../util/rect.h"
 #include "../util/vector2.h"
 
-#define IngamePlatforms_KEY_UP     0b00001
-#define IngamePlatforms_KEY_RIGHT  0b00010
-#define IngamePlatforms_KEY_DOWN   0b00100
-#define IngamePlatforms_KEY_LEFT   0b01000
-#define IngamePlatforms_KEY_JUMP   0b10000
+#define IngamePlatforms_KEY_UP     0b000001
+#define IngamePlatforms_KEY_RIGHT  0b000010
+#define IngamePlatforms_KEY_DOWN   0b000100
+#define IngamePlatforms_KEY_LEFT   0b001000
+#define IngamePlatforms_KEY_JUMP   0b010000
+#define IngamePlatforms_KEY_ACTION 0b100000
 
-#define IngamePlatforms_NOKEY_UP     0b11110
-#define IngamePlatforms_NOKEY_RIGHT  0b11101
-#define IngamePlatforms_NOKEY_DOWN   0b11011
-#define IngamePlatforms_NOKEY_LEFT   0b10111
-#define IngamePlatforms_NOKEY_JUMP   0b01111
+#define IngamePlatforms_NOKEY_UP     0b111110
+#define IngamePlatforms_NOKEY_RIGHT  0b111101
+#define IngamePlatforms_NOKEY_DOWN   0b111011
+#define IngamePlatforms_NOKEY_LEFT   0b110111
+#define IngamePlatforms_NOKEY_JUMP   0b101111
+#define IngamePlatforms_NOKEY_ACTION 0b011111
 
 #define IngamePlatforms_NUM_SPRITES 3
 
@@ -81,6 +83,7 @@ u8 ingamePlatforms_isPressingUp();
 u8 ingamePlatforms_isPressingLeft();
 u8 ingamePlatforms_isPressingRight();
 u8 ingamePlatforms_isPressingDown();
-u8 ingamePlatforms_isPresingJump();
+u8 ingamePlatforms_isPressingJump();
+u8 ingamePlatforms_isPressingAction();
 
 void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite);

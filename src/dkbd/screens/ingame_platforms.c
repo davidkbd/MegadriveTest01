@@ -152,6 +152,9 @@ void ingamePlatforms_applyFootRestrictions(IngamePlatforms_Sprite *sprite, Rect 
 				sprite->onFloor = 1;
 				sprite->speed.y = 0;
 			}
+			if ((MAP_RESTRICTION_ISRAMP & restrictionFoots)) {
+				sprite->speed.y = 20;
+			}
 			ingamePlatforms_putOnFloor(&(posInCell->pos2), &(sprite->position), yRelaxPosition);
 		}
 	} else {
@@ -195,6 +198,7 @@ s16 ingamePlatforms_calculateFootRelaxPosition(u16 restriction, s16 spriteXInCel
 			yRelaxPosition += 80;
 		}
 	}
+	yRelaxPosition += 10;
 	return yRelaxPosition;
 }
 
@@ -240,30 +244,21 @@ void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite) {
 	sprite->position.x += sprite->speed.x;
 	sprite->position.y += sprite->speed.y;
 
-	if (ingamePlatforms_isPressingUp()) {
-		if (ingamePlatforms_isPressingLeft()) {
-			SPR_setAnim(sprite->sprite, 8);
-		} else if (ingamePlatforms_isPressingRight()) {
-			SPR_setAnim(sprite->sprite, 2);
-		} else {
-			SPR_setAnim(sprite->sprite, 1);
-		}
-	} else if (ingamePlatforms_isPressingDown()) {
-		if (ingamePlatforms_isPressingLeft()) {
-			SPR_setAnim(sprite->sprite, 6);
-		} else if (ingamePlatforms_isPressingRight()) {
-			SPR_setAnim(sprite->sprite, 4);
-		} else {
-			SPR_setAnim(sprite->sprite, 5);
-		}
+	if (ingamePlatforms_isPressingRight()) {
+		SPR_setHFlip(sprite->sprite, FALSE);
+	} else if (ingamePlatforms_isPressingLeft()) {
+		SPR_setHFlip(sprite->sprite, TRUE);
+	}
+	if (ingamePlatforms_isPressingAction()) {
+		SPR_setAnim(sprite->sprite, 4);
+	} else if (!sprite->onFloor) {
+		SPR_setAnim(sprite->sprite, 2);
+	} else if (ingamePlatforms_isPressingRight()) {
+		SPR_setAnim(sprite->sprite, 1);
+	} else if (ingamePlatforms_isPressingLeft()) {
+		SPR_setAnim(sprite->sprite, 1);
 	} else {
-		if (ingamePlatforms_isPressingLeft()) {
-			SPR_setAnim(sprite->sprite, 7);
-		} else if (ingamePlatforms_isPressingRight()) {
-			SPR_setAnim(sprite->sprite, 3);
-		} else {
-			SPR_setAnim(sprite->sprite, 0);
-		}
+		SPR_setAnim(sprite->sprite, 0);
 	}
 }
 
