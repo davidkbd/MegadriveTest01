@@ -49,8 +49,6 @@ void viewport_updateLastYPosition();
 void viewport_updateLastCenterTilesPosition();
 void viewport_vdpSetHorizontalScroll();
 void viewport_vdpSetVerticalScroll();
-void viewport_convertPlanBTile(u16 *tile);
-void viewport_convertPlanATile(u16 *tile);
 
 void viewport_reset(s16 x, s16 y) {
 	Viewport_DATA.rawPosition.x = x;
@@ -112,14 +110,13 @@ void viewport_putRectOfTiles(s16 minx, s16 maxx, s16 miny, s16 maxy) {
 	}
 }
 
-void viewport_updatePlanATile(s16 x, s16 y) {
+void viewport_updatePlanATile(s16 x, s16 y) {/*
 	u16 tileId = map_getPlanA(x, y);
 	if (tileId > 26) {
-		viewport_convertPlanATile(&tileId);
 		s16 realY = map_getOnTop(tileId) + Viewport_DATA.currentPosition.pos1.y;
 		u8 onTop = y > realY;
 		tiles_putMapTile(tileId, x, y, onTop);
-	}
+	}*/
 }
 
 void viewport_fillOfTiles() {
@@ -131,26 +128,22 @@ void viewport_fillOfTiles() {
 void viewport_putColumnOfTiles(s16 x) {
 	for (s16 y = Viewport_DATA.currentPosition.pos1.y; y <= Viewport_DATA.currentPosition.pos2.y; ++y) {
 		viewport_putPlanATile(x, y);
-		viewport_putPlanBTile(x, y);
 	}
 }
 
 void viewport_putRowOfTiles(s16 y) {
 	for (s16 x = Viewport_DATA.currentPosition.pos1.x; x <= Viewport_DATA.currentPosition.pos2.x; ++x) {
 		viewport_putPlanATile(x, y);
-		viewport_putPlanBTile(x, y);
 	}
 }
 
 void viewport_putPlanATile(s16 x, s16 y) {
 	u16 tileId = map_getPlanA(x, y);
-	viewport_convertPlanATile(&tileId);
 	tiles_putMapTile(tileId, x, y, FALSE);
 }
 
 void viewport_putPlanBTile(s16 x, s16 y) {
 	u16 tileId = map_getPlanB(x, y);
-	viewport_convertPlanBTile(&tileId);
 	tiles_putBackgroundTile(tileId, x, y, FALSE);
 }
 
@@ -244,16 +237,4 @@ void viewport_vdpSetHorizontalScroll() {
 void viewport_vdpSetVerticalScroll() {
 	VDP_setVerticalScroll(PLAN_A, Viewport_DATA.realPosition.y);
 	VDP_setVerticalScroll(PLAN_B, Viewport_DATA.realPosition.y);
-}
-
-void viewport_convertPlanBTile(u16 *tile) {
-	if (*tile > 2) {
-		*tile = 0;
-	}
-}
-
-void viewport_convertPlanATile(u16 *tile) {
-	if (*tile == 1 || *tile == 2) {
-		*tile = 0;
-	}
 }

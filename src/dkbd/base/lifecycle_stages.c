@@ -3,7 +3,6 @@
 
 #include "../screens/logo_inicial.h"
 #include "../screens/portada.h"
-#include "../screens/testingame.h"
 #include "../screens/ingame_platforms.h"
 
 void lifecycle_openScreen_logoInicial() {
@@ -61,35 +60,6 @@ void lifecycle_openScreen_portada() {
 			portada_onKeyReleaseFunction
 			);
 }
-
-void lifecycle_openScreen_testIngame() {
-	lifecycle_changeScreen(testIngame_initialize, testIngame_update);
-	lifecycle_configureControls(
-			testIngame_onKeyPressStartFunction,
-			testIngame_onKeyPressAFunction,
-			testIngame_onKeyPressBFunction,
-			testIngame_onKeyPressCFunction,
-			testIngame_onKeyPressXFunction,
-			testIngame_onKeyPressYFunction,
-			testIngame_onKeyPressZFunction,
-			testIngame_onKeyPressUpFunction,
-			testIngame_onKeyPressDownFunction,
-			testIngame_onKeyPressLeftFunction,
-			testIngame_onKeyPressRightFunction,
-			testIngame_onKeyReleaseStartFunction,
-			testIngame_onKeyReleaseAFunction,
-			testIngame_onKeyReleaseBFunction,
-			testIngame_onKeyReleaseCFunction,
-			testIngame_onKeyReleaseXFunction,
-			testIngame_onKeyReleaseYFunction,
-			testIngame_onKeyReleaseZFunction,
-			testIngame_onKeyReleaseUpFunction,
-			testIngame_onKeyReleaseDownFunction,
-			testIngame_onKeyReleaseLeftFunction,
-			testIngame_onKeyReleaseRightFunction
-			);
-}
-
 
 void lifecycle_openScreen_ingame_platforms() {
 	lifecycle_changeScreen(ingamePlatforms_initialize, ingamePlatforms_update);

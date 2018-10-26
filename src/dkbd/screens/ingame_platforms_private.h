@@ -7,15 +7,19 @@
 #define IngamePlatforms_KEY_RIGHT  0b00010
 #define IngamePlatforms_KEY_DOWN   0b00100
 #define IngamePlatforms_KEY_LEFT   0b01000
-#define IngamePlatforms_IN_AIR     0b10000
+#define IngamePlatforms_KEY_JUMP   0b10000
 
 #define IngamePlatforms_NOKEY_UP     0b11110
 #define IngamePlatforms_NOKEY_RIGHT  0b11101
 #define IngamePlatforms_NOKEY_DOWN   0b11011
 #define IngamePlatforms_NOKEY_LEFT   0b10111
-#define IngamePlatforms_NOIN_AIR     0b01111
+#define IngamePlatforms_NOKEY_JUMP   0b01111
 
 #define IngamePlatforms_NUM_SPRITES 3
+
+#define INGAME_PLATFORMS_MAX_X_SPEED 34
+#define INGAME_PLATFORMS_JUMP_FORCE -80
+#define INGAME_PLATFORMS_MAX_FALLING_SPEED 70
 
 #ifndef INGAME_PLATFORMS_PRIVATE_H
 #define INGAME_PLATFORMS_PRIVATE_H
@@ -77,5 +81,6 @@ u8 ingamePlatforms_isPressingUp();
 u8 ingamePlatforms_isPressingLeft();
 u8 ingamePlatforms_isPressingRight();
 u8 ingamePlatforms_isPressingDown();
+u8 ingamePlatforms_isPresingJump();
 
 void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite);

@@ -4,9 +4,6 @@
 #include "../util/palette.h"
 #include "../util/limits.h"
 
-#define MAX_VEL_X 34
-#define MAX_VEL_Y 30
-
 void ingamePlatforms_pressingXAxis();
 void ingamePlatforms_notPressingXAxis();
 
@@ -18,10 +15,7 @@ void ingamePlatforms_onKeyPressAFunction(u16 joy) {
 }
 
 void ingamePlatforms_onKeyPressBFunction(u16 joy) {
-	if (IngamePlatforms_DATA->playerSpritePTR->onFloor) {
-		IngamePlatforms_DATA->playerSpritePTR->onFloor = 0;
-		IngamePlatforms_DATA->playerSpritePTR->speed.y = -80;
-	}
+	IngamePlatforms_DATA->playerSpritePTR->data |= IngamePlatforms_KEY_JUMP;
 }
 
 void ingamePlatforms_onKeyPressCFunction(u16 joy) {
@@ -59,6 +53,7 @@ void ingamePlatforms_onKeyReleaseAFunction(u16 joy) {
 }
 
 void ingamePlatforms_onKeyReleaseBFunction(u16 joy) {
+	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_NOKEY_JUMP;
 }
 
 void ingamePlatforms_onKeyReleaseCFunction(u16 joy) {
@@ -92,6 +87,11 @@ void ingamePlatforms_onKeyReleaseRightFunction(u16 joy) {
 void ingamePlatforms_updateControls() {
 	ingamePlatforms_pressingXAxis();
 	ingamePlatforms_notPressingXAxis();
+
+	if (ingamePlatforms_isPresingJump() && IngamePlatforms_DATA->playerSpritePTR->onFloor) {
+		IngamePlatforms_DATA->playerSpritePTR->onFloor = 0;
+		IngamePlatforms_DATA->playerSpritePTR->speed.y = INGAME_PLATFORMS_JUMP_FORCE;
+	}
 }
 
 u8 ingamePlatforms_isPressingUp() {
@@ -110,12 +110,16 @@ u8 ingamePlatforms_isPressingDown() {
 	return IngamePlatforms_KEY_DOWN & IngamePlatforms_DATA->playerSpritePTR->data;
 }
 
+u8 ingamePlatforms_isPresingJump() {
+	return IngamePlatforms_KEY_JUMP & IngamePlatforms_DATA->playerSpritePTR->data;
+}
+
 void ingamePlatforms_pressingXAxis() {
 	Vector2 *speed = &IngamePlatforms_DATA->playerSpritePTR->speed;
-	if (ingamePlatforms_isPressingLeft() && speed->x > -MAX_VEL_X) {
+	if (ingamePlatforms_isPressingLeft() && speed->x > -INGAME_PLATFORMS_MAX_X_SPEED) {
 		speed->x -= 2;
 	}
-	if (ingamePlatforms_isPressingRight() && speed->x < MAX_VEL_X) {
+	if (ingamePlatforms_isPressingRight() && speed->x < INGAME_PLATFORMS_MAX_X_SPEED) {
 		speed->x += 2;
 	}
 }

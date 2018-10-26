@@ -11,14 +11,14 @@
 
 #include "../maps/level01_b.h"
 
-void map_loadMap(u8 plan, const u8 *map[MAP_SIZE][MAP_SIZE]);
+void map_loadMap(u8 plan, const u8 * (*map)[MAP_SIZE]);
 u8 map_get(u8 plan, u8 x, u8 y);
 
 struct Map_DATA_st {
 	const u8 (*data)[MAP_SIZE];
 } *Map_DATA = NULL;
 
-void map_load(const u8 *mapPlanB[MAP_SIZE][MAP_SIZE], const u8 *mapPlanA[MAP_SIZE][MAP_SIZE]) {
+void map_load(const u8 * (*mapPlanB)[MAP_SIZE], const u8 * (*mapPlanA)[MAP_SIZE]) {
 	map_destroy();
 	Map_DATA = MEM_alloc(sizeof(struct Map_DATA_st) * 2);
 	map_loadMap(MAP_PLAN_B, mapPlanB);
@@ -47,16 +47,19 @@ u8 map_getPlanB(u8 x, u8 y) {
 	return map_get(MAP_PLAN_B, x, y);
 }
 
-u8 map_getRestriction(u8 x, u8 y) {
-	u8 m = map_getPlanB(x, y);
-	return map_restrictions[m];
+u16 map_getRestriction(u8 x, u8 y) {
+	u16 m = map_getPlanA(x, y);
+	if (m < MAP_RESTRICTION_COUNT) {
+		return map_restrictions[m];
+	}
+	return 0;
 }
 
 u8 map_getOnTop(u8 tileId) {
 	return map_ontop[tileId];
 }
 
-void map_loadMap(u8 plan, const u8 *map[MAP_SIZE][MAP_SIZE]) {
+void map_loadMap(u8 plan, const u8 * (*map)[MAP_SIZE]) {
 	Map_DATA[plan].data = &(map[0][0]);
 }
 

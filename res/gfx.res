@@ -9,8 +9,6 @@ TILESET hud_nums_tile "tiles/hud_nums.png" NONE
 
 TILESET ingame_hud_tile "gfx/ingame_hud.png" NONE
 TILESET ingame_floor_tile "gfx/ingame_floor.png" NONE
-TILESET ingame_flowers_tile "gfx/ingame_flowers.png" NONE
-TILESET ingame_trees_tile "gfx/ingame_trees.png" NONE
-TILESET ingame_wall_tile "gfx/ingame_wall.png" NONE
-TILESET ingame_subfloor_liquid_tile "gfx/ingame_subfloor_liquid.png" NONE
+TILESET ingame_floor2_tile "gfx/ingame_floor2.png" NONE
+TILESET ingame_background_tile "gfx/ingame_background.png" NONE
 

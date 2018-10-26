@@ -39,7 +39,7 @@ void ingamePlatforms_initData() {
 	IngamePlatforms_DATA->gravity = 9;
 	hud_reset();
 
-	ingamePlatforms_initializePlayer(1800, 1400);
+	ingamePlatforms_initializePlayer(1200, 300);
 	viewport_reset(0, 0);
 
 	// PROBANDO Sprites
@@ -70,11 +70,9 @@ void ingamePlatforms_initPalete() {
 }
 
 void ingamePlatforms_initBackgrounds() {
-	VDP_loadTileData(ingame_subfloor_liquid_tile.tiles, G_TILEINDEX_SUBFLOOR, 8,                           FALSE);
-	VDP_loadTileData(ingame_floor_tile.tiles,           G_TILEINDEX_FLOOR,    ingame_floor_tile.numTile,   FALSE);
-	VDP_loadTileData(ingame_flowers_tile.tiles,         G_TILEINDEX_FLOWERS,  ingame_flowers_tile.numTile, FALSE);
-	VDP_loadTileData(ingame_trees_tile.tiles,           G_TILEINDEX_TREES,    ingame_trees_tile.numTile, FALSE);
-	VDP_loadTileData(ingame_wall_tile.tiles,            G_TILEINDEX_WALL,     ingame_wall_tile.numTile,  FALSE);
+	VDP_loadTileData(ingame_floor_tile.tiles,      G_TILEINDEX_FLOOR,        ingame_floor_tile.numTile,   FALSE);
+	VDP_loadTileData(ingame_floor2_tile.tiles,     G_TILEINDEX_FLOOR2,       ingame_floor2_tile.numTile,   FALSE);
+	VDP_loadTileData(ingame_background_tile.tiles, G_TILEINDEX_BACKGROUND,   ingame_background_tile.numTile,  FALSE);
 }
 
 void ingamePlatforms_initSprites() {
@@ -121,12 +119,12 @@ void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	s->spriteDef = &testingame_player;
 	s->position.x = x;
 	s->position.y = y;
-	s->size.x = 400;
+	s->size.x = 160;
 	s->size.y = 480;
-	s->xCenter = 200;
-	s->collider.pos1.x = -140;
+	s->xCenter = 80;
+	s->collider.pos1.x = -80;
 	s->collider.pos1.y = -90;
-	s->collider.pos2.x = 140;
+	s->collider.pos2.x = 80;
 	s->collider.pos2.y = 0;
 	s->data = 0;
 	s->update = ingamePlatforms_onPlayerUpdate;

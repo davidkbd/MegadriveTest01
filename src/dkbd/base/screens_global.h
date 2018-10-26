@@ -40,9 +40,7 @@
 
 // =========================== SCENE  =========================== //
 
-#define G_TILEINDEX_EMPTY 0x18
-#define G_TILEINDEX_SUBFLOOR 0x20
-#define G_TILEINDEX_FLOOR 0x24
-#define G_TILEINDEX_FLOWERS 0xA4
-#define G_TILEINDEX_TREES 0xE4
-#define G_TILEINDEX_WALL 0x174
+#define G_TILEINDEX_MAP 0x001C
+#define G_TILEINDEX_FLOOR 0x0020
+#define G_TILEINDEX_FLOOR2 0x0060
+#define G_TILEINDEX_BACKGROUND 0x00A0

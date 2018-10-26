@@ -70,20 +70,24 @@ void palette_loadEnemies(u8 type) {
 
 void palette_loadGreenHill() {
 	palette_putColor(PAL0, 1, 0x0); // Bordes
-	palette_putColor(PAL0, 2, 0x262);
-	palette_putColor(PAL0, 3, 0x07B);
-	palette_putColor(PAL0, 4, 0x141);
-	palette_putColor(PAL0, 5, 0x059);
-	palette_putColor(PAL0, 6, 0x374); // Bordes1
-	palette_putColor(PAL0, 7, 0x396); // Bordes2
-	palette_putColor(PAL0, 8, 0x05b); // Detalles1 Marron
-	palette_putColor(PAL0, 9, 0x07f); // Detalles2 Marron
-	palette_putColor(PAL0, 10, 0x0ff); // Detalles3 Marron
-	palette_putColor(PAL0, 11, 0x4a7); // Detalles3 Verde
-	palette_putColor(PAL0, 12, 0x005); // Roca Base
-	palette_putColor(PAL0, 13, 0x259); // Roca Base
-	palette_putColor(PAL0, 14, 0x27b); // Roca Base
-	palette_putColor(PAL0, 15, 0x7cf); //
+	//Pared
+	palette_putColor(PAL0, 2, 0x08F);
+	palette_putColor(PAL0, 3, 0x07D);
+	palette_putColor(PAL0, 4, 0x06B);
+	palette_putColor(PAL0, 5, 0x049);
+	//Hierba
+	palette_putColor(PAL0, 6, 0x090);
+	palette_putColor(PAL0, 7, 0x0B0);
+	palette_putColor(PAL0, 8, 0x0D0);
+	palette_putColor(PAL0, 9, 0x0E0);
+	//Roca
+	palette_putColor(PAL0, 10, 0x666);
+	palette_putColor(PAL0, 11, 0xAAA);
+	//Unused
+	palette_putColor(PAL0, 12, 0x000);
+	palette_putColor(PAL0, 13, 0x000);
+	palette_putColor(PAL0, 14, 0x000);
+	palette_putColor(PAL0, 15, 0x000);
 
 	palette_putColor(PAL3, 1, 0x722); // Agua
 	palette_putColor(PAL3, 2, 0xa66);
