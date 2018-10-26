@@ -24,10 +24,12 @@ void ingameKeyJoyHandler(u16 joy, u16 changed, u16 state) {
 // JOY_waitPress(joy, BUTTON_A | BUTTON_UP) espera a pulsar un boton indicado en un pad especifico
 
 void ingameKeyJoyHandler_checkAndExec(u16 joy, u16 state, u16 changed, u16 key, void(*pressFunction)(u16), void(*releaseFunction)(u16)) {
-	if (state & key) {
-		pressFunction(joy);
-	} else if (changed & key) {
-		releaseFunction(joy);
+	if (changed & key) {
+		if (state & key) {
+			pressFunction(joy);
+		} else {
+			releaseFunction(joy);
+		}
 	}
 }
 
