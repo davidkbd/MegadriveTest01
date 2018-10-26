@@ -65,15 +65,15 @@ void ingamePlatforms_onKeyReleaseStartFunction(u16 joy) {
 }
 
 void ingamePlatforms_onKeyReleaseAFunction(u16 joy) {
-	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_NOKEY_ACTION;
+	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_ACTION;
 }
 
 void ingamePlatforms_onKeyReleaseBFunction(u16 joy) {
-	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_NOKEY_JUMP;
+	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_JUMP;
 }
 
 void ingamePlatforms_onKeyReleaseCFunction(u16 joy) {
-	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_NOKEY_ACTION;
+	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_ACTION;
 }
 
 void ingamePlatforms_onKeyReleaseXFunction(u16 joy) {
@@ -86,28 +86,30 @@ void ingamePlatforms_onKeyReleaseZFunction(u16 joy) {
 }
 
 void ingamePlatforms_onKeyReleaseUpFunction(u16 joy) {
-	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_NOKEY_UP;
+	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_UP;
 }
 
 void ingamePlatforms_onKeyReleaseDownFunction(u16 joy) {
-	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_NOKEY_DOWN;
+	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_DOWN;
 }
 
 void ingamePlatforms_onKeyReleaseLeftFunction(u16 joy) {
-	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_NOKEY_LEFT;
+	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_LEFT;
 }
 
 void ingamePlatforms_onKeyReleaseRightFunction(u16 joy) {
-	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_NOKEY_RIGHT;
+	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_RIGHT;
 }
 
 void ingamePlatforms_updateControls() {
 	ingamePlatforms_pressingXAxis();
 	ingamePlatforms_notPressingXAxis();
 
-	if (ingamePlatforms_isPressingJump() && IngamePlatforms_DATA->playerSpritePTR->onFloor) {
-		IngamePlatforms_DATA->playerSpritePTR->onFloor = 0;
-		IngamePlatforms_DATA->playerSpritePTR->speed.y = INGAME_PLATFORMS_JUMP_FORCE;
+	IngamePlatforms_Sprite *player = IngamePlatforms_DATA->playerSpritePTR;
+	if (ingamePlatforms_isPressingJump() && player->onFloor) {
+		player->onFloor = 0;
+		player->speed.y = INGAME_PLATFORMS_JUMP_FORCE;
+		player->data &= IngamePlatforms_DISABLEKEY_JUMP;
 	}
 }
 
@@ -164,5 +166,5 @@ void ingamePlatforms_notPressingXAxis() {
 
 void ingamePlatforms_releaseAction() {
 KLog("HOLA");
-	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_NOKEY_ACTION;
+	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_ACTION;
 }

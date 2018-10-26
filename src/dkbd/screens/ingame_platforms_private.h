@@ -3,19 +3,19 @@
 #include "../util/rect.h"
 #include "../util/vector2.h"
 
-#define IngamePlatforms_KEY_UP     0b000001
-#define IngamePlatforms_KEY_RIGHT  0b000010
-#define IngamePlatforms_KEY_DOWN   0b000100
-#define IngamePlatforms_KEY_LEFT   0b001000
-#define IngamePlatforms_KEY_JUMP   0b010000
-#define IngamePlatforms_KEY_ACTION 0b100000
+#define IngamePlatforms_KEY_UP        0b00000001
+#define IngamePlatforms_KEY_RIGHT     0b00000010
+#define IngamePlatforms_KEY_DOWN      0b00000100
+#define IngamePlatforms_KEY_LEFT      0b00001000
+#define IngamePlatforms_KEY_JUMP      0b00010000
+#define IngamePlatforms_KEY_ACTION    0b00100000
 
-#define IngamePlatforms_NOKEY_UP     0b111110
-#define IngamePlatforms_NOKEY_RIGHT  0b111101
-#define IngamePlatforms_NOKEY_DOWN   0b111011
-#define IngamePlatforms_NOKEY_LEFT   0b110111
-#define IngamePlatforms_NOKEY_JUMP   0b101111
-#define IngamePlatforms_NOKEY_ACTION 0b011111
+#define IngamePlatforms_DISABLEKEY_UP     0b11111110
+#define IngamePlatforms_DISABLEKEY_RIGHT  0b11111101
+#define IngamePlatforms_DISABLEKEY_DOWN   0b11111011
+#define IngamePlatforms_DISABLEKEY_LEFT   0b11110111
+#define IngamePlatforms_DISABLEKEY_JUMP   0b11101111
+#define IngamePlatforms_DISABLEKEY_ACTION 0b11011111
 
 #define IngamePlatforms_NUM_SPRITES 3
 
