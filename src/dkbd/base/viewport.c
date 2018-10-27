@@ -236,5 +236,5 @@ void viewport_vdpSetHorizontalScroll() {
 
 void viewport_vdpSetVerticalScroll() {
 	VDP_setVerticalScroll(PLAN_A, Viewport_DATA.realPosition.y);
-	VDP_setVerticalScroll(PLAN_B, Viewport_DATA.rawPosition.y / 200);
+	VDP_setVerticalScroll(PLAN_B, Viewport_DATA.rawPosition.y / 300);
 }

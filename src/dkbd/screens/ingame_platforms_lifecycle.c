@@ -8,7 +8,6 @@
 #include "../io/joy_handlers.h"
 #include "../util/palette.h"
 #include "../util/map.h"
-#include "../maps/level01_b.h"
 #include "../maps/level01.h"
 
 
@@ -33,7 +32,7 @@ void ingamePlatforms_initMemory() {
 }
 
 void ingamePlatforms_initData() {
-	map_load(&level01_b, &level01);
+	map_load(&level01);
 	IngamePlatforms_DATA->screenData.frameCount = 0;
 	IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
 	IngamePlatforms_DATA->gravity = 9;

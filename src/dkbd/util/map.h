@@ -1,6 +1,7 @@
 #include <genesis.h>
 
-#define MAP_SIZE 128
+#define MAP_WIDTH 128
+#define MAP_HEIGHT 128
 
 #define MAP_RESTRICTION_UP              0b0000000000000001
 #define MAP_RESTRICTION_RIGHT           0b0000000000000010
@@ -21,7 +22,7 @@
 /**
  * Carga datos
  */
-void map_load(const u8 * (*mapPlanB)[MAP_SIZE], const u8 * (*mapPlanA)[MAP_SIZE]);
+void map_load(const u8 * (*mapPlanA)[MAP_WIDTH]);
 
 /**
  * Libera memoria
