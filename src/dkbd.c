@@ -20,7 +20,10 @@ int dkbd() {
 	//JOY_SUPPORT_JUSTIFIER_BOTH, JOY_SUPPORT_ANALOGJOY, JOY_SUPPORT_KEYBOARD
 
 	SYS_disableInts();
-	
+	//SYS_enableInts();
+
+	VDP_setScrollingMode(HSCROLL_LINE, VSCROLL_PLANE);
+
 	VDP_setScreenWidth320();
 	VDP_setScreenHeight224();
 

@@ -11,6 +11,11 @@
 #define VIEWPORT_WIDTH 320
 #define VIEWPORT_HEIGHT 224
 
+#define VIEWPORT_HSCROLL_LINES_SIZE 256
+s16 VIEWPORT_PLANA_HSCROLL_LINES[VIEWPORT_HSCROLL_LINES_SIZE];
+s16 VIEWPORT_PLANB_HSCROLL_LINES[VIEWPORT_HSCROLL_LINES_SIZE];
+
+
 /**
  * Datos del viewport
  */
@@ -230,8 +235,32 @@ void viewport_updateLastCenterTilesPosition() {
 }
 
 void viewport_vdpSetHorizontalScroll() {
-	VDP_setHorizontalScroll(PLAN_A, Viewport_DATA.realPosition.x);
-	VDP_setHorizontalScroll(PLAN_B, Viewport_DATA.rawPosition.x / 20);
+	u16 i = 0;
+	s16 linelimit = 160 - Viewport_DATA.rawPosition.y / 300;
+
+	s16 linerest = VIEWPORT_HSCROLL_LINES_SIZE - linelimit;
+
+	s16 planbPos = Viewport_DATA.rawPosition.x / linerest;
+
+	while (i < linelimit) {
+		VIEWPORT_PLANA_HSCROLL_LINES[i] = Viewport_DATA.realPosition .x;
+		VIEWPORT_PLANB_HSCROLL_LINES[i] = planbPos;
+		 ++i;
+	}
+	u8 j = 1;
+	linerest /= 3;
+	u16 planbLineY = Viewport_DATA.rawPosition.x / linerest;
+	while (i < VIEWPORT_HSCROLL_LINES_SIZE) {
+		VIEWPORT_PLANA_HSCROLL_LINES[i] = Viewport_DATA.realPosition.x;
+		VIEWPORT_PLANB_HSCROLL_LINES[i] = planbLineY;
+		if ((j % 5) == 0) {
+			planbLineY = Viewport_DATA.rawPosition.x / (linerest - (j/3) + 1);
+		}
+		++j;
+		++i;
+	}
+	VDP_setHorizontalScrollLine(PLAN_A, 0, VIEWPORT_PLANA_HSCROLL_LINES, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
+	VDP_setHorizontalScrollLine(PLAN_B, 0, VIEWPORT_PLANB_HSCROLL_LINES, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
 }
 
 void viewport_vdpSetVerticalScroll() {
