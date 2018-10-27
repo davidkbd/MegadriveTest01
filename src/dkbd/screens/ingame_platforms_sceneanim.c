@@ -10,7 +10,7 @@ void ingamePlatforms_updateSubFloorAnimation();
 void ingamePlatforms_updateSceneAnimation() {
 	if (repeats_delayed(IngamePlatforms_DATA->screenData.frameCount, 0, 0, repeats_1_each_2_mode)) {
 		++IngamePlatforms_DATA->screenData.sceneAnimationFrame;
-		if (IngamePlatforms_DATA->screenData.sceneAnimationFrame > 3) {
+		if (IngamePlatforms_DATA->screenData.sceneAnimationFrame > 2) {
 			IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
 		}
 		ingamePlatforms_updateSubFloorAnimation();
@@ -19,29 +19,20 @@ void ingamePlatforms_updateSceneAnimation() {
 
 void ingamePlatforms_updateSubFloorAnimation() {
 	switch (IngamePlatforms_DATA->screenData.sceneAnimationFrame) {
-		case 3:
-			palette_putColor(PAL3, 2, 0xa66);
-			palette_putColor(PAL3, 3, 0x944);
-			palette_putColor(PAL3, 4, 0x833);
-			palette_putColor(PAL3, 5, 0x722);
-			break;
 		case 2:
-			palette_putColor(PAL3, 2, 0x722);
-			palette_putColor(PAL3, 3, 0xa66);
-			palette_putColor(PAL3, 4, 0x944);
-			palette_putColor(PAL3, 5, 0x833);
+			palette_putColor(PAL1, 2, 0xf33);
+			palette_putColor(PAL1, 3, 0xf55);
+			palette_putColor(PAL1, 4, 0xe00);
 			break;
 		case 1:
-			palette_putColor(PAL3, 2, 0x833);
-			palette_putColor(PAL3, 3, 0x722);
-			palette_putColor(PAL3, 4, 0xa66);
-			palette_putColor(PAL3, 5, 0x944);
+			palette_putColor(PAL1, 2, 0xf55);
+			palette_putColor(PAL1, 3, 0xe00);
+			palette_putColor(PAL1, 4, 0xf33);
 			break;
 		case 0:
-			palette_putColor(PAL3, 2, 0x944);
-			palette_putColor(PAL3, 3, 0x833);
-			palette_putColor(PAL3, 4, 0x722);
-			palette_putColor(PAL3, 5, 0xa66);
+			palette_putColor(PAL1, 2, 0xe00);
+			palette_putColor(PAL1, 3, 0xf33);
+			palette_putColor(PAL1, 4, 0xf55);
 			break;
 	
 	}

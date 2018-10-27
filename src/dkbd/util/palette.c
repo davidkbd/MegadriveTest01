@@ -2,6 +2,9 @@
 
 #include "../base/screens_global.h"
 
+#include "../../../res/gfx.h"
+
+
 void palette_loadGreenHill();
 void palette_loadOtro();
 
@@ -59,10 +62,10 @@ void palette_loadScreen(u8 screenId) {
 }
 
 void palette_loadHud(u8 status) {
-	palette_putColor(PAL1, 1, 0x000);
-	palette_putColor(PAL1, 2, 0xccc);
-	palette_putColor(PAL1, 14, palette_hudColors[status][0]);
-	palette_putColor(PAL1, 15, palette_hudColors[status][1]);
+	palette_putColor(PAL3, 1, 0x000);
+	palette_putColor(PAL3, 2, 0xccc);
+	palette_putColor(PAL3, 14, palette_hudColors[status][0]);
+	palette_putColor(PAL3, 15, palette_hudColors[status][1]);
 }
 
 void palette_loadEnemies(u8 type) {
@@ -89,11 +92,8 @@ void palette_loadGreenHill() {
 	palette_putColor(PAL0, 14, 0x000);
 	palette_putColor(PAL0, 15, 0x000);
 
-	palette_putColor(PAL3, 1, 0x722); // Agua
-	palette_putColor(PAL3, 2, 0xa66);
-	palette_putColor(PAL3, 3, 0x944);
-	palette_putColor(PAL3, 4, 0x833);
-	palette_putColor(PAL3, 5, 0x722);
+
+	palette_write(PAL1, planb_level01.palette->data);
 }
 
 void palette_loadOtro() {
@@ -108,9 +108,9 @@ void palette_loadOtro() {
 	palette_putColor(PAL0, 9, 0x07f);
 	palette_putColor(PAL0, 10, 0x0ff);
 
-	palette_putColor(PAL3, 1, 0x722); // Agua
-	palette_putColor(PAL3, 2, 0xa66);
-	palette_putColor(PAL3, 3, 0x944);
-	palette_putColor(PAL3, 4, 0x833);
-	palette_putColor(PAL3, 5, 0x722);
+	palette_putColor(PAL1, 1, 0x722); // Agua
+	palette_putColor(PAL1, 2, 0xa66);
+	palette_putColor(PAL1, 3, 0x944);
+	palette_putColor(PAL1, 4, 0x833);
+	palette_putColor(PAL1, 5, 0x722);
 }

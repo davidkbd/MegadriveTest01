@@ -6,6 +6,7 @@ extern const TileSet portada_menu_tile;
 extern const TileSet portada_yesno_tile;
 extern const TileSet portada_difficulty_tile;
 extern const Image portada_opts_palete;
+extern const Image planb_level01;
 extern const TileSet hud_nums_tile;
 extern const TileSet ingame_hud_tile;
 extern const TileSet ingame_floor_tile;
