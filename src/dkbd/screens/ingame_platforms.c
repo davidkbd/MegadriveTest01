@@ -96,34 +96,8 @@ void ingamePlatforms_applySprites() {
 
 void ingamePlatforms_moveViewport() {
 	IngamePlatforms_Sprite *s = IngamePlatforms_DATA->playerSpritePTR;
-	Vector2 *viewportPosition = &(IngamePlatforms_DATA->screenData.viewportPosition);
-
-	if (ingamePlatforms_isPressingRight()) {
-		if (viewportPosition->x > 1600) {
-			viewportPosition->x = 1600;
-		}
-		if (viewportPosition->x > 700) {
-			viewportPosition->x -= 10;
-		}
-	} else if (ingamePlatforms_isPressingLeft()) {
-		if (viewportPosition->x < 1600) {
-				viewportPosition->x = 1600;
-			}
-		if (viewportPosition->x < 2500) {
-			viewportPosition->x += 10;
-		}
-	} else {
-		viewportPosition->x = 1600;
-	}
-	if (ingamePlatforms_isPressingDown()) {
-		viewportPosition->y = 500;
-	} else if (ingamePlatforms_isPressingUp()) {
-		viewportPosition->y = 1800;
-	} else {
-		viewportPosition->y = 1600; //1200 seria el centro
-	}
-	s16 moveX = (viewportPosition->x - s->posInViewport.x) / 8;
-	s16 moveY = (viewportPosition->y - s->posInViewport.y) / 8;
+	s16 moveX = (IngamePlatforms_DATA->screenData.viewportPosition.x - s->posInViewport.x) / 8;
+	s16 moveY = (IngamePlatforms_DATA->screenData.viewportPosition.y - s->posInViewport.y) / 8;
 	if (abs(moveX) > 2 || abs(moveY) > 2) {
 		viewport_moveY(-moveY);
 		viewport_moveX(moveX);
@@ -150,17 +124,20 @@ void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *spri
 		if (sprite->speed.x > 0) {
 			sprite->speed.x = 0;
 		}
-		if (posInCell->pos2.x < 80 && posInCell->pos2.x >= 0) {
+		if (posInCell->pos2.x < 80 && posInCell->pos2.x > 0) {
 			sprite->position.x -= 1;
 		}
-	}
-	if (((MAP_RESTRICTION_LEFT & restrictionUL) || (MAP_RESTRICTION_LEFT & restrictionDL)) && !(sprite->onFloor && (0b00001100 & restrictionDL))) {
+		sprite->pushing = 1;
+	} else if (((MAP_RESTRICTION_LEFT & restrictionUL) || (MAP_RESTRICTION_LEFT & restrictionDL)) && !(sprite->onFloor && (0b00001100 & restrictionDL))) {
 		if (sprite->speed.x < 0) {
 			sprite->speed.x = 0;
 		}
-		if (posInCell->pos1.x > 79 && posInCell->pos1.x < 160) {
+		if (posInCell->pos1.x > 79 && posInCell->pos1.x < 159) {
 			sprite->position.x += 1;
 		}
+		sprite->pushing = -1;
+	} else {
+		sprite->pushing = 0;
 	}
 }
 
@@ -282,6 +259,9 @@ void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite) {
 	}
 	if (ingamePlatforms_isPressingAction()) {
 		SPR_setAnim(sprite->sprite, 4);
+	} else if (sprite->pushing != 0) {
+		SPR_setHFlip(sprite->sprite, (sprite->pushing < 0));
+		SPR_setAnim(sprite->sprite, 6);
 	} else if (!sprite->onFloor) {
 		SPR_setAnim(sprite->sprite, 2);
 	} else if (ingamePlatforms_isPressingRight()) {

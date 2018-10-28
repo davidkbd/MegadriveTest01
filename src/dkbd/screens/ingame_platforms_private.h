@@ -36,6 +36,7 @@ struct IngamePlatforms_Sprite_st {
 	Vector2 size; // Visualmente, utilizado para saber si cargar o destruir al hacer scroll
 	u8 onFloor;
 	s8 onPlatformBorder;
+	s8 pushing;
 	u8 xCenter;
 	Rect collider;
 	//0xFFFF

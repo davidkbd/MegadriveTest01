@@ -12,5 +12,6 @@ extern const TileSet ingame_hud_tile;
 extern const TileSet ingame_floor_tile;
 extern const TileSet ingame_floor2_tile;
 extern const TileSet ingame_background_tile;
+extern const TileSet ingame_wall_tile;
 
 #endif // _RES_GFX_H_

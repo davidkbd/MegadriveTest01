@@ -72,12 +72,11 @@ void palette_loadEnemies(u8 type) {
 }
 
 void palette_loadGreenHill() {
-	palette_putColor(PAL0, 1, 0x0); // Bordes
-	//Pared
-	palette_putColor(PAL0, 2, 0x08F);
-	palette_putColor(PAL0, 3, 0x07D);
-	palette_putColor(PAL0, 4, 0x06B);
-	palette_putColor(PAL0, 5, 0x049);
+	palette_putColor(PAL0, 1, 0x08F);
+	palette_putColor(PAL0, 2, 0x05A);
+	palette_putColor(PAL0, 3, 0x06B);
+	palette_putColor(PAL0, 4, 0x037);
+	palette_putColor(PAL0, 5, 0x025);
 	//Hierba
 	palette_putColor(PAL0, 6, 0x090);
 	palette_putColor(PAL0, 7, 0x0B0);
