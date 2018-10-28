@@ -96,8 +96,34 @@ void ingamePlatforms_applySprites() {
 
 void ingamePlatforms_moveViewport() {
 	IngamePlatforms_Sprite *s = IngamePlatforms_DATA->playerSpritePTR;
-	s16 moveX = (1600 - s->posInViewport.x) / 8;
-	s16 moveY = (1200 - s->posInViewport.y) / 8;
+	Vector2 *viewportPosition = &(IngamePlatforms_DATA->screenData.viewportPosition);
+
+	if (ingamePlatforms_isPressingRight()) {
+		if (viewportPosition->x > 1600) {
+			viewportPosition->x = 1600;
+		}
+		if (viewportPosition->x > 700) {
+			viewportPosition->x -= 10;
+		}
+	} else if (ingamePlatforms_isPressingLeft()) {
+		if (viewportPosition->x < 1600) {
+				viewportPosition->x = 1600;
+			}
+		if (viewportPosition->x < 2500) {
+			viewportPosition->x += 10;
+		}
+	} else {
+		viewportPosition->x = 1600;
+	}
+	if (ingamePlatforms_isPressingDown()) {
+		viewportPosition->y = 500;
+	} else if (ingamePlatforms_isPressingUp()) {
+		viewportPosition->y = 1800;
+	} else {
+		viewportPosition->y = 1600; //1200 seria el centro
+	}
+	s16 moveX = (viewportPosition->x - s->posInViewport.x) / 8;
+	s16 moveY = (viewportPosition->y - s->posInViewport.y) / 8;
 	if (abs(moveX) > 2 || abs(moveY) > 2) {
 		viewport_moveY(-moveY);
 		viewport_moveX(moveX);

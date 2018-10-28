@@ -12,9 +12,6 @@
 #define VIEWPORT_HEIGHT 224
 
 #define VIEWPORT_HSCROLL_LINES_SIZE 256
-s16 VIEWPORT_PLANA_HSCROLL_LINES[VIEWPORT_HSCROLL_LINES_SIZE];
-s16 VIEWPORT_PLANB_HSCROLL_LINES[VIEWPORT_HSCROLL_LINES_SIZE];
-
 
 /**
  * Datos del viewport
@@ -28,6 +25,9 @@ struct Viewport_DATA_st {
 	Rect currentPosition;
 	// Dibujado de tiles central
 	Vector2 lastCenterTilesPosition;
+	// Scroll data
+	s16 hzScrollLinesPlanA[VIEWPORT_HSCROLL_LINES_SIZE];
+	s16 hzScrollLinesPlanB[VIEWPORT_HSCROLL_LINES_SIZE];
 } Viewport_DATA;
 
 void viewport_fillOfTiles();
@@ -237,25 +237,23 @@ void viewport_updateLastCenterTilesPosition() {
 void viewport_vdpSetHorizontalScroll() {
 	s16 yPosition = Viewport_DATA.rawPosition.y / 300;
 	s16 linelimit = 160 - yPosition;
-
 	const s16 planbPos = Viewport_DATA.rawPosition.x / 20;
-
 	u16 line = 0;
 	while (line < linelimit) {
-		VIEWPORT_PLANA_HSCROLL_LINES[line] = Viewport_DATA.realPosition .x;
-		VIEWPORT_PLANB_HSCROLL_LINES[line] = planbPos;
+		Viewport_DATA.hzScrollLinesPlanA[line] = Viewport_DATA.realPosition.x;
+		Viewport_DATA.hzScrollLinesPlanB[line] = planbPos;
 		 ++line;
 	}
 	u16 displacedLine = 1;
 	while (line < VIEWPORT_HSCROLL_LINES_SIZE) {
 		s16 y = (Viewport_DATA.realPosition.x * displacedLine) / 80 + planbPos;
-		VIEWPORT_PLANA_HSCROLL_LINES[line] = Viewport_DATA.realPosition.x;
-		VIEWPORT_PLANB_HSCROLL_LINES[line] = y;
+		Viewport_DATA.hzScrollLinesPlanA[line] = Viewport_DATA.realPosition.x;
+		Viewport_DATA.hzScrollLinesPlanB[line] = y;
 		++line;
 		++displacedLine;
 	}
-	VDP_setHorizontalScrollLine(PLAN_A, 0, VIEWPORT_PLANA_HSCROLL_LINES, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
-	VDP_setHorizontalScrollLine(PLAN_B, 0, VIEWPORT_PLANB_HSCROLL_LINES, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
+	VDP_setHorizontalScrollLine(PLAN_A, 0, Viewport_DATA.hzScrollLinesPlanA, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
+	VDP_setHorizontalScrollLine(PLAN_B, 0, Viewport_DATA.hzScrollLinesPlanB, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
 }
 
 void viewport_vdpSetVerticalScroll() {
