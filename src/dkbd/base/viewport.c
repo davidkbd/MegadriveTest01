@@ -235,29 +235,24 @@ void viewport_updateLastCenterTilesPosition() {
 }
 
 void viewport_vdpSetHorizontalScroll() {
-	u16 i = 0;
-	s16 linelimit = 160 - Viewport_DATA.rawPosition.y / 300;
+	s16 yPosition = Viewport_DATA.rawPosition.y / 300;
+	s16 linelimit = 160 - yPosition;
 
-	s16 linerest = VIEWPORT_HSCROLL_LINES_SIZE - linelimit;
+	const s16 planbPos = Viewport_DATA.rawPosition.x / 20;
 
-	s16 planbPos = Viewport_DATA.rawPosition.x / linerest;
-
-	while (i < linelimit) {
-		VIEWPORT_PLANA_HSCROLL_LINES[i] = Viewport_DATA.realPosition .x;
-		VIEWPORT_PLANB_HSCROLL_LINES[i] = planbPos;
-		 ++i;
+	u16 line = 0;
+	while (line < linelimit) {
+		VIEWPORT_PLANA_HSCROLL_LINES[line] = Viewport_DATA.realPosition .x;
+		VIEWPORT_PLANB_HSCROLL_LINES[line] = planbPos;
+		 ++line;
 	}
-	u8 j = 1;
-	linerest /= 3;
-	u16 planbLineY = Viewport_DATA.rawPosition.x / linerest;
-	while (i < VIEWPORT_HSCROLL_LINES_SIZE) {
-		VIEWPORT_PLANA_HSCROLL_LINES[i] = Viewport_DATA.realPosition.x;
-		VIEWPORT_PLANB_HSCROLL_LINES[i] = planbLineY;
-		if ((j % 5) == 0) {
-			planbLineY = Viewport_DATA.rawPosition.x / (linerest - (j/3) + 1);
-		}
-		++j;
-		++i;
+	u16 displacedLine = 1;
+	while (line < VIEWPORT_HSCROLL_LINES_SIZE) {
+		s16 y = (Viewport_DATA.realPosition.x * displacedLine) / 80 + planbPos;
+		VIEWPORT_PLANA_HSCROLL_LINES[line] = Viewport_DATA.realPosition.x;
+		VIEWPORT_PLANB_HSCROLL_LINES[line] = y;
+		++line;
+		++displacedLine;
 	}
 	VDP_setHorizontalScrollLine(PLAN_A, 0, VIEWPORT_PLANA_HSCROLL_LINES, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
 	VDP_setHorizontalScrollLine(PLAN_B, 0, VIEWPORT_PLANB_HSCROLL_LINES, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);

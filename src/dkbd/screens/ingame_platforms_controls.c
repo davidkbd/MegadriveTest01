@@ -105,6 +105,10 @@ void ingamePlatforms_updateControls() {
 	ingamePlatforms_pressingXAxis();
 	ingamePlatforms_notPressingXAxis();
 
+	if (ingamePlatforms_isPressingUp()) {
+		IngamePlatforms_DATA->playerSpritePTR->speed.y -= 40;
+	}
+
 	IngamePlatforms_Sprite *player = IngamePlatforms_DATA->playerSpritePTR;
 	if (ingamePlatforms_isPressingJump() && player->onFloor) {
 		player->onFloor = 0;
@@ -165,6 +169,5 @@ void ingamePlatforms_notPressingXAxis() {
 }
 
 void ingamePlatforms_releaseAction() {
-KLog("HOLA");
 	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_ACTION;
 }

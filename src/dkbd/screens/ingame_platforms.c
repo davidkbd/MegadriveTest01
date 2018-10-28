@@ -98,11 +98,9 @@ void ingamePlatforms_moveViewport() {
 	IngamePlatforms_Sprite *s = IngamePlatforms_DATA->playerSpritePTR;
 	s16 moveX = (1600 - s->posInViewport.x) / 8;
 	s16 moveY = (1200 - s->posInViewport.y) / 8;
-	if (abs(moveX) > 2) {
-		viewport_moveX(moveX);
-	}
-	if (abs(moveY) > 2) {
+	if (abs(moveX) > 2 || abs(moveY) > 2) {
 		viewport_moveY(-moveY);
+		viewport_moveX(moveX);
 	}
 }
 
