@@ -50,7 +50,7 @@ struct IngamePlatforms_ScreenData {
 	struct ScreenData {
 		u16 frameCount;
 		u8 sceneAnimationFrame;
-		Vector2 viewportPosition;
+		Vector2 viewportOffset;
 	} screenData;
 
 	s8 gravity;

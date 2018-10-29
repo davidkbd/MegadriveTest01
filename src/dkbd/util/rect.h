@@ -13,6 +13,11 @@ typedef struct Rect_st {
 #endif
 
 /**
+ * Crea un rect nuevo
+ */
+Rect rect(s16 x1, s16 y1, s16 x2, s16 y2);
+
+/**
  * Devuelve un nuevo vectro con el resultado de sumar los dos
  */
 Rect rect_add(Rect *value, Rect *otherValue);

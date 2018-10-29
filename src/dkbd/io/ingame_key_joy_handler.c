@@ -32,4 +32,3 @@ void ingameKeyJoyHandler_checkAndExec(u16 joy, u16 state, u16 changed, u16 key, 
 		}
 	}
 }
-

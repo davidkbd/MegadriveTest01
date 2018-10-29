@@ -10,4 +10,3 @@
 
 void ingamePlatforms_onInanimatedUpdate(IngamePlatforms_Sprite *sprite) {
 }
-

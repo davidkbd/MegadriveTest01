@@ -39,7 +39,7 @@ void ingamePlatforms_initData() {
 	hud_reset();
 
 	ingamePlatforms_initializePlayer(1200, 300);
-	viewport_reset(0, 0);
+	viewport_reset(vector2(0, 0), rect(0, 0, (128-40) * 160, (128-14) * 160));
 
 	// PROBANDO Sprites
 	for (u8 i = 1; i < IngamePlatforms_NUM_SPRITES; ++i) {

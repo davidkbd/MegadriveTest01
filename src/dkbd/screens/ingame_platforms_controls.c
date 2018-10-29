@@ -173,35 +173,35 @@ void ingamePlatforms_releaseAction() {
 
 void ingamePlatforms_controlViewport() {
 	IngamePlatforms_Sprite * s = &(IngamePlatforms_DATA->playerSpritePTR);
-	Vector2 *viewportPosition = &(IngamePlatforms_DATA->screenData.viewportPosition);
+	Vector2 *viewportOffset = &(IngamePlatforms_DATA->screenData.viewportOffset);
 	if (ingamePlatforms_isPressingRight() && abs(s->speed.x) > 10) {
-		if (viewportPosition->x > 1600) {
-			viewportPosition->x = 1600;
+		if (viewportOffset->x > 1600) {
+			viewportOffset->x = 1600;
 		}
-		if (viewportPosition->x > 700) {
-			viewportPosition->x -= 20;
+		if (viewportOffset->x > 700) {
+			viewportOffset->x -= 20;
 		}
 	} else if (ingamePlatforms_isPressingLeft()) {
-		if (viewportPosition->x < 1600) {
-				viewportPosition->x = 1600;
+		if (viewportOffset->x < 1600) {
+				viewportOffset->x = 1600;
 			}
-		if (viewportPosition->x < 2500) {
-			viewportPosition->x += 20;
+		if (viewportOffset->x < 2500) {
+			viewportOffset->x += 20;
 		}
 	} else {
-		if (viewportPosition->x > 1600) {
-			viewportPosition->x -= 20;
+		if (viewportOffset->x > 1600) {
+			viewportOffset->x -= 20;
 		}
-		if (viewportPosition->x < 1600) {
-			viewportPosition->x += 20;
+		if (viewportOffset->x < 1600) {
+			viewportOffset->x += 20;
 		}
 	}
 	if (ingamePlatforms_isPressingDown()) {
-		viewportPosition->y = 500;
+		viewportOffset->y = 500;
 	} else if (ingamePlatforms_isPressingUp()) {
-		viewportPosition->y = 1800;
+		viewportOffset->y = 1800;
 	} else {
 		//1200 seria el centro
-		viewportPosition->y = 1600;
+		viewportOffset->y = 1600;
 	}
 }

@@ -11,7 +11,16 @@
 #define VIEWPORT_WIDTH 320
 #define VIEWPORT_HEIGHT 224
 
+#define VIEWPORT_MAX_LEFT_SPEED  -60
+#define VIEWPORT_MAX_RIGHT_SPEED  60
+#define VIEWPORT_MAX_UP_SPEED    -60
+#define VIEWPORT_MAX_DOWN_SPEED   60
+
+// 256 o 224?
 #define VIEWPORT_HSCROLL_LINES_SIZE 256
+
+// 3dfx
+#define VIEWPORT_OCEAN_LINE 160
 
 /**
  * Datos del viewport
@@ -19,12 +28,12 @@
 struct Viewport_DATA_st {
 	// Scroll
 	Vector2 rawPosition;
-	Vector2 realPosition;
+	Vector2 planAPosition;
+	Vector2 planBPosition;
+	Rect limits;
 	// Tiles
-	Rect lastPosition;
-	Rect currentPosition;
-	// Dibujado de tiles central
-	Vector2 lastCenterTilesPosition;
+	Rect lastPositionInTiles;
+	Rect currentPositionInTiles;
 	// Scroll data
 	s16 hzScrollLinesPlanA[VIEWPORT_HSCROLL_LINES_SIZE];
 	s16 hzScrollLinesPlanB[VIEWPORT_HSCROLL_LINES_SIZE];
@@ -34,41 +43,41 @@ void viewport_fillOfTiles();
 void viewport_putColumnOfTiles(s16 x);
 void viewport_putRowOfTiles(s16 y);
 void viewport_putPlanATile(s16 x, s16 y);
-void viewport_putPlanBTile(s16 x, s16 y);
-void viewport_putRectOfTiles(s16 x1, s16 x2, s16 miny, s16 maxy);
-void viewport_updatePlanATile(s16 x, s16 y);
 u8 viewport_isMovingUp();
 u8 viewport_isMovingDown();
 u8 viewport_isMovingLeft();
 u8 viewport_isMovingRight();
-u8 viewport_isCenterTilesUpdateNeeded();
-void viewport_calculateRealXPosition();
-void viewport_calculateRealYPosition();
+void viewport_calculatePlanAXPosition();
+void viewport_calculatePlanAYPosition();
+void viewport_calculatePlanBXPosition();
+void viewport_calculatePlanBYPosition();
 void viewport_calculateCurrentXPosition();
 void viewport_calculateCurrentYPosition();
 void viewport_drawXTiles();
 void viewport_drawYTiles();
-void viewport_drawCenterTiles();
 void viewport_updateLastXPosition();
 void viewport_updateLastYPosition();
-void viewport_updateLastCenterTilesPosition();
 void viewport_vdpSetHorizontalScroll();
 void viewport_vdpSetVerticalScroll();
+void viewport_ocean3dfx();
 
-void viewport_reset(s16 x, s16 y) {
-	Viewport_DATA.rawPosition.x = x;
-	Viewport_DATA.rawPosition.y = y;
+void (*viewport_3dfxPtr)();
 
-	Viewport_DATA.lastCenterTilesPosition.x = x; // Para que drawCenterTiles pinte porque x es raw, lastCenterTilesPosition es current
-	Viewport_DATA.lastCenterTilesPosition.y = y; // Para que drawCenterTiles pinte porque y es raw, lastCenterTilesPosition es current
+void viewport_reset(Vector2 initialPoisition, Rect limits) {
+	viewport_3dfxPtr = viewport_ocean3dfx;
+	Viewport_DATA.limits.pos1.x = -limits.pos1.x;
+	Viewport_DATA.limits.pos2.x = -limits.pos2.x;
+	Viewport_DATA.limits.pos1.y = limits.pos1.y;
+	Viewport_DATA.limits.pos2.y = limits.pos2.y;
 
-	viewport_calculateRealXPosition();
+	viewport_calculatePlanAXPosition();
+	viewport_calculatePlanBXPosition();
 	viewport_calculateCurrentXPosition();
-	viewport_calculateRealYPosition();
+	viewport_calculatePlanAYPosition();
+	viewport_calculatePlanBYPosition();
 	viewport_calculateCurrentYPosition();
 
 	viewport_fillOfTiles();
-	viewport_drawCenterTiles();
 
 	viewport_updateLastXPosition();
 	viewport_updateLastYPosition();
@@ -78,23 +87,25 @@ void viewport_reset(s16 x, s16 y) {
 }
 
 void viewport_moveX(s16 x) {
-	Viewport_DATA.rawPosition.x += limits_s16(x, -60, 60);
+	Viewport_DATA.rawPosition.x += limits_s16(x, VIEWPORT_MAX_LEFT_SPEED, VIEWPORT_MAX_RIGHT_SPEED);
+	Viewport_DATA.rawPosition.x = limits_s16(Viewport_DATA.rawPosition.x, Viewport_DATA.limits.pos2.x, Viewport_DATA.limits.pos1.x);
 
-	viewport_calculateRealXPosition();
+	viewport_calculatePlanAXPosition();
+	viewport_calculatePlanBXPosition();
 	viewport_calculateCurrentXPosition();
 	viewport_drawXTiles();
-	viewport_drawCenterTiles();
 	viewport_updateLastXPosition();
 	viewport_vdpSetHorizontalScroll();
 }
 
 void viewport_moveY(s16 y) {
-	Viewport_DATA.rawPosition.y += limits_s16(y, -60, 60);
+	Viewport_DATA.rawPosition.y += limits_s16(y, VIEWPORT_MAX_UP_SPEED, VIEWPORT_MAX_DOWN_SPEED);
+	Viewport_DATA.rawPosition.y = limits_s16(Viewport_DATA.rawPosition.y, Viewport_DATA.limits.pos1.y, Viewport_DATA.limits.pos2.y);
 
-	viewport_calculateRealYPosition();
+	viewport_calculatePlanAYPosition();
+	viewport_calculatePlanBYPosition();
 	viewport_calculateCurrentYPosition();
 	viewport_drawYTiles();
-	viewport_drawCenterTiles();
 	viewport_updateLastYPosition();
 	viewport_vdpSetVerticalScroll();
 }
@@ -107,37 +118,20 @@ s16 viewport_getCurrentY() {
 	return Viewport_DATA.rawPosition.y;
 }
 
-void viewport_putRectOfTiles(s16 minx, s16 maxx, s16 miny, s16 maxy) {
-	for (s16 x = minx; x <= maxx; ++x) {
-		for (s16 y = miny; y <= maxy; ++y) {
-			viewport_updatePlanATile(x, y);
-		}
-	}
-}
-
-void viewport_updatePlanATile(s16 x, s16 y) {/*
-	u16 tileId = map_getPlanA(x, y);
-	if (tileId > 26) {
-		s16 realY = map_getOnTop(tileId) + Viewport_DATA.currentPosition.pos1.y;
-		u8 onTop = y > realY;
-		tiles_putMapTile(tileId, x, y, onTop);
-	}*/
-}
-
 void viewport_fillOfTiles() {
-	for (s16 i = Viewport_DATA.currentPosition.pos1.x; i <= Viewport_DATA.currentPosition.pos2.x; ++i) {
+	for (s16 i = Viewport_DATA.currentPositionInTiles.pos1.x; i <= Viewport_DATA.currentPositionInTiles.pos2.x; ++i) {
 		viewport_putColumnOfTiles(i);
 	}
 }
 
 void viewport_putColumnOfTiles(s16 x) {
-	for (s16 y = Viewport_DATA.currentPosition.pos1.y; y <= Viewport_DATA.currentPosition.pos2.y; ++y) {
+	for (s16 y = Viewport_DATA.currentPositionInTiles.pos1.y; y <= Viewport_DATA.currentPositionInTiles.pos2.y; ++y) {
 		viewport_putPlanATile(x, y);
 	}
 }
 
 void viewport_putRowOfTiles(s16 y) {
-	for (s16 x = Viewport_DATA.currentPosition.pos1.x; x <= Viewport_DATA.currentPosition.pos2.x; ++x) {
+	for (s16 x = Viewport_DATA.currentPositionInTiles.pos1.x; x <= Viewport_DATA.currentPositionInTiles.pos2.x; ++x) {
 		viewport_putPlanATile(x, y);
 	}
 }
@@ -147,116 +141,100 @@ void viewport_putPlanATile(s16 x, s16 y) {
 	tiles_putMapTile(tileId, x, y, FALSE);
 }
 
-void viewport_putPlanBTile(s16 x, s16 y) {
-	u16 tileId = map_getPlanB(x, y);
-	tiles_putBackgroundTile(tileId, x, y, FALSE);
-}
-
 u8 viewport_isMovingUp() {
-	return Viewport_DATA.currentPosition.pos1.y < Viewport_DATA.lastPosition.pos1.y;
+	return Viewport_DATA.currentPositionInTiles.pos1.y < Viewport_DATA.lastPositionInTiles.pos1.y;
 }
 
 u8 viewport_isMovingDown() {
-	return Viewport_DATA.currentPosition.pos2.y > Viewport_DATA.lastPosition.pos2.y;
+	return Viewport_DATA.currentPositionInTiles.pos2.y > Viewport_DATA.lastPositionInTiles.pos2.y;
 }
 
 u8 viewport_isMovingLeft() {
-	return Viewport_DATA.currentPosition.pos1.x < Viewport_DATA.lastPosition.pos1.x;
+	return Viewport_DATA.currentPositionInTiles.pos1.x < Viewport_DATA.lastPositionInTiles.pos1.x;
 }
 
 u8 viewport_isMovingRight() {
-	return Viewport_DATA.currentPosition.pos2.x > Viewport_DATA.lastPosition.pos2.x;
+	return Viewport_DATA.currentPositionInTiles.pos2.x > Viewport_DATA.lastPositionInTiles.pos2.x;
 }
 
-u8 viewport_isCenterTilesUpdateNeeded() {
-	return Viewport_DATA.lastCenterTilesPosition.x != Viewport_DATA.currentPosition.pos1.x || Viewport_DATA.lastCenterTilesPosition.y != Viewport_DATA.currentPosition.pos1.y;
+void viewport_calculatePlanAXPosition() {
+	Viewport_DATA.planAPosition.x = Viewport_DATA.rawPosition.x / 10;
 }
 
-void viewport_calculateRealXPosition() {
-	Viewport_DATA.realPosition.x = Viewport_DATA.rawPosition.x / 10;
+void viewport_calculatePlanAYPosition() {
+	Viewport_DATA.planAPosition.y = Viewport_DATA.rawPosition.y / 10;
 }
 
-void viewport_calculateRealYPosition() {
-	Viewport_DATA.realPosition.y = Viewport_DATA.rawPosition.y / 10;
+void viewport_calculatePlanBXPosition() {
+	Viewport_DATA.planBPosition.x = Viewport_DATA.rawPosition.x / 20;
+}
+
+void viewport_calculatePlanBYPosition() {
+	Viewport_DATA.planBPosition.y = Viewport_DATA.rawPosition.y / 560;
 }
 
 void viewport_calculateCurrentXPosition() {
-	Viewport_DATA.currentPosition.pos1.x = -((Viewport_DATA.realPosition.x + VIEWPORT_TILEWIDTH) / VIEWPORT_TILEWIDTH);
-	Viewport_DATA.currentPosition.pos2.x = -((Viewport_DATA.realPosition.x - VIEWPORT_WIDTH)     / VIEWPORT_TILEWIDTH);
+	Viewport_DATA.currentPositionInTiles.pos1.x = -((Viewport_DATA.planAPosition.x + VIEWPORT_TILEWIDTH) / VIEWPORT_TILEWIDTH);
+	Viewport_DATA.currentPositionInTiles.pos2.x = -((Viewport_DATA.planAPosition.x - VIEWPORT_WIDTH)     / VIEWPORT_TILEWIDTH);
 }
 
 void viewport_calculateCurrentYPosition() {
-	Viewport_DATA.currentPosition.pos1.y = (Viewport_DATA.realPosition.y - VIEWPORT_TILEHEIGHT) / VIEWPORT_TILEHEIGHT;
-	Viewport_DATA.currentPosition.pos2.y = (Viewport_DATA.realPosition.y + VIEWPORT_HEIGHT)     / VIEWPORT_TILEHEIGHT;
+	Viewport_DATA.currentPositionInTiles.pos1.y = (Viewport_DATA.planAPosition.y - VIEWPORT_TILEHEIGHT) / VIEWPORT_TILEHEIGHT;
+	Viewport_DATA.currentPositionInTiles.pos2.y = (Viewport_DATA.planAPosition.y + VIEWPORT_HEIGHT)     / VIEWPORT_TILEHEIGHT;
 }
 
 void viewport_drawXTiles() {
 	if (viewport_isMovingLeft()) {
-		viewport_putColumnOfTiles(Viewport_DATA.currentPosition.pos1.x);
+		viewport_putColumnOfTiles(Viewport_DATA.currentPositionInTiles.pos1.x);
 	}
 	if (viewport_isMovingRight()) {
-		viewport_putColumnOfTiles(Viewport_DATA.currentPosition.pos2.x);
+		viewport_putColumnOfTiles(Viewport_DATA.currentPositionInTiles.pos2.x);
 	}
 }
 
 void viewport_drawYTiles() {
 	if (viewport_isMovingUp()) {
-		viewport_putRowOfTiles(Viewport_DATA.currentPosition.pos1.y);
+		viewport_putRowOfTiles(Viewport_DATA.currentPositionInTiles.pos1.y);
 	}
 	if (viewport_isMovingDown()) {
-		viewport_putRowOfTiles(Viewport_DATA.currentPosition.pos2.y);
-	}
-}
-
-void viewport_drawCenterTiles() {
-	if (viewport_isCenterTilesUpdateNeeded()) {
-		viewport_putRectOfTiles(
-				Viewport_DATA.currentPosition.pos1.x + 8,
-				Viewport_DATA.currentPosition.pos2.x - 9,
-				Viewport_DATA.currentPosition.pos1.y + 4,
-				Viewport_DATA.currentPosition.pos2.y - 6);
-		viewport_updateLastCenterTilesPosition();
+		viewport_putRowOfTiles(Viewport_DATA.currentPositionInTiles.pos2.y);
 	}
 }
 
 void viewport_updateLastXPosition() {
-	Viewport_DATA.lastPosition.pos1.x = Viewport_DATA.currentPosition.pos1.x;
-	Viewport_DATA.lastPosition.pos2.x = Viewport_DATA.currentPosition.pos2.x;
+	Viewport_DATA.lastPositionInTiles.pos1.x = Viewport_DATA.currentPositionInTiles.pos1.x;
+	Viewport_DATA.lastPositionInTiles.pos2.x = Viewport_DATA.currentPositionInTiles.pos2.x;
 }
 
 void viewport_updateLastYPosition() {
-	Viewport_DATA.lastPosition.pos1.y = Viewport_DATA.currentPosition.pos1.y;
-	Viewport_DATA.lastPosition.pos2.y = Viewport_DATA.currentPosition.pos2.y;
-}
-
-void viewport_updateLastCenterTilesPosition() {
-	Viewport_DATA.lastCenterTilesPosition.x = Viewport_DATA.currentPosition.pos1.x;
-	Viewport_DATA.lastCenterTilesPosition.y = Viewport_DATA.currentPosition.pos1.y;
+	Viewport_DATA.lastPositionInTiles.pos1.y = Viewport_DATA.currentPositionInTiles.pos1.y;
+	Viewport_DATA.lastPositionInTiles.pos2.y = Viewport_DATA.currentPositionInTiles.pos2.y;
 }
 
 void viewport_vdpSetHorizontalScroll() {
-	s16 yPosition = Viewport_DATA.rawPosition.y / 300;
-	s16 linelimit = 160 - yPosition;
-	const s16 planbPos = Viewport_DATA.rawPosition.x / 20;
-	u16 line = 0;
-	while (line < linelimit) {
-		Viewport_DATA.hzScrollLinesPlanA[line] = Viewport_DATA.realPosition.x;
-		Viewport_DATA.hzScrollLinesPlanB[line] = planbPos;
-		 ++line;
-	}
-	u16 displacedLine = 1;
-	while (line < VIEWPORT_HSCROLL_LINES_SIZE) {
-		s16 y = (Viewport_DATA.realPosition.x * displacedLine) / 80 + planbPos;
-		Viewport_DATA.hzScrollLinesPlanA[line] = Viewport_DATA.realPosition.x;
-		Viewport_DATA.hzScrollLinesPlanB[line] = y;
-		++line;
-		++displacedLine;
-	}
+	viewport_3dfxPtr();
 	VDP_setHorizontalScrollLine(PLAN_A, 0, Viewport_DATA.hzScrollLinesPlanA, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
 	VDP_setHorizontalScrollLine(PLAN_B, 0, Viewport_DATA.hzScrollLinesPlanB, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
 }
 
 void viewport_vdpSetVerticalScroll() {
-	VDP_setVerticalScroll(PLAN_A, Viewport_DATA.realPosition.y);
-	VDP_setVerticalScroll(PLAN_B, Viewport_DATA.rawPosition.y / 300);
+	VDP_setVerticalScroll(PLAN_A, Viewport_DATA.planAPosition.y);
+	VDP_setVerticalScroll(PLAN_B, Viewport_DATA.planBPosition.y);
+}
+
+void viewport_ocean3dfx() {
+	const s16 linelimit = VIEWPORT_OCEAN_LINE - Viewport_DATA.planBPosition.y;
+	u16 line = 0;
+	while (line < linelimit) {
+		Viewport_DATA.hzScrollLinesPlanA[line] = Viewport_DATA.planAPosition.x;
+		Viewport_DATA.hzScrollLinesPlanB[line] = Viewport_DATA.planBPosition.x;
+		 ++line;
+	}
+	u16 displacedLine = 1;
+	while (line < VIEWPORT_HSCROLL_LINES_SIZE) {
+		Viewport_DATA.hzScrollLinesPlanA[line] = Viewport_DATA.planAPosition.x;
+		Viewport_DATA.hzScrollLinesPlanB[line] = (Viewport_DATA.planAPosition.x * displacedLine) / 80 + Viewport_DATA.planBPosition.x;
+		++line;
+		++displacedLine;
+	}
 }

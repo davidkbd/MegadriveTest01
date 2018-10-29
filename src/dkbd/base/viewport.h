@@ -1,9 +1,12 @@
 #include <genesis.h>
 
+#include "../util/vector2.h"
+#include "../util/rect.h"
+
 /**
  * Posiciona y dibuja todos los tiles
  */
-void viewport_reset(s16 x, s16 y);
+void viewport_reset(Vector2 initialPoisition, Rect limits);
 
 /**
  * Posiciona la vista en las coordenadas indicadas

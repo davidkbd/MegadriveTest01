@@ -119,4 +119,3 @@ void ingamePlatforms_onKeyReleaseLeftFunction(u16 joy);
  * Callback de controles
  */
 void ingamePlatforms_onKeyReleaseRightFunction(u16 joy);
-

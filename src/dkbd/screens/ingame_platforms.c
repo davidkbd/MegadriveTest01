@@ -15,7 +15,7 @@
 //#include "../../../res/gfx.h"
 
 void ingamePlatforms_updateSprites();
-void ingamePlatforms_updateSpritesPositionInViewport(IngamePlatforms_Sprite *sprite);
+void ingamePlatforms_updateSpritePositionInViewport(IngamePlatforms_Sprite *sprite);
 void ingamePlatforms_updateOrDestroySprites(IngamePlatforms_Sprite *sprite);
 void ingamePlatforms_applySprites();
 void ingamePlatforms_moveViewport();
@@ -60,7 +60,7 @@ void ingamePlatforms_updateSprites() {
 	}
 }
 
-void ingamePlatforms_updateSpritesPositionInViewport(IngamePlatforms_Sprite *sprite) {
+void ingamePlatforms_updateSpritePositionInViewport(IngamePlatforms_Sprite *sprite) {
 	sprite->posInViewport.x = sprite->position.x + viewport_getCurrentX();
 	sprite->posInViewport.y = sprite->position.y - viewport_getCurrentY();
 }
@@ -82,13 +82,13 @@ void ingamePlatforms_updateOrDestroySprites(IngamePlatforms_Sprite *sprite) {
 void ingamePlatforms_applySprites() {
 	for (u8 i = 0; i < IngamePlatforms_NUM_SPRITES; ++i) {
 		IngamePlatforms_Sprite *s = &(IngamePlatforms_DATA->sprites[i]);
-		ingamePlatforms_updateSpritesPositionInViewport(s);
+		ingamePlatforms_updateSpritePositionInViewport(s);
 		if (i != 0) {
 			ingamePlatforms_updateOrDestroySprites(s);
 		}
 		if (s->sprite != 0) {
 			s16 x = (s->posInViewport.x - s->xCenter) / 10;
-			s16 y = (s->posInViewport.y - s->size.y)   / 10;
+			s16 y = (s->posInViewport.y - s->size.y)  / 10;
 			SPR_setPosition(s->sprite, x, y);
 		}
 	}
@@ -96,8 +96,8 @@ void ingamePlatforms_applySprites() {
 
 void ingamePlatforms_moveViewport() {
 	IngamePlatforms_Sprite *s = IngamePlatforms_DATA->playerSpritePTR;
-	s16 moveX = (IngamePlatforms_DATA->screenData.viewportPosition.x - s->posInViewport.x) / 8;
-	s16 moveY = (IngamePlatforms_DATA->screenData.viewportPosition.y - s->posInViewport.y) / 8;
+	s16 moveX = (IngamePlatforms_DATA->screenData.viewportOffset.x - s->posInViewport.x) / 8;
+	s16 moveY = (IngamePlatforms_DATA->screenData.viewportOffset.y - s->posInViewport.y) / 8;
 	if (abs(moveX) > 2 || abs(moveY) > 2) {
 		viewport_moveY(-moveY);
 		viewport_moveX(moveX);
@@ -124,16 +124,20 @@ void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *spri
 		if (sprite->speed.x > 0) {
 			sprite->speed.x = 0;
 		}
-		if (posInCell->pos2.x < 80 && posInCell->pos2.x > 0) {
-			sprite->position.x -= 1;
+		while (posInCell->pos2.x < 80 && posInCell->pos2.x > 0) {
+			--sprite->position.x;
+			--posInCell->pos1.x;
+			--posInCell->pos2.x;
 		}
 		sprite->pushing = 1;
 	} else if (((MAP_RESTRICTION_LEFT & restrictionUL) || (MAP_RESTRICTION_LEFT & restrictionDL)) && !(sprite->onFloor && (0b00001100 & restrictionDL))) {
 		if (sprite->speed.x < 0) {
 			sprite->speed.x = 0;
 		}
-		if (posInCell->pos1.x > 79 && posInCell->pos1.x < 159) {
-			sprite->position.x += 1;
+		while (posInCell->pos1.x > 79 && posInCell->pos1.x < 159) {
+			++sprite->position.x;
+			++posInCell->pos1.x;
+			++posInCell->pos2.x;
 		}
 		sprite->pushing = -1;
 	} else {
@@ -259,11 +263,11 @@ void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite) {
 	}
 	if (ingamePlatforms_isPressingAction()) {
 		SPR_setAnim(sprite->sprite, 4);
+	} else if (!sprite->onFloor) {
+		SPR_setAnim(sprite->sprite, 2);
 	} else if (sprite->pushing != 0) {
 		SPR_setHFlip(sprite->sprite, (sprite->pushing < 0));
 		SPR_setAnim(sprite->sprite, 6);
-	} else if (!sprite->onFloor) {
-		SPR_setAnim(sprite->sprite, 2);
 	} else if (ingamePlatforms_isPressingRight()) {
 		SPR_setAnim(sprite->sprite, 1);
 	} else if (ingamePlatforms_isPressingLeft()) {
@@ -275,5 +279,3 @@ void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite) {
 		SPR_setAnim(sprite->sprite, 0);
 	}
 }
-
-
