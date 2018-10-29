@@ -127,7 +127,7 @@ void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	s->size.y = 320;
 	s->xCenter = 120;
 	s->collider.pos1.x = -120;
-	s->collider.pos1.y = -90;
+	s->collider.pos1.y = -200;
 	s->collider.pos2.x = 120;
 	s->collider.pos2.y = 0;
 	s->data = 0;
