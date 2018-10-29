@@ -108,10 +108,6 @@ void ingamePlatforms_updateControls() {
 
 	ingamePlatforms_controlViewport();
 
-	if (ingamePlatforms_isPressingUp()) {
-		IngamePlatforms_DATA->playerSpritePTR->speed.y -= 40;
-	}
-
 	IngamePlatforms_Sprite *player = IngamePlatforms_DATA->playerSpritePTR;
 	if (ingamePlatforms_isPressingJump() && player->onFloor) {
 		player->onFloor = 0;
