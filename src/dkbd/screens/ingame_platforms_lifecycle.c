@@ -10,12 +10,12 @@
 #include "../util/map.h"
 #include "../maps/level01.h"
 
-
 #include "../../../res/sprite.h"
 #include "../../../res/gfx.h"
 #include "../base/viewport.h"
 
 void ingamePlatforms_initializePlayer(s16 x, s16 y);
+void ingamePlatforms_initializeJumper(IngamePlatforms_Sprite *s, s16 x, s16 y);
 
 // ================ INIT ================ //
 
@@ -35,24 +35,15 @@ void ingamePlatforms_initData() {
 	map_load(&level01);
 	IngamePlatforms_DATA->screenData.frameCount = 0;
 	IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
-	IngamePlatforms_DATA->gravity = 9;
+	IngamePlatforms_DATA->gravity = 6;
 	hud_reset();
 
 	ingamePlatforms_initializePlayer(1200, 300);
 	viewport_reset(vector2(0, 0), rect(0, 0, (128-40) * 160, (128-14) * 160));
 
-	// PROBANDO Sprites
-	for (u8 i = 1; i < IngamePlatforms_NUM_SPRITES; ++i) {
-		IngamePlatforms_Sprite *s = &(IngamePlatforms_DATA->sprites[i]);
-		s->sprite = 0;
-		//s->alwaysOnTop = TRUE;
-		s->spriteDef = &palmtree;
-		s->position.x = 2400 + i * 200; // Puede que casque estando tan cerca
-		s->position.y = 900 + i * 200; // Puede que casque estando tan cerca
-		s->size.x = 160;
-		s->size.y = 160;
-		s->update = ingamePlatforms_onInanimatedUpdate;
-	}
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[1]), 2410, 2220);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[2]), 2890, 2220);
+
 }
 
 void ingamePlatforms_initSound() {
@@ -126,11 +117,24 @@ void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	s->size.x = 240;
 	s->size.y = 320;
 	s->xCenter = 120;
+	s->yCenter = 140;
 	s->collider.pos1.x = -120;
 	s->collider.pos1.y = -200;
 	s->collider.pos2.x = 120;
 	s->collider.pos2.y = 0;
 	s->data = 0;
 	s->update = ingamePlatforms_onPlayerUpdate;
+}
+
+void ingamePlatforms_initializeJumper(IngamePlatforms_Sprite *s, s16 x, s16 y) {
+	s->sprite = 0;
+	//s->alwaysOnTop = TRUE;
+	s->palette = PAL2;
+	s->spriteDef = &jumper;
+	s->position.x = x;
+	s->position.y = y;
+	s->size.x = 320;
+	s->size.y = 160;
+	s->update = ingamePlatforms_onJumperUpdate;
 }
 

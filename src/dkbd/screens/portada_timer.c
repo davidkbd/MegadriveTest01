@@ -56,6 +56,6 @@ void portada_onExitEndGraphics() {
 
 void portada_onExitCompleted() {
 	portada_finalizeMemory();
-	lifecycle_openScreen_testIngame();
+	lifecycle_openScreen_ingame_platforms();
 }
 

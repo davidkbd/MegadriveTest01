@@ -19,8 +19,8 @@
 
 #define IngamePlatforms_NUM_SPRITES 3
 
-#define INGAME_PLATFORMS_MAX_X_SPEED 34
-#define INGAME_PLATFORMS_JUMP_FORCE -80
+#define INGAME_PLATFORMS_MAX_X_SPEED 25
+#define INGAME_PLATFORMS_JUMP_FORCE -70
 #define INGAME_PLATFORMS_MAX_FALLING_SPEED 70
 
 #ifndef INGAME_PLATFORMS_PRIVATE_H
@@ -28,6 +28,7 @@
 
 struct IngamePlatforms_Sprite_st {
 	const SpriteDefinition *spriteDef;
+	u8 palette;
 	u8 alwaysOnTop;
 	Sprite* sprite;
 	Vector2 position;
@@ -38,6 +39,7 @@ struct IngamePlatforms_Sprite_st {
 	s8 onPlatformBorder;
 	s8 pushing;
 	u8 xCenter;
+	u8 yCenter;
 	Rect collider;
 	//0xFFFF
 	u16 data;

@@ -34,6 +34,7 @@ void portada_initPalete() {
 }
 
 void portada_initBackgrounds() {
+	VDP_drawImageEx(PLAN_B, &planb_level01, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, G_TILEINDEX_PLANB), 0, 0, TRUE, FALSE);
 }
 
 void portada_initSprites() {

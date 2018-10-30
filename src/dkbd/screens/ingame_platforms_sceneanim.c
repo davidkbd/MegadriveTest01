@@ -8,7 +8,7 @@
 void ingamePlatforms_updateSubFloorAnimation();
 
 void ingamePlatforms_updateSceneAnimation() {
-	if (repeats_delayed(IngamePlatforms_DATA->screenData.frameCount, 0, 0, repeats_1_each_2_mode)) {
+	if (repeats_delayed(IngamePlatforms_DATA->screenData.frameCount, 0, 0, repeats_1_each_5_mode)) {
 		++IngamePlatforms_DATA->screenData.sceneAnimationFrame;
 		if (IngamePlatforms_DATA->screenData.sceneAnimationFrame > 2) {
 			IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
@@ -34,7 +34,6 @@ void ingamePlatforms_updateSubFloorAnimation() {
 			palette_putColor(PAL1, 3, 0xf33);
 			palette_putColor(PAL1, 4, 0xf55);
 			break;
-	
 	}
 	palette_apply();
 }

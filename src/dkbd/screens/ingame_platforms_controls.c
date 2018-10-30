@@ -172,20 +172,20 @@ void ingamePlatforms_releaseAction() {
 }
 
 void ingamePlatforms_controlViewport() {
-	IngamePlatforms_Sprite * s = &(IngamePlatforms_DATA->playerSpritePTR);
+	IngamePlatforms_Sprite *s = IngamePlatforms_DATA->playerSpritePTR;
 	Vector2 *viewportOffset = &(IngamePlatforms_DATA->screenData.viewportOffset);
 	if (ingamePlatforms_isPressingRight() && abs(s->speed.x) > 10) {
 		if (viewportOffset->x > 1600) {
 			viewportOffset->x = 1600;
 		}
-		if (viewportOffset->x > 700) {
+		if (viewportOffset->x > 900) {
 			viewportOffset->x -= 20;
 		}
 	} else if (ingamePlatforms_isPressingLeft()) {
 		if (viewportOffset->x < 1600) {
 				viewportOffset->x = 1600;
 			}
-		if (viewportOffset->x < 2500) {
+		if (viewportOffset->x < 2300) {
 			viewportOffset->x += 20;
 		}
 	} else {

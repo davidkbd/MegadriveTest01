@@ -34,6 +34,7 @@ void portada_configureControlsPortada() {
 
 void portada_onKeyPressFunction(u16 joy) {
 	portada_hidePressStart();
+	portada_showMenu();
 }
 
 void portada_onKeyReleaseFunction(u16 joy) {

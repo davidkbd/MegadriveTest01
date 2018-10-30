@@ -20,7 +20,7 @@ void ingamePlatforms_updateOrDestroySprites(IngamePlatforms_Sprite *sprite);
 void ingamePlatforms_applySprites();
 void ingamePlatforms_moveViewport();
 void ingamePlatforms_applyMapRestrictions(IngamePlatforms_Sprite *sprite);
-void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionUR, u16 restrictionDR, u16 restrictionUL, u16 restrictionDL);
+void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionUR, u16 restrictionCR, u16 restrictionDR, u16 restrictionUL, u16 restrictionCL, u16 restrictionDL);
 void ingamePlatforms_applyFootRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionFoots, u16 restrictionDR, u16 restrictionDL);
 void ingamePlatforms_applyHeadRestrictions(IngamePlatforms_Sprite *sprite, u16 restrictionUL, u16 restrictionUR);
 s16 ingamePlatforms_calculateFootRelaxPosition(u16 restriction, s16 spriteXInCell);
@@ -49,6 +49,7 @@ void ingamePlatforms_initialize() {
 	ingamePlatforms_initBackgrounds();
 	ingamePlatforms_initSprites();
 	ingamePlatforms_beginStart();
+	//SYS_setVIntPreCallback(&ingamePlatforms_applySprites);
 }
 
 void ingamePlatforms_updateSprites() {
@@ -71,7 +72,7 @@ void ingamePlatforms_updateOrDestroySprites(IngamePlatforms_Sprite *sprite) {
 	s16 maxx = -viewport_getCurrentX() + 3200;
 	s16 maxy = viewport_getCurrentY() + 2240;
 	if (sprite->sprite == 0 && sprite->position.x > minx && sprite->position.x < maxx && sprite->position.y > miny && sprite->position.y < maxy) {
-		sprite->sprite = SPR_addSprite(sprite->spriteDef, 0, 0, TILE_ATTR(PAL3, TRUE, FALSE, FALSE));
+		sprite->sprite = SPR_addSprite(sprite->spriteDef, 0, 0, TILE_ATTR(sprite->palette, TRUE, FALSE, FALSE));
 		SPR_setAlwaysOnTop(sprite->sprite, sprite->alwaysOnTop);
 	} else if (sprite->sprite != 0 && (sprite->position.x < minx || sprite->position.x > maxx || sprite->position.y < miny || sprite->position.y > maxy)) {
 		SPR_releaseSprite(sprite->sprite);
@@ -113,13 +114,16 @@ void ingamePlatforms_applyMapRestrictions(IngamePlatforms_Sprite *sprite) {
 	u16 restrictionDR    = map_getRestriction(cell.pos2.x, cell.pos2.y);
 	u16 restrictionDL    = map_getRestriction(cell.pos1.x, cell.pos2.y);
 	u16 restrictionFoots = map_getRestriction(sprite->position.x / 160, cell.pos2.y);
+	s16 yCenter = cell.pos2.y - sprite->yCenter;
+	u16 restrictionCL    = map_getRestriction(sprite->collider.pos1.x / 160, yCenter);
+	u16 restrictionCR    = map_getRestriction(sprite->collider.pos2.x / 160, yCenter);
 
-	ingamePlatforms_applyHorizontalMapRestrictions(sprite, &posInCell, restrictionUR, restrictionDR, restrictionUL, restrictionDL);
+	ingamePlatforms_applyHorizontalMapRestrictions(sprite, &posInCell, restrictionUR, restrictionCR, restrictionDR, restrictionUL, restrictionCL, restrictionDL);
 	ingamePlatforms_applyFootRestrictions(sprite, &posInCell, restrictionFoots, restrictionDR, restrictionDL);
 	ingamePlatforms_applyHeadRestrictions(sprite, restrictionUL, restrictionUR);
 }
 
-void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionUR, u16 restrictionDR, u16 restrictionUL, u16 restrictionDL) {
+void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionUR, u16 restrictionCR, u16 restrictionDR, u16 restrictionUL, u16 restrictionCL, u16 restrictionDL) {
 	if (((MAP_RESTRICTION_RIGHT & restrictionUR) || (MAP_RESTRICTION_RIGHT & restrictionDR)) && !(sprite->onFloor && (0b00000110 & restrictionDR))) {
 		if (sprite->speed.x > 0) {
 			sprite->speed.x = 0;
@@ -149,9 +153,8 @@ void ingamePlatforms_applyFootRestrictions(IngamePlatforms_Sprite *sprite, Rect 
 	if (MAP_RESTRICTION_DOWN & restrictionFoots) {
 		s16 spriteXInCell = sprite->position.x % 160;
 		s16 yRelaxPosition =
-				(MAP_RESTRICTION_ISRAMP & restrictionFoots)
-						? ingamePlatforms_calculateFootRelaxPosition(restrictionFoots, spriteXInCell)
-								: 10;
+						ingamePlatforms_calculateFootRelaxPosition(restrictionFoots, spriteXInCell)
+								;
 		if (sprite->speed.y > 0) {
 			if (posInCell->pos2.y >= yRelaxPosition) {
 				sprite->onFloor = 1;
@@ -185,30 +188,28 @@ void ingamePlatforms_applyHeadRestrictions(IngamePlatforms_Sprite *sprite, u16 r
 
 s16 ingamePlatforms_calculateFootRelaxPosition(u16 restriction, s16 spriteXInCell) {
 	s16 yRelaxPosition;
-	if (MAP_RESTRICTION_ISRAMPLEFT & restriction) {
-		if (MAP_RESTRICTION_ISRAMPHARD & restriction) {
-			yRelaxPosition = 160-spriteXInCell;
+	if (MAP_RESTRICTION_ISRAMP & restriction) {
+		if (MAP_RESTRICTION_ISRAMPLEFT & restriction) {
+			if (MAP_RESTRICTION_ISRAMPHARD & restriction) {
+				yRelaxPosition = 160-spriteXInCell;
+			} else {
+				yRelaxPosition = 160-spriteXInCell / 2;
+			}
 		} else {
-			yRelaxPosition = 160-spriteXInCell / 2;
-		}
-		if (MAP_RESTRICTION_ISBOTTOMTILE & restriction) {
-			yRelaxPosition -= 160;
-		}
-		if (MAP_RESTRICTION_ISRAMPDISPLACED & restriction) {
-			yRelaxPosition += 80;
+			if (MAP_RESTRICTION_ISRAMPHARD & restriction) {
+				yRelaxPosition = spriteXInCell;
+			} else {
+				yRelaxPosition = spriteXInCell / 2;
+			}
 		}
 	} else {
-		if (MAP_RESTRICTION_ISRAMPHARD & restriction) {
-			yRelaxPosition = spriteXInCell;
-		} else {
-			yRelaxPosition = spriteXInCell / 2;
-		}
-		if (MAP_RESTRICTION_ISBOTTOMTILE & restriction) {
-			yRelaxPosition -= 160;
-		}
-		if (MAP_RESTRICTION_ISRAMPDISPLACED & restriction) {
-			yRelaxPosition += 80;
-		}
+		yRelaxPosition = 0;
+	}
+	if (MAP_RESTRICTION_ISBOTTOMTILE & restriction) {
+		yRelaxPosition -= 160;
+	}
+	if (MAP_RESTRICTION_ISRAMPDISPLACED & restriction) {
+		yRelaxPosition += 80;
 	}
 	yRelaxPosition += 10;
 	return yRelaxPosition;
