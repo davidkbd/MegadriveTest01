@@ -124,7 +124,7 @@ void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *spri
 		if (sprite->speed.x > 0) {
 			sprite->speed.x = 0;
 		}
-		while (posInCell->pos2.x < 80 && posInCell->pos2.x > 0) {
+		while (posInCell->pos2.x < 80 && posInCell->pos2.x > 10) {
 			--sprite->position.x;
 			--posInCell->pos1.x;
 			--posInCell->pos2.x;
