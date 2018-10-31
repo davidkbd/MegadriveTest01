@@ -49,7 +49,6 @@ void ingamePlatforms_initialize() {
 	ingamePlatforms_initBackgrounds();
 	ingamePlatforms_initSprites();
 	ingamePlatforms_beginStart();
-	//SYS_setVIntPreCallback(&ingamePlatforms_applySprites);
 }
 
 void ingamePlatforms_updateSprites() {
@@ -299,3 +298,4 @@ void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite) {
 		SPR_setAnim(sprite->sprite, 0);
 	}
 }
+

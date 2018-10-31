@@ -56,8 +56,7 @@ void viewport_drawXTiles();
 void viewport_drawYTiles();
 void viewport_updateLastXPosition();
 void viewport_updateLastYPosition();
-void viewport_vdpSetHorizontalScroll();
-void viewport_vdpSetVerticalScroll();
+void viewport_vint();
 void viewport_ocean3dfx();
 
 void (*viewport_3dfxPtr)();
@@ -81,8 +80,10 @@ void viewport_reset(Vector2 initialPoisition, Rect limits) {
 	viewport_updateLastXPosition();
 	viewport_updateLastYPosition();
 
-	viewport_vdpSetHorizontalScroll();
-	viewport_vdpSetVerticalScroll();
+	viewport_3dfxPtr();
+
+	SYS_enableInts();
+	SYS_setVIntCallback(&viewport_vint);
 }
 
 void viewport_moveX(s16 x) {
@@ -94,7 +95,7 @@ void viewport_moveX(s16 x) {
 	viewport_calculateCurrentXPosition();
 	viewport_drawXTiles();
 	viewport_updateLastXPosition();
-	viewport_vdpSetHorizontalScroll();
+	viewport_3dfxPtr();
 }
 
 void viewport_moveY(s16 y) {
@@ -106,7 +107,6 @@ void viewport_moveY(s16 y) {
 	viewport_calculateCurrentYPosition();
 	viewport_drawYTiles();
 	viewport_updateLastYPosition();
-	viewport_vdpSetVerticalScroll();
 }
 
 s16 viewport_getCurrentX() {
@@ -210,13 +210,9 @@ void viewport_updateLastYPosition() {
 	Viewport_DATA.lastPositionInTiles.pos2.y = Viewport_DATA.currentPositionInTiles.pos2.y;
 }
 
-void viewport_vdpSetHorizontalScroll() {
-	viewport_3dfxPtr();
+void viewport_vint() {
 	VDP_setHorizontalScrollLine(PLAN_A, 0, Viewport_DATA.hzScrollLinesPlanA, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
 	VDP_setHorizontalScrollLine(PLAN_B, 0, Viewport_DATA.hzScrollLinesPlanB, VIEWPORT_HSCROLL_LINES_SIZE, TRUE);
-}
-
-void viewport_vdpSetVerticalScroll() {
 	VDP_setVerticalScroll(PLAN_A, Viewport_DATA.planAPosition.y);
 	VDP_setVerticalScroll(PLAN_B, Viewport_DATA.planBPosition.y);
 }
