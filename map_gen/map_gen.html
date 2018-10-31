@@ -19,13 +19,20 @@
 				right: 0px;
 				height: calc(100% - 130px);
 				border: solid 1px #000;
-				width: 256px;
+				width: 272px;
 				background: #f0f;
+				overflow: hidden;
+				overflow-y: scroll;
 			}
 			#m1 {
 				border: solid 1px #000;
 				margin-right: 270px;
 				margin-bottom: 130px;
+				-moz-user-select: -moz-none;
+				-khtml-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
 			}
 			#code {
 				width: 100%;
@@ -48,6 +55,11 @@
 				height: 16px;
 				border: solid 1px #0ff;
 				z-index: 999;
+			}
+			button {
+				padding: 60px;
+				padding-top: 0;
+				padding-bottom: 0;
 			}
 		</style>
 		<script>
@@ -208,6 +220,11 @@ static const u8 '+ LEVEL_NAME +'[128][128] = {\n';
 				CODE.value = txt;
 			}
 			
+			function toClipboard() {
+				document.getElementById('code').select();
+				document.execCommand('copy');
+			}
+			
 			function decimalToHexString(number) {
 			  return Number(number).toString(16).toUpperCase();
 			}
@@ -219,6 +236,7 @@ static const u8 '+ LEVEL_NAME +'[128][128] = {\n';
 		<div id="codeContainer">
 			<textarea id="code"></textarea>
 			<button onclick="loadXpm()">Load</button>
+			<button onclick="toClipboard()">Copy</button>
 		</div>
 		<div id="cursor1"></div>
 		<div id="cursor2"></div>

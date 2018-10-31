@@ -38,11 +38,11 @@ void ingamePlatforms_initData() {
 	IngamePlatforms_DATA->gravity = 6;
 	hud_reset();
 
-	ingamePlatforms_initializePlayer(1200, 300);
+	ingamePlatforms_initializePlayer(5, 5);
 	viewport_reset(vector2(0, 0), rect(0, 0, (128-40) * 160, (128-14) * 160));
 
-	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[1]), 2410, 2220);
-	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[2]), 2890, 2220);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[1]), 35, 28);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[2]), 39, 28);
 
 }
 
@@ -112,16 +112,20 @@ void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	IngamePlatforms_DATA->playerSpritePTR = &(IngamePlatforms_DATA->sprites[0]);
 	IngamePlatforms_Sprite *s = IngamePlatforms_DATA->playerSpritePTR;
 	s->spriteDef = &testingame_player;
-	s->position.x = x;
-	s->position.y = y;
+	s->position.x = x * 80;
+	s->position.y = y * 80;
 	s->size.x = 240;
 	s->size.y = 320;
 	s->xCenter = 120;
 	s->yCenter = 140;
-	s->collider.pos1.x = -120;
-	s->collider.pos1.y = -200;
-	s->collider.pos2.x = 120;
-	s->collider.pos2.y = 0;
+	s->collider.pos1.x = s->position.x -120;
+	s->collider.pos1.y = s->position.y -200;
+	s->collider.pos2.x = s->position.x +120;
+	s->collider.pos2.y = s->position.y +0;
+	s->footsCollider.pos1.x = s->position.x -40;
+	s->footsCollider.pos1.y = s->position.y -40;
+	s->footsCollider.pos2.x = s->position.x +40;
+	s->footsCollider.pos2.y = s->position.y +0;
 	s->data = 0;
 	s->update = ingamePlatforms_onPlayerUpdate;
 }
@@ -131,10 +135,20 @@ void ingamePlatforms_initializeJumper(IngamePlatforms_Sprite *s, s16 x, s16 y) {
 	//s->alwaysOnTop = TRUE;
 	s->palette = PAL2;
 	s->spriteDef = &jumper;
-	s->position.x = x;
-	s->position.y = y;
-	s->size.x = 320;
-	s->size.y = 160;
+	s->position.x = x * 80;
+	s->position.y = y * 80;
+	s->size.x = 240;
+	s->size.y = 240;
+	s->xCenter = 120;
+	s->yCenter = 80;
+	s->collider.pos1.x = s->position.x -80;
+	s->collider.pos1.y = s->position.y -160;
+	s->collider.pos2.x = s->position.x +80;
+	s->collider.pos2.y = s->position.y -100;
+	s->footsCollider.pos1.x = s->position.x -120;
+	s->footsCollider.pos1.y = s->position.y -60;
+	s->footsCollider.pos2.x = s->position.x +120;
+	s->footsCollider.pos2.y = s->position.y +0;
+	s->data = 0;
 	s->update = ingamePlatforms_onJumperUpdate;
 }
-

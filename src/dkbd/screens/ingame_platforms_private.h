@@ -41,6 +41,7 @@ struct IngamePlatforms_Sprite_st {
 	u8 xCenter;
 	u8 yCenter;
 	Rect collider;
+	Rect footsCollider;
 	//0xFFFF
 	u16 data;
 	//Callback de actualizacion

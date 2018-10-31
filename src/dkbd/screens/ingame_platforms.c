@@ -20,13 +20,13 @@ void ingamePlatforms_updateOrDestroySprites(IngamePlatforms_Sprite *sprite);
 void ingamePlatforms_applySprites();
 void ingamePlatforms_moveViewport();
 void ingamePlatforms_applyMapRestrictions(IngamePlatforms_Sprite *sprite);
-void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionUR, u16 restrictionCR, u16 restrictionDR, u16 restrictionUL, u16 restrictionCL, u16 restrictionDL);
+void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionUR, u16 restrictionDR, u16 restrictionUL, u16 restrictionDL);
 void ingamePlatforms_applyFootRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionFoots, u16 restrictionDR, u16 restrictionDL);
 void ingamePlatforms_applyHeadRestrictions(IngamePlatforms_Sprite *sprite, u16 restrictionUL, u16 restrictionUR);
 s16 ingamePlatforms_calculateFootRelaxPosition(u16 restriction, s16 spriteXInCell);
-void ingamePlatforms_putOnFloor(Vector2 *posInCell, Vector2 *sprPos, s16 yRelaxPosition);
+void ingamePlatforms_putOnFloor(Vector2 *posInCell, IngamePlatforms_Sprite *sprite, s16 yRelaxPosition);
 void ingamePlatforms_applyGravity(IngamePlatforms_Sprite *sprite);
-void ingamePlatforms_getColliderPositions(Rect *cell, Rect *posInCell);
+void ingamePlatforms_getColliderPositions(Rect *collider, Rect *cell, Rect *posInCell);
 
 void ingamePlatforms_update() {
 	++IngamePlatforms_DATA->screenData.frameCount;
@@ -108,28 +108,29 @@ void ingamePlatforms_moveViewport() {
 void ingamePlatforms_applyMapRestrictions(IngamePlatforms_Sprite *sprite) {
 	Rect cell;
 	Rect posInCell;
-	ingamePlatforms_getColliderPositions(&cell, &posInCell);
+	ingamePlatforms_getColliderPositions(&(sprite->collider), &cell, &posInCell);
 	u16 restrictionUL    = map_getRestriction(cell.pos1.x, cell.pos1.y);
 	u16 restrictionUR    = map_getRestriction(cell.pos2.x, cell.pos1.y);
 	u16 restrictionDR    = map_getRestriction(cell.pos2.x, cell.pos2.y);
 	u16 restrictionDL    = map_getRestriction(cell.pos1.x, cell.pos2.y);
 	u16 restrictionFoots = map_getRestriction(sprite->position.x / 160, cell.pos2.y);
-	s16 yCenter = cell.pos2.y - sprite->yCenter;
-	u16 restrictionCL    = map_getRestriction(sprite->collider.pos1.x / 160, yCenter);
-	u16 restrictionCR    = map_getRestriction(sprite->collider.pos2.x / 160, yCenter);
 
-	ingamePlatforms_applyHorizontalMapRestrictions(sprite, &posInCell, restrictionUR, restrictionCR, restrictionDR, restrictionUL, restrictionCL, restrictionDL);
+	ingamePlatforms_applyHorizontalMapRestrictions(sprite, &posInCell, restrictionUR, restrictionDR, restrictionUL, restrictionDL);
 	ingamePlatforms_applyFootRestrictions(sprite, &posInCell, restrictionFoots, restrictionDR, restrictionDL);
 	ingamePlatforms_applyHeadRestrictions(sprite, restrictionUL, restrictionUR);
 }
 
-void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionUR, u16 restrictionCR, u16 restrictionDR, u16 restrictionUL, u16 restrictionCL, u16 restrictionDL) {
+void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionUR, u16 restrictionDR, u16 restrictionUL, u16 restrictionDL) {
 	if (((MAP_RESTRICTION_RIGHT & restrictionUR) || (MAP_RESTRICTION_RIGHT & restrictionDR)) && !(sprite->onFloor && (0b00000110 & restrictionDR))) {
 		if (sprite->speed.x > 0) {
 			sprite->speed.x = 0;
 		}
 		while (posInCell->pos2.x < 80 && posInCell->pos2.x > 10) {
 			--sprite->position.x;
+			--sprite->collider.pos1.x;
+			--sprite->collider.pos2.x;
+			--sprite->footsCollider.pos1.x;
+			--sprite->footsCollider.pos2.x;
 			--posInCell->pos1.x;
 			--posInCell->pos2.x;
 		}
@@ -140,6 +141,10 @@ void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *spri
 		}
 		while (posInCell->pos1.x > 79 && posInCell->pos1.x < 159) {
 			++sprite->position.x;
+			++sprite->collider.pos1.x;
+			++sprite->collider.pos2.x;
+			++sprite->footsCollider.pos1.x;
+			++sprite->footsCollider.pos2.x;
 			++posInCell->pos1.x;
 			++posInCell->pos2.x;
 		}
@@ -152,9 +157,7 @@ void ingamePlatforms_applyHorizontalMapRestrictions(IngamePlatforms_Sprite *spri
 void ingamePlatforms_applyFootRestrictions(IngamePlatforms_Sprite *sprite, Rect *posInCell, u16 restrictionFoots, u16 restrictionDR, u16 restrictionDL) {
 	if (MAP_RESTRICTION_DOWN & restrictionFoots) {
 		s16 spriteXInCell = sprite->position.x % 160;
-		s16 yRelaxPosition =
-						ingamePlatforms_calculateFootRelaxPosition(restrictionFoots, spriteXInCell)
-								;
+		s16 yRelaxPosition = ingamePlatforms_calculateFootRelaxPosition(restrictionFoots, spriteXInCell);
 		if (sprite->speed.y > 0) {
 			if (posInCell->pos2.y >= yRelaxPosition) {
 				sprite->onFloor = 1;
@@ -163,7 +166,7 @@ void ingamePlatforms_applyFootRestrictions(IngamePlatforms_Sprite *sprite, Rect 
 			if ((MAP_RESTRICTION_ISRAMP & restrictionFoots)) {
 				sprite->speed.y = 20;
 			}
-			ingamePlatforms_putOnFloor(&(posInCell->pos2), &(sprite->position), yRelaxPosition);
+			ingamePlatforms_putOnFloor(&(posInCell->pos2), sprite, yRelaxPosition);
 		}
 		if (!(MAP_RESTRICTION_ISRAMP & restrictionFoots) && restrictionDL == 0 && posInCell->pos1.x < 110) {
 			sprite->onPlatformBorder = -1;
@@ -182,7 +185,11 @@ void ingamePlatforms_applyHeadRestrictions(IngamePlatforms_Sprite *sprite, u16 r
 		if (sprite->speed.y < 0) {
 			sprite->speed.y = 0;
 		}
-		sprite->position.y += 1;
+		++sprite->position.y;
+		++sprite->collider.pos1.y;
+		++sprite->collider.pos2.y;
+		++sprite->footsCollider.pos1.y;
+		++sprite->footsCollider.pos2.y;
 	}
 }
 
@@ -215,13 +222,21 @@ s16 ingamePlatforms_calculateFootRelaxPosition(u16 restriction, s16 spriteXInCel
 	return yRelaxPosition;
 }
 
-void ingamePlatforms_putOnFloor(Vector2 *posInCell, Vector2 *sprPos, s16 yRelaxPosition) {
+void ingamePlatforms_putOnFloor(Vector2 *posInCell, IngamePlatforms_Sprite *sprite, s16 yRelaxPosition) {
 	while (posInCell->y < yRelaxPosition) {
-		++sprPos->y;
+		++sprite->position.y;
+		++sprite->collider.pos1.y;
+		++sprite->collider.pos2.y;
+		++sprite->footsCollider.pos1.y;
+		++sprite->footsCollider.pos2.y;
 		++posInCell->y;
 	}
 	while (posInCell->y > yRelaxPosition) {
-		--sprPos->y;
+		--sprite->position.y;
+		--sprite->collider.pos1.y;
+		--sprite->collider.pos2.y;
+		--sprite->footsCollider.pos1.y;
+		--sprite->footsCollider.pos2.y;
 		--posInCell->y;
 	}
 }
@@ -234,20 +249,15 @@ void ingamePlatforms_applyGravity(IngamePlatforms_Sprite *sprite) {
 			INGAME_PLATFORMS_MAX_FALLING_SPEED);
 }
 
-void ingamePlatforms_getColliderPositions(Rect *cell, Rect *posInCell) {
-	IngamePlatforms_Sprite *sprite = IngamePlatforms_DATA->playerSpritePTR;
-	s16 x1 = sprite->position.x + sprite->collider.pos1.x;
-	s16 x2 = sprite->position.x + sprite->collider.pos2.x;
-	s16 y1 = sprite->position.y + sprite->collider.pos1.y;
-	s16 y2 = sprite->position.y + sprite->collider.pos2.y;
-	cell->pos1.x = x1 / 160;
-	cell->pos1.y = y1 / 160;
-	cell->pos2.x = x2 / 160;
-	cell->pos2.y = y2 / 160;
-	posInCell->pos1.x = x1 % 160;
-	posInCell->pos1.y = y1 % 160;
-	posInCell->pos2.x = x2 % 160;
-	posInCell->pos2.y = y2 % 160;
+void ingamePlatforms_getColliderPositions(Rect *collider, Rect *cell, Rect *posInCell) {
+	cell->pos1.x = collider->pos1.x / 160;
+	cell->pos1.y = collider->pos1.y / 160;
+	cell->pos2.x = collider->pos2.x / 160;
+	cell->pos2.y = collider->pos2.y / 160;
+	posInCell->pos1.x = collider->pos1.x % 160;
+	posInCell->pos1.y = collider->pos1.y % 160;
+	posInCell->pos2.x = collider->pos2.x % 160;
+	posInCell->pos2.y = collider->pos2.y % 160;
 }
 
 void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite) {
@@ -256,6 +266,15 @@ void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite) {
 
 	sprite->position.x += sprite->speed.x;
 	sprite->position.y += sprite->speed.y;
+
+	sprite->collider.pos1.x += sprite->speed.x;
+	sprite->collider.pos2.x += sprite->speed.x;
+	sprite->collider.pos1.y += sprite->speed.y;
+	sprite->collider.pos2.y += sprite->speed.y;
+	sprite->footsCollider.pos1.x += sprite->speed.x;
+	sprite->footsCollider.pos2.x += sprite->speed.x;
+	sprite->footsCollider.pos1.y += sprite->speed.y;
+	sprite->footsCollider.pos2.y += sprite->speed.y;
 
 	if (ingamePlatforms_isPressingRight()) {
 		SPR_setHFlip(sprite->sprite, FALSE);
