@@ -183,21 +183,25 @@ void viewport_calculateCurrentYPosition() {
 }
 
 void viewport_drawXTiles() {
+	SYS_disableInts();
 	if (viewport_isMovingLeft()) {
 		viewport_putColumnOfTiles(Viewport_DATA.currentPositionInTiles.pos1.x);
 	}
 	if (viewport_isMovingRight()) {
 		viewport_putColumnOfTiles(Viewport_DATA.currentPositionInTiles.pos2.x);
 	}
+	SYS_enableInts();
 }
 
 void viewport_drawYTiles() {
+	SYS_disableInts();
 	if (viewport_isMovingUp()) {
 		viewport_putRowOfTiles(Viewport_DATA.currentPositionInTiles.pos1.y);
 	}
 	if (viewport_isMovingDown()) {
 		viewport_putRowOfTiles(Viewport_DATA.currentPositionInTiles.pos2.y);
 	}
+	SYS_enableInts();
 }
 
 void viewport_updateLastXPosition() {

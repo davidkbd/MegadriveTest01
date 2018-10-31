@@ -39,11 +39,9 @@ void ingamePlatforms_initData() {
 	hud_reset();
 
 	ingamePlatforms_initializePlayer(5, 5);
-	viewport_reset(vector2(0, 0), rect(0, 0, (128-40) * 160, (128-14) * 160));
 
 	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[1]), 35, 28);
 	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[2]), 39, 28);
-
 }
 
 void ingamePlatforms_initSound() {
@@ -83,6 +81,8 @@ void ingamePlatforms_initSprites() {
 	IngamePlatforms_DATA->sprites[0].sprite = SPR_addSprite(&testingame_player, 0, 0, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
 
 	SPR_update();
+
+	viewport_reset(vector2(0, 0), rect(0, 0, (128-40) * 160, (128-14) * 160));
 }
 
 // ================ FINALIZE ================ //

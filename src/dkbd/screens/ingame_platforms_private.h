@@ -93,3 +93,5 @@ u8 ingamePlatforms_isPressingJump();
 u8 ingamePlatforms_isPressingAction();
 
 void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite);
+void ingamePlatforms_moveXSprite(IngamePlatforms_Sprite *sprite, s16 x);
+void ingamePlatforms_moveYSprite(IngamePlatforms_Sprite *sprite, s16 y);

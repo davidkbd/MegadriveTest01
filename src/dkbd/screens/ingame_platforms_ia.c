@@ -26,11 +26,7 @@ void ingamePlatforms_onJumperUpdate(IngamePlatforms_Sprite *s) {
 		} else {
 			displace = 1;
 		}
-		player->position.x      += displace;
-		player->collider.pos1.x += displace;
-		player->collider.pos2.x += displace;
-		player->footsCollider.pos1.x += displace;
-		player->footsCollider.pos2.x += displace;
+		ingamePlatforms_moveXSprite(player, displace);
 		player->pushing = 1;
 	}
 	if (collision_checkRectVsRect(&(s->collider), &(player->footsCollider)) || s->data != 0) {
