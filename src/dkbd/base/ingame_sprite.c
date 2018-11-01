@@ -44,8 +44,8 @@ void ingameSprite_disable(IngameSprite *sprite) {
 u8 ingameSprite_isInVieport(IngameSprite *sprite) {
 	s16 minx = -viewport_getCurrentX() - sprite->size.x;
 	s16 miny =  viewport_getCurrentY() - sprite->size.y;
-	s16 maxx = -viewport_getCurrentX() + 3200;
-	s16 maxy =  viewport_getCurrentY() + 2240;
+	s16 maxx = -viewport_getCurrentX() + 3200 + sprite->size.x;
+	s16 maxy =  viewport_getCurrentY() + 2240 + sprite->size.y;
 	return
 			sprite->position.x > minx &&
 			sprite->position.x < maxx &&
@@ -56,8 +56,8 @@ u8 ingameSprite_isInVieport(IngameSprite *sprite) {
 u8 ingameSprite_isOutOfViewport(IngameSprite *sprite) {
 	s16 minx = -viewport_getCurrentX() - sprite->size.x;
 	s16 miny =  viewport_getCurrentY() - sprite->size.y;
-	s16 maxx = -viewport_getCurrentX() + 3200;
-	s16 maxy =  viewport_getCurrentY() + 2240;
+	s16 maxx = -viewport_getCurrentX() + 3200 + sprite->size.x;
+	s16 maxy =  viewport_getCurrentY() + 2240 + sprite->size.y;
 	return
 			sprite->position.x < minx ||
 			sprite->position.x > maxx ||

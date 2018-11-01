@@ -19,7 +19,6 @@ struct IngameSprite_st {
 	s8 onPlatformBorder;
 	s8 pushing;
 	u8 xCenter;
-	u8 yCenter;
 	Rect collider;
 	Rect footsCollider;
 	//0xFFFF

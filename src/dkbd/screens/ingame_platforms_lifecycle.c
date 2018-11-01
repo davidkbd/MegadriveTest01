@@ -33,7 +33,7 @@ void ingamePlatforms_initMemory() {
 }
 
 void ingamePlatforms_initData() {
-	map_load(&level01, &level01Sprites);
+	map_load(level01, level01sprites);
 	IngamePlatforms_DATA->screenData.frameCount = 0;
 	IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
 	IngamePlatforms_DATA->gravity = 6;
@@ -119,7 +119,6 @@ void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	s->size.x = 240;
 	s->size.y = 320;
 	s->xCenter = 120;
-	s->yCenter = 140;
 	s->collider.pos1.x = s->position.x -120;
 	s->collider.pos1.y = s->position.y -200;
 	s->collider.pos2.x = s->position.x +120;
@@ -142,7 +141,6 @@ void ingamePlatforms_initializeJumper(IngameSprite *s, s16 x, s16 y) {
 	s->size.x = 240;
 	s->size.y = 240;
 	s->xCenter = 120;
-	s->yCenter = 80;
 	s->collider.pos1.x = s->position.x -80;
 	s->collider.pos1.y = s->position.y -160;
 	s->collider.pos2.x = s->position.x +80;

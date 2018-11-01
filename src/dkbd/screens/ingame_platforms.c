@@ -26,7 +26,7 @@ void ingamePlatforms_applyHeadRestrictions(IngameSprite *sprite, u16 restriction
 s16 ingamePlatforms_calculateFootRelaxPosition(u16 restriction, s16 spriteXInCell);
 void ingamePlatforms_putOnFloor(Vector2 *posInCell, IngameSprite *sprite, s16 yRelaxPosition);
 void ingamePlatforms_applyGravity(IngameSprite *sprite);
-void ingamePlatforms_getColliderPositions(Rect *collider, Rect *cell, Rect *posInCell);
+void ingamePlatforms_getColliderPositions(Rect *collider, Vector2 *posTop, Vector2 *posBottom, Rect *posInCell);
 
 void ingamePlatforms_update() {
 	++IngamePlatforms_DATA->screenData.frameCount;
@@ -100,16 +100,20 @@ void ingamePlatforms_moveViewport() {
 }
 
 void ingamePlatforms_applyMapRestrictions(IngameSprite *sprite) {
-	Rect cell;
+	Vector2 posTopLeft;
+	Vector2 posBottomRight;
 	Rect posInCell;
-	ingamePlatforms_getColliderPositions(&(sprite->collider), &cell, &posInCell);
-	u16 restrictionUL    = map_getRestriction(cell.pos1.x, cell.pos1.y);
-	u16 restrictionUR    = map_getRestriction(cell.pos2.x, cell.pos1.y);
-	u16 restrictionDR    = map_getRestriction(cell.pos2.x, cell.pos2.y);
-	u16 restrictionDL    = map_getRestriction(cell.pos1.x, cell.pos2.y);
-	u16 restrictionFoots = map_getRestriction(sprite->position.x / 160, cell.pos2.y);
+	ingamePlatforms_getColliderPositions(&(sprite->collider), &posTopLeft, &posBottomRight, &posInCell);
+	s16 midY = (posTopLeft.y + posBottomRight.y) / 2;
+	u16 restrictionUL    = map_getRestriction(posTopLeft.x, posTopLeft.y);
+	u16 restrictionUR    = map_getRestriction(posBottomRight.x, posTopLeft.y);
+	u16 restrictionML    = map_getRestriction(posTopLeft.x, midY);
+	u16 restrictionMR    = map_getRestriction(posBottomRight.x, midY);
+	u16 restrictionDR    = map_getRestriction(posBottomRight.x, posBottomRight.y);
+	u16 restrictionDL    = map_getRestriction(posTopLeft.x, posBottomRight.y);
+	u16 restrictionFoots = map_getRestriction(sprite->position.x / 160, posBottomRight.y);
 
-	ingamePlatforms_applyHorizontalMapRestrictions(sprite, &posInCell, restrictionUR, restrictionDR, restrictionUL, restrictionDL);
+	ingamePlatforms_applyHorizontalMapRestrictions(sprite, &posInCell, restrictionMR, restrictionDR, restrictionML, restrictionDL);
 	ingamePlatforms_applyFootRestrictions(sprite, &posInCell, restrictionFoots, restrictionDR, restrictionDL);
 	ingamePlatforms_applyHeadRestrictions(sprite, restrictionUL, restrictionUR);
 }
@@ -223,11 +227,11 @@ void ingamePlatforms_applyGravity(IngameSprite *sprite) {
 			INGAME_PLATFORMS_MAX_FALLING_SPEED);
 }
 
-void ingamePlatforms_getColliderPositions(Rect *collider, Rect *cell, Rect *posInCell) {
-	cell->pos1.x = collider->pos1.x / 160;
-	cell->pos1.y = collider->pos1.y / 160;
-	cell->pos2.x = collider->pos2.x / 160;
-	cell->pos2.y = collider->pos2.y / 160;
+void ingamePlatforms_getColliderPositions(Rect *collider, Vector2 *posTopLeft, Vector2 *posBottomRight, Rect *posInCell) {
+	posTopLeft->x = collider->pos1.x / 160;
+	posTopLeft->y = collider->pos1.y / 160;
+	posBottomRight->x = collider->pos2.x / 160;
+	posBottomRight->y = collider->pos2.y / 160;
 	posInCell->pos1.x = collider->pos1.x % 160;
 	posInCell->pos1.y = collider->pos1.y % 160;
 	posInCell->pos2.x = collider->pos2.x % 160;
