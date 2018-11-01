@@ -108,7 +108,7 @@ void ingamePlatforms_updateControls() {
 
 	ingamePlatforms_controlViewport();
 
-	IngamePlatforms_Sprite *player = IngamePlatforms_DATA->playerSpritePTR;
+	IngameSprite *player = IngamePlatforms_DATA->playerSpritePTR;
 	if (ingamePlatforms_isPressingJump() && player->onFloor) {
 		player->onFloor = 0;
 		player->speed.y = INGAME_PLATFORMS_JUMP_FORCE;
@@ -172,7 +172,7 @@ void ingamePlatforms_releaseAction() {
 }
 
 void ingamePlatforms_controlViewport() {
-	IngamePlatforms_Sprite *s = IngamePlatforms_DATA->playerSpritePTR;
+	IngameSprite *s = IngamePlatforms_DATA->playerSpritePTR;
 	Vector2 *viewportOffset = &(IngamePlatforms_DATA->screenData.viewportOffset);
 	if (ingamePlatforms_isPressingRight() && abs(s->speed.x) > 10) {
 		if (viewportOffset->x > 1600) {

@@ -9,24 +9,19 @@
 #include "../util/repeats.h"
 #include "../util/collision.h"
 
-void ingamePlatforms_onInanimatedUpdate(IngamePlatforms_Sprite *s) {
+void ingamePlatforms_onInanimatedUpdate(IngameSprite *s) {
 }
 
-void ingamePlatforms_onJumperUpdate(IngamePlatforms_Sprite *s) {
-	if (s->sprite == 0) {
+void ingamePlatforms_onJumperUpdate(IngameSprite *s) {
+	if (ingameSprite_isDisabled(s)) {
 		return;
 	}
 	// s->data = animation position
-	IngamePlatforms_Sprite *player = IngamePlatforms_DATA->playerSpritePTR;
+	IngameSprite *player = IngamePlatforms_DATA->playerSpritePTR;
 	player->pushing = 0;
 	while (collision_checkRectVsRect(&(player->footsCollider), &(s->footsCollider))) {
-		s8 displace;
-		if (player->position.x + player->xCenter < s->position.x + s->xCenter) {
-			displace = -1;
-		} else {
-			displace = 1;
-		}
-		ingamePlatforms_moveXSprite(player, displace);
+		s8 displace = (ingameSprite_comparePosition(player, s) < 0)? -1 : 1;
+		ingameSprite_moveX(player, displace);
 		player->pushing = 1;
 	}
 	if (collision_checkRectVsRect(&(s->collider), &(player->footsCollider)) || s->data != 0) {

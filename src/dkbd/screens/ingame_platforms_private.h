@@ -1,5 +1,7 @@
 #include "../base/screens_global.h"
 
+#include "../base/ingame_sprite.h"
+
 #include "../util/rect.h"
 #include "../util/vector2.h"
 
@@ -27,28 +29,7 @@
 #ifndef INGAME_PLATFORMS_PRIVATE_H
 #define INGAME_PLATFORMS_PRIVATE_H
 
-struct IngamePlatforms_Sprite_st {
-	const SpriteDefinition *spriteDef;
-	u8 palette;
-	u8 alwaysOnTop;
-	Sprite* sprite;
-	Vector2 position;
-	Vector2 posInViewport;
-	Vector2 speed;
-	Vector2 size; // Visualmente, utilizado para saber si cargar o destruir al hacer scroll
-	u8 onFloor;
-	s8 onPlatformBorder;
-	s8 pushing;
-	u8 xCenter;
-	u8 yCenter;
-	Rect collider;
-	Rect footsCollider;
-	//0xFFFF
-	u16 data;
-	//Callback de actualizacion
-	void (*update)(struct IngamePlatforms_Sprite_st *sprite);
-};
-typedef struct IngamePlatforms_Sprite_st IngamePlatforms_Sprite;
+//static const INGAME_PLATFORMS_JUMPERS[4] = {1, 2, 3, 4};
 
 struct IngamePlatforms_ScreenData {
 	struct ScreenData {
@@ -59,12 +40,12 @@ struct IngamePlatforms_ScreenData {
 
 	s8 gravity;
 
-	IngamePlatforms_Sprite hudTimeSprite;
-	IngamePlatforms_Sprite hudAnimalsSprite;
-	IngamePlatforms_Sprite hudScoreSprite;
+	IngameSprite hudTimeSprite;
+	IngameSprite hudAnimalsSprite;
+	IngameSprite hudScoreSprite;
 
-	IngamePlatforms_Sprite *playerSpritePTR;
-	IngamePlatforms_Sprite sprites[IngamePlatforms_NUM_SPRITES];
+	IngameSprite *playerSpritePTR;
+	IngameSprite sprites[IngamePlatforms_NUM_SPRITES];
 };
 struct IngamePlatforms_ScreenData* IngamePlatforms_DATA;
 
@@ -93,6 +74,4 @@ u8 ingamePlatforms_isPressingDown();
 u8 ingamePlatforms_isPressingJump();
 u8 ingamePlatforms_isPressingAction();
 
-void ingamePlatforms_onPlayerUpdate(IngamePlatforms_Sprite *sprite);
-void ingamePlatforms_moveXSprite(IngamePlatforms_Sprite *sprite, s16 x);
-void ingamePlatforms_moveYSprite(IngamePlatforms_Sprite *sprite, s16 y);
+void ingamePlatforms_onPlayerUpdate(IngameSprite *sprite);

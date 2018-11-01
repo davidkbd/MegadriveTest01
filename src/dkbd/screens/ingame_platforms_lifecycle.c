@@ -15,7 +15,7 @@
 #include "../base/viewport.h"
 
 void ingamePlatforms_initializePlayer(s16 x, s16 y);
-void ingamePlatforms_initializeJumper(IngamePlatforms_Sprite *s, s16 x, s16 y);
+void ingamePlatforms_initializeJumper(IngameSprite *s, s16 x, s16 y);
 
 // ================ INIT ================ //
 
@@ -112,7 +112,7 @@ void ingamePlatforms_finalizeMemory() {
 
 void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	IngamePlatforms_DATA->playerSpritePTR = &(IngamePlatforms_DATA->sprites[0]);
-	IngamePlatforms_Sprite *s = IngamePlatforms_DATA->playerSpritePTR;
+	IngameSprite *s = IngamePlatforms_DATA->playerSpritePTR;
 	s->spriteDef = &testingame_player;
 	s->position.x = x * 80;
 	s->position.y = y * 80;
@@ -132,7 +132,7 @@ void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	s->update = ingamePlatforms_onPlayerUpdate;
 }
 
-void ingamePlatforms_initializeJumper(IngamePlatforms_Sprite *s, s16 x, s16 y) {
+void ingamePlatforms_initializeJumper(IngameSprite *s, s16 x, s16 y) {
 	s->sprite = 0;
 	//s->alwaysOnTop = TRUE;
 	s->palette = PAL2;
