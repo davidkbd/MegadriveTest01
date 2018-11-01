@@ -30,6 +30,8 @@ struct IngameSprite_st {
 typedef struct IngameSprite_st IngameSprite;
 #endif
 
+
+void ingameSprite_moveTo(IngameSprite *sprite, s16 x, s16 y);
 void ingameSprite_moveX(IngameSprite *sprite, s16 x);
 void ingameSprite_moveY(IngameSprite *sprite, s16 y);
 u8 ingameSprite_isEnabled(IngameSprite *sprite);

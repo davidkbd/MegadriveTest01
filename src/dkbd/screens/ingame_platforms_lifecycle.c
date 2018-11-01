@@ -9,6 +9,7 @@
 #include "../util/palette.h"
 #include "../util/map.h"
 #include "../maps/level01.h"
+#include "../maps/level01_sprites.h"
 
 #include "../../../res/sprite.h"
 #include "../../../res/gfx.h"
@@ -32,7 +33,7 @@ void ingamePlatforms_initMemory() {
 }
 
 void ingamePlatforms_initData() {
-	map_load(&level01);
+	map_load(&level01, &level01Sprites);
 	IngamePlatforms_DATA->screenData.frameCount = 0;
 	IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
 	IngamePlatforms_DATA->gravity = 6;
@@ -40,10 +41,9 @@ void ingamePlatforms_initData() {
 
 	ingamePlatforms_initializePlayer(5, 5);
 
-	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[1]), 35, 28);
-	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[2]), 39, 28);
-	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[3]), 4, 44);
-	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[4]), 64, 44);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[1]), 4, 44);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[2]), 35, 28);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[3]), 39, 28);
 }
 
 void ingamePlatforms_initSound() {
@@ -66,7 +66,6 @@ void ingamePlatforms_initBackgrounds() {
 
 	VDP_loadTileData(ingame_wall_tile.tiles,       G_TILEINDEX_WALL,   ingame_background_tile.numTile,  FALSE);
 
-
 	VDP_drawImageEx(PLAN_B, &planb_level01, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, G_TILEINDEX_PLANB), 0, 0, TRUE, FALSE);
 }
 
@@ -85,6 +84,7 @@ void ingamePlatforms_initSprites() {
 	SPR_update();
 
 	viewport_reset(vector2(0, 0), rect(0, 0, (128-40) * 160, (128-14) * 160));
+	viewport_setOnSpriteReplaceCallback(ingamePlatforms_onViewportSprite);
 }
 
 // ================ FINALIZE ================ //

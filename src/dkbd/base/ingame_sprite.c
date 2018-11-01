@@ -2,6 +2,11 @@
 
 #include "viewport.h"
 
+void ingameSprite_moveTo(IngameSprite *sprite, s16 x, s16 y) {
+	ingameSprite_moveX(sprite, x - sprite->position.x);
+	ingameSprite_moveY(sprite, y - sprite->position.y);
+}
+
 void ingameSprite_moveX(IngameSprite *sprite, s16 x) {
 	sprite->position.x += x;
 	sprite->collider.pos1.x += x;
@@ -61,11 +66,9 @@ u8 ingameSprite_isOutOfViewport(IngameSprite *sprite) {
 }
 
 void ingameSprite_applyPosition(IngameSprite *sprite) {
-	if (sprite->sprite != 0) {
-		s16 x = (sprite->posInViewport.x - sprite->xCenter) / 10;
-		s16 y = (sprite->posInViewport.y - sprite->size.y)  / 10;
-		SPR_setPosition(sprite->sprite, x, y);
-	}
+	s16 x = (sprite->posInViewport.x - sprite->xCenter) / 10;
+	s16 y = (sprite->posInViewport.y - sprite->size.y)  / 10;
+	SPR_setPosition(sprite->sprite, x, y);
 }
 
 s8 ingameSprite_comparePosition(IngameSprite *sprite1, IngameSprite *sprite2) {

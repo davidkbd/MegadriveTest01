@@ -14,7 +14,7 @@ void tiles_addMapTile(u16 tile, s16 x, s16 y, u8 onTop);
 void tiles_removeBackgroundTile(s16 x, s16 y);
 void tiles_addBackgroundTile(u16 tile, s16 x, s16 y, u8 onTop);
 
-void tiles_putMapTile(u16 tile, s16 x, s16 y, u8 onTop) {
+void tiles_putMapTile(u8 tile, s16 x, s16 y, u8 onTop) {
 	if (tile == 0) {
 		tiles_removeMapTile(x, y);
 	} else {
@@ -23,7 +23,7 @@ void tiles_putMapTile(u16 tile, s16 x, s16 y, u8 onTop) {
 	}
 }
 
-void tiles_putBackgroundTile(u16 tile, s16 x, s16 y, u8 onTop) {
+void tiles_putBackgroundTile(u8 tile, s16 x, s16 y, u8 onTop) {
 	if (tile == 0) {
 		tiles_removeBackgroundTile(x, y);
 	} else {

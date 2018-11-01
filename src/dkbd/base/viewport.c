@@ -36,12 +36,15 @@ struct Viewport_DATA_st {
 	// Scroll data
 	s16 hzScrollLinesPlanA[VIEWPORT_HSCROLL_LINES_SIZE];
 	s16 hzScrollLinesPlanB[VIEWPORT_HSCROLL_LINES_SIZE];
+	// Cuando al hacer scroll aparece un sprite, se llama al callback
+	void (*onSpriteReplaceCallback)(u8 spriteId, s16 x, s16 y);
 } Viewport_DATA;
 
-void viewport_fillOfTiles();
-void viewport_putColumnOfTiles(s16 x);
-void viewport_putRowOfTiles(s16 y);
+void viewport_refreshCurrentViewport();
+void viewport_refreshColumn(s16 x);
+void viewport_refreshRow(s16 y);
 void viewport_putPlanATile(s16 x, s16 y);
+void viewport_putSprite(s16 x, s16 y);
 u8 viewport_isMovingUp();
 u8 viewport_isMovingDown();
 u8 viewport_isMovingLeft();
@@ -62,6 +65,7 @@ void viewport_ocean3dfx();
 void (*viewport_3dfxPtr)();
 
 void viewport_reset(Vector2 initialPoisition, Rect limits) {
+	Viewport_DATA.onSpriteReplaceCallback = 0;
 	viewport_3dfxPtr = viewport_ocean3dfx;
 	Viewport_DATA.limits.pos1.x = -limits.pos1.x;
 	Viewport_DATA.limits.pos2.x = -limits.pos2.x;
@@ -75,7 +79,7 @@ void viewport_reset(Vector2 initialPoisition, Rect limits) {
 	viewport_calculatePlanBYPosition();
 	viewport_calculateCurrentYPosition();
 
-	viewport_fillOfTiles();
+	viewport_refreshCurrentViewport();
 
 	viewport_updateLastXPosition();
 	viewport_updateLastYPosition();
@@ -117,27 +121,44 @@ s16 viewport_getCurrentY() {
 	return Viewport_DATA.rawPosition.y;
 }
 
-void viewport_fillOfTiles() {
+void viewport_setOnSpriteReplaceCallback(void (*callback)(u8 spriteId, s16 x, s16 y)) {
+	Viewport_DATA.onSpriteReplaceCallback = callback;
+}
+
+void viewport_refreshCurrentViewport() {
 	for (s16 i = Viewport_DATA.currentPositionInTiles.pos1.x; i <= Viewport_DATA.currentPositionInTiles.pos2.x; ++i) {
-		viewport_putColumnOfTiles(i);
+		viewport_refreshColumn(i);
 	}
 }
 
-void viewport_putColumnOfTiles(s16 x) {
+void viewport_refreshColumn(s16 x) {
 	for (s16 y = Viewport_DATA.currentPositionInTiles.pos1.y; y <= Viewport_DATA.currentPositionInTiles.pos2.y; ++y) {
 		viewport_putPlanATile(x, y);
+		viewport_putSprite(x, y);
 	}
 }
 
-void viewport_putRowOfTiles(s16 y) {
+void viewport_refreshRow(s16 y) {
 	for (s16 x = Viewport_DATA.currentPositionInTiles.pos1.x; x <= Viewport_DATA.currentPositionInTiles.pos2.x; ++x) {
 		viewport_putPlanATile(x, y);
+		viewport_putSprite(x, y);
 	}
 }
 
 void viewport_putPlanATile(s16 x, s16 y) {
-	u16 tileId = map_getPlanA(x, y);
+	u8 tileId = map_getPlanA(x, y);
 	tiles_putMapTile(tileId, x, y, FALSE);
+}
+
+void viewport_putSprite(s16 x, s16 y) {
+	if (Viewport_DATA.onSpriteReplaceCallback == 0) {
+		KLog("WARNING, el callback esta desactivado, no deberia");
+		return;
+	}
+	u8 spriteId = map_getSprite(x, y);
+	if (spriteId != 0) {
+		Viewport_DATA.onSpriteReplaceCallback(spriteId, (x+1) * 160, (y+1) * 160);
+	}
 }
 
 u8 viewport_isMovingUp() {
@@ -185,10 +206,10 @@ void viewport_calculateCurrentYPosition() {
 void viewport_drawXTiles() {
 	SYS_disableInts();
 	if (viewport_isMovingLeft()) {
-		viewport_putColumnOfTiles(Viewport_DATA.currentPositionInTiles.pos1.x);
+		viewport_refreshColumn(Viewport_DATA.currentPositionInTiles.pos1.x);
 	}
 	if (viewport_isMovingRight()) {
-		viewport_putColumnOfTiles(Viewport_DATA.currentPositionInTiles.pos2.x);
+		viewport_refreshColumn(Viewport_DATA.currentPositionInTiles.pos2.x);
 	}
 	SYS_enableInts();
 }
@@ -196,10 +217,10 @@ void viewport_drawXTiles() {
 void viewport_drawYTiles() {
 	SYS_disableInts();
 	if (viewport_isMovingUp()) {
-		viewport_putRowOfTiles(Viewport_DATA.currentPositionInTiles.pos1.y);
+		viewport_refreshRow(Viewport_DATA.currentPositionInTiles.pos1.y);
 	}
 	if (viewport_isMovingDown()) {
-		viewport_putRowOfTiles(Viewport_DATA.currentPositionInTiles.pos2.y);
+		viewport_refreshRow(Viewport_DATA.currentPositionInTiles.pos2.y);
 	}
 	SYS_enableInts();
 }

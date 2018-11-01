@@ -6,25 +6,23 @@
 #include "string.h"
 #include "limits.h"
 
-#define MAP_PLAN_A 0
-
-void map_loadMap(u8 plan, const u8 * (*map)[MAP_WIDTH]);
-u8 map_get(u8 plan, u8 x, u8 y);
 u8 map_calculateWidth();
 u8 map_calculateHeight();
 
 struct Map_DATA_st {
 	const u8 (*data)[MAP_WIDTH];
+	const u8 (*sprites)[MAP_WIDTH];
 	u8 width;
 	u8 height;
 } *Map_DATA = NULL;
 
-void map_load(const u8 * (*mapPlanA)[MAP_WIDTH]) {
+void map_load(const u8 * (*mapPlanA)[MAP_WIDTH], const u8 * (*sprites)[MAP_WIDTH]) {
 	map_destroy();
 	Map_DATA = MEM_alloc(sizeof(struct Map_DATA_st) * 1);
-	map_loadMap(MAP_PLAN_A, mapPlanA);
-	Map_DATA[MAP_PLAN_A].width = map_calculateWidth();
-	Map_DATA[MAP_PLAN_A].height = map_calculateHeight();
+	Map_DATA->data = &(mapPlanA[0][0]);
+	Map_DATA->sprites = &(sprites[0][0]);
+	Map_DATA->width = map_calculateWidth();
+	Map_DATA->height = map_calculateHeight();
 }
 
 void map_destroy() {
@@ -34,15 +32,23 @@ void map_destroy() {
 }
 
 u8 map_getWidth() {
-	return Map_DATA[MAP_PLAN_A].width;
+	return Map_DATA->width;
 }
 
 u8 map_getHeight() {
-	return Map_DATA[MAP_PLAN_A].height;
+	return Map_DATA->height;
 }
 
 u8 map_getPlanA(u8 x, u8 y) {
-	return map_get(MAP_PLAN_A, x, y);
+	return Map_DATA->data[y][x];
+}
+
+u8 map_getSprite(u8 x, u8 y) {
+	u8 s = Map_DATA->sprites[y][x];
+	if (s < 160) {
+		return 0;
+	}
+	return s - 160;
 }
 
 //u8 map_getPlanB(u8 x, u8 y) {
@@ -61,19 +67,9 @@ u8 map_getOnTop(u8 tileId) {
 	return map_ontop[tileId];
 }
 
-void map_loadMap(u8 plan, const u8 * (*map)[MAP_WIDTH]) {
-	Map_DATA[plan].data = &(map[0][0]);
-}
-
-u8 map_get(u8 plan, u8 x, u8 y) {
-	u16 xx = limits_cycle_s16(x, 0, 0, map_getWidth());
-	u16 yy = limits_cycle_s16(y, 0, 0, map_getHeight());
-	return Map_DATA[plan].data[yy][xx];
-}
-
 u8 map_calculateWidth() {
 	for (u8 x = 0; x < MAP_WIDTH; ++x) {
-		if (Map_DATA[MAP_PLAN_A].data[0][x] == 127) {
+		if (Map_DATA->data[0][x] == 127) {
 			return x + 1;
 		}
 	}
@@ -82,7 +78,7 @@ u8 map_calculateWidth() {
 
 u8 map_calculateHeight() {
 	for (u8 y = 0; y < MAP_HEIGHT; ++y) {
-		if (Map_DATA[MAP_PLAN_A].data[y][0] == 127) {
+		if (Map_DATA->data[y][0] == 127) {
 			return y + 1;
 		}
 	}

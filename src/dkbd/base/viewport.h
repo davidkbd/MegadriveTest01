@@ -27,3 +27,8 @@ s16 viewport_getCurrentX();
  * Obtiene posicion vertical.
  */
 s16 viewport_getCurrentY();
+
+/**
+ * Cuando al hacer scroll aparece un sprite, se llama al callback
+ */
+void viewport_setOnSpriteReplaceCallback(void (*callback)(u8 spriteId, s16 x, s16 y));

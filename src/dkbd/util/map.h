@@ -22,7 +22,7 @@
 /**
  * Carga datos
  */
-void map_load(const u8 * (*mapPlanA)[MAP_WIDTH]);
+void map_load(const u8 * (*mapPlanA)[MAP_WIDTH], const u8 * (*sprites)[MAP_WIDTH]);
 
 /**
  * Libera memoria
@@ -43,6 +43,11 @@ u8 map_getHeight();
  * Obtiene el tile del mapa en memoria dada la posicion
  */
 u8 map_getPlanA(u8 x, u8 y);
+
+/**
+ * Obtiene el sprite del mapa en memoria dada la posicion
+ */
+u8 map_getSprite(u8 x, u8 y);
 
 /**
  * Obtiene el tile del mapa en memoria dada la posicion

@@ -29,8 +29,6 @@
 #ifndef INGAME_PLATFORMS_PRIVATE_H
 #define INGAME_PLATFORMS_PRIVATE_H
 
-//static const INGAME_PLATFORMS_JUMPERS[4] = {1, 2, 3, 4};
-
 struct IngamePlatforms_ScreenData {
 	struct ScreenData {
 		u16 frameCount;
@@ -74,4 +72,5 @@ u8 ingamePlatforms_isPressingDown();
 u8 ingamePlatforms_isPressingJump();
 u8 ingamePlatforms_isPressingAction();
 
+void ingamePlatforms_onViewportSprite(u8 spriteId, s16 x, s16 y);
 void ingamePlatforms_onPlayerUpdate(IngameSprite *sprite);

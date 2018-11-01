@@ -38,6 +38,7 @@ void ingamePlatforms_update() {
 	ingamePlatforms_applySprites();
 	ingamePlatforms_updateSceneAnimation();
 	hud_updateScore(getFPS());
+	//hud_updateScore(IngamePlatforms_DATA->playerSpritePTR->position.x/80);
 }
 
 void ingamePlatforms_initialize() {
@@ -80,7 +81,11 @@ void ingamePlatforms_applySprites() {
 		if (i != 0) {
 			ingamePlatforms_updateOrDestroySprites(s);
 		}
-		ingameSprite_applyPosition(s);
+		if (ingameSprite_isEnabled(s)) {
+			ingamePlatforms_applyGravity(s);
+			ingamePlatforms_applyMapRestrictions(s);
+			ingameSprite_applyPosition(s);
+		}
 	}
 }
 
@@ -114,7 +119,7 @@ void ingamePlatforms_applyHorizontalMapRestrictions(IngameSprite *sprite, Rect *
 		if (sprite->speed.x > 0) {
 			sprite->speed.x = 0;
 		}
-		while (posInCell->pos2.x < 80 && posInCell->pos2.x > 10) {
+		while (posInCell->pos2.x > 10) {
 			ingameSprite_moveX(sprite, -1);
 			--posInCell->pos1.x;
 			--posInCell->pos2.x;
@@ -124,7 +129,7 @@ void ingamePlatforms_applyHorizontalMapRestrictions(IngameSprite *sprite, Rect *
 		if (sprite->speed.x < 0) {
 			sprite->speed.x = 0;
 		}
-		while (posInCell->pos1.x > 79 && posInCell->pos1.x < 159) {
+		while (posInCell->pos1.x < 159) {
 			ingameSprite_moveX(sprite, 1);
 			++posInCell->pos1.x;
 			++posInCell->pos2.x;
@@ -175,7 +180,7 @@ s16 ingamePlatforms_calculateFootRelaxPosition(u16 restriction, s16 spriteXInCel
 	if (MAP_RESTRICTION_ISRAMP & restriction) {
 		if (MAP_RESTRICTION_ISRAMPLEFT & restriction) {
 			if (MAP_RESTRICTION_ISRAMPHARD & restriction) {
-				yRelaxPosition = 80-spriteXInCell;
+				yRelaxPosition = 160-spriteXInCell;
 			} else {
 				yRelaxPosition = 80-spriteXInCell / 2;
 			}
@@ -229,10 +234,11 @@ void ingamePlatforms_getColliderPositions(Rect *collider, Rect *cell, Rect *posI
 	posInCell->pos2.y = collider->pos2.y % 160;
 }
 
-void ingamePlatforms_onPlayerUpdate(IngameSprite *sprite) {
-	ingamePlatforms_applyGravity(sprite);
-	ingamePlatforms_applyMapRestrictions(sprite);
+void ingamePlatforms_onViewportSprite(u8 spriteId, s16 x, s16 y) {
+	ingameSprite_moveTo(&(IngamePlatforms_DATA->sprites[spriteId]), x, y);
+}
 
+void ingamePlatforms_onPlayerUpdate(IngameSprite *sprite) {
 	ingameSprite_moveX(sprite, sprite->speed.x);
 	ingameSprite_moveY(sprite, sprite->speed.y);
 
