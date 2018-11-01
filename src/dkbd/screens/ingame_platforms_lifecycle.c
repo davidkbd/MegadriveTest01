@@ -42,6 +42,8 @@ void ingamePlatforms_initData() {
 
 	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[1]), 35, 28);
 	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[2]), 39, 28);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[3]), 4, 44);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[4]), 64, 44);
 }
 
 void ingamePlatforms_initSound() {
@@ -144,7 +146,7 @@ void ingamePlatforms_initializeJumper(IngamePlatforms_Sprite *s, s16 x, s16 y) {
 	s->collider.pos1.x = s->position.x -80;
 	s->collider.pos1.y = s->position.y -160;
 	s->collider.pos2.x = s->position.x +80;
-	s->collider.pos2.y = s->position.y -100;
+	s->collider.pos2.y = s->position.y +0;
 	s->footsCollider.pos1.x = s->position.x -120;
 	s->footsCollider.pos1.y = s->position.y -60;
 	s->footsCollider.pos2.x = s->position.x +120;

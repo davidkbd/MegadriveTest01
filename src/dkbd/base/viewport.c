@@ -165,7 +165,7 @@ void viewport_calculatePlanAYPosition() {
 }
 
 void viewport_calculatePlanBXPosition() {
-	Viewport_DATA.planBPosition.x = Viewport_DATA.rawPosition.x / 20;
+	Viewport_DATA.planBPosition.x = Viewport_DATA.rawPosition.x / 200;
 }
 
 void viewport_calculatePlanBYPosition() {

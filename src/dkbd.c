@@ -63,7 +63,7 @@ int dkbd() {
 		lifecycle_update();
 		SPR_update();
 		VDP_waitVSync();
-		//fpsfixer_fixTo40FPS(currentTimeMillis);
+		//fpsfixer_fixTo30FPS(currentTimeMillis);
 	}
 	return 0; 
 }

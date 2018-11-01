@@ -30,12 +30,12 @@ void ingamePlatforms_onJumperUpdate(IngamePlatforms_Sprite *s) {
 		player->pushing = 1;
 	}
 	if (collision_checkRectVsRect(&(s->collider), &(player->footsCollider)) || s->data != 0) {
-		if (s->data < 4) {
+		if (s->data < 8) {
 			++s->data;
 		} else {
 			s->data = 0;
 		}
-		player->speed.y = -300;
+		player->speed.y = INGAME_PLATFORMS_MAX_JUMP_SPEED;
 	}
-	SPR_setAnimAndFrame(s->sprite, 0, s->data);
+	SPR_setAnimAndFrame(s->sprite, 0, s->data/2);
 }

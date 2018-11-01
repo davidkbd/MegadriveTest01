@@ -199,7 +199,7 @@ void ingamePlatforms_controlViewport() {
 	if (ingamePlatforms_isPressingDown()) {
 		viewportOffset->y = 500;
 	} else if (ingamePlatforms_isPressingUp()) {
-		viewportOffset->y = 1800;
+		viewportOffset->y = 2000;
 	} else {
 		//1200 seria el centro
 		viewportOffset->y = 1600;

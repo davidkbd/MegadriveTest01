@@ -185,9 +185,9 @@ s16 ingamePlatforms_calculateFootRelaxPosition(u16 restriction, s16 spriteXInCel
 	if (MAP_RESTRICTION_ISRAMP & restriction) {
 		if (MAP_RESTRICTION_ISRAMPLEFT & restriction) {
 			if (MAP_RESTRICTION_ISRAMPHARD & restriction) {
-				yRelaxPosition = 160-spriteXInCell;
+				yRelaxPosition = 80-spriteXInCell;
 			} else {
-				yRelaxPosition = 160-spriteXInCell / 2;
+				yRelaxPosition = 80-spriteXInCell / 2;
 			}
 		} else {
 			if (MAP_RESTRICTION_ISRAMPHARD & restriction) {
@@ -224,7 +224,7 @@ void ingamePlatforms_applyGravity(IngamePlatforms_Sprite *sprite) {
 	sprite->speed.y = limits_incr_s16(
 			sprite->speed.y,
 			IngamePlatforms_DATA->gravity,
-			INGAME_PLATFORMS_JUMP_FORCE,
+			INGAME_PLATFORMS_MAX_JUMP_SPEED,
 			INGAME_PLATFORMS_MAX_FALLING_SPEED);
 }
 
