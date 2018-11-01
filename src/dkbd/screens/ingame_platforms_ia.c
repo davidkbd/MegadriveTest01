@@ -24,7 +24,10 @@ void ingamePlatforms_onJumperUpdate(IngameSprite *s) {
 		ingameSprite_moveX(player, displace);
 		player->pushing = 1;
 	}
-	if (collision_checkRectVsRect(&(s->collider), &(player->footsCollider)) || s->data != 0) {
+	if (player->speed.y > 0 && collision_checkRectVsRect(&(s->collider), &(player->footsCollider))) {
+		s->data = 1;
+	}
+	if (s->data != 0) {
 		if (s->data < 8) {
 			++s->data;
 		} else {

@@ -115,7 +115,7 @@ void ingamePlatforms_applyMapRestrictions(IngameSprite *sprite) {
 }
 
 void ingamePlatforms_applyHorizontalMapRestrictions(IngameSprite *sprite, Rect *posInCell, u16 restrictionUR, u16 restrictionDR, u16 restrictionUL, u16 restrictionDL) {
-	if (((MAP_RESTRICTION_RIGHT & restrictionUR) || (MAP_RESTRICTION_RIGHT & restrictionDR)) && !(sprite->onFloor && (0b00000110 & restrictionDR))) {
+	if (((MAP_RESTRICTION_RIGHT & restrictionUR)) && !(sprite->onFloor && (0b00000110 & restrictionDR))) {
 		if (sprite->speed.x > 0) {
 			sprite->speed.x = 0;
 		}
@@ -125,7 +125,7 @@ void ingamePlatforms_applyHorizontalMapRestrictions(IngameSprite *sprite, Rect *
 			--posInCell->pos2.x;
 		}
 		sprite->pushing = 1;
-	} else if (((MAP_RESTRICTION_LEFT & restrictionUL) || (MAP_RESTRICTION_LEFT & restrictionDL)) && !(sprite->onFloor && (0b00001100 & restrictionDL))) {
+	} else if (((MAP_RESTRICTION_LEFT & restrictionUL)) && !(sprite->onFloor && (0b00001100 & restrictionDL))) {
 		if (sprite->speed.x < 0) {
 			sprite->speed.x = 0;
 		}

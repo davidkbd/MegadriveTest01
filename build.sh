@@ -22,11 +22,12 @@ export GENDEV=/home/davidkbd/gendev/gendev/build
 #echo "#endif" >> src/dkbd/maps/level01.h
 
 #make -f makefile.gen all
-make -f makefile.gen clean all
+make -f makefile.gen clean all debug
 [[ $? -eq 0 ]] || exit 1
 
 
-wine /home/davidkbd/programas/Gens_KMod_v0.7.3/gens.exe "${PWD/\/home\/davidkbd/C:\/users\/davidkbd\/My Documents}/out/rom.bin"
+wine /home/davidkbd/programas/Gens_KMod_v0.7.3/gens.exe "${PWD/\/home\/davidkbd/C:\/users\/davidkbd\/My Documents}/out/rom.bin" &
+
 
 #wine /home/davidkbd/programas/KegaFusion/Fusion.exe "${PWD/\/home\/davidkbd/C:\/users\/davidkbd\/My Documents}/out/rom.bin"
 
