@@ -33,12 +33,14 @@ u8 ingameSprite_isDisabled(IngameSprite *sprite) {
 
 void ingameSprite_enable(IngameSprite *sprite) {
 	sprite->sprite = SPR_addSprite(sprite->spriteDef, 0, 0, TILE_ATTR(sprite->palette, TRUE, FALSE, FALSE));
-	SPR_setAlwaysOnTop(sprite->sprite, sprite->alwaysOnTop);
+	//SPR_setAlwaysOnTop(sprite->sprite, sprite->alwaysOnTop);
 }
 
 void ingameSprite_disable(IngameSprite *sprite) {
-	SPR_releaseSprite(sprite->sprite);
-	sprite->sprite = 0;
+	if (ingameSprite_isEnabled(sprite)) {
+		SPR_releaseSprite(sprite->sprite);
+		sprite->sprite = 0;
+	}
 }
 
 u8 ingameSprite_isInVieport(IngameSprite *sprite) {

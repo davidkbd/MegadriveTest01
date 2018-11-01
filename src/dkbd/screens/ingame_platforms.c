@@ -82,8 +82,10 @@ void ingamePlatforms_applySprites() {
 			ingamePlatforms_updateOrDestroySprites(s);
 		}
 		if (ingameSprite_isEnabled(s)) {
-			ingamePlatforms_applyGravity(s);
-			ingamePlatforms_applyMapRestrictions(s);
+			if (!s->isStatic) {
+				ingamePlatforms_applyGravity(s);
+				ingamePlatforms_applyMapRestrictions(s);
+			}
 			ingameSprite_applyPosition(s);
 		}
 	}

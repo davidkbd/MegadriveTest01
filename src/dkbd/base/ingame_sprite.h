@@ -8,6 +8,7 @@
 
 struct IngameSprite_st {
 	const SpriteDefinition *spriteDef;
+	u8 isStatic;
 	u8 palette;
 	u8 alwaysOnTop;
 	Sprite* sprite;
