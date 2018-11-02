@@ -37,7 +37,6 @@ void logoInicial_initBackgrounds() {
 void logoInicial_initSprites() {
 	LogoInicial_DATA->sprites[0] = SPR_addSprite(&logoinicial_logo, 160 - 64, 40, TILE_ATTR(PAL0, TRUE, FALSE, FALSE));
 	SPR_setAnim(LogoInicial_DATA->sprites[0], 0);
-	SPR_update();
 }
 
 // ================ FINALIZE ================ //

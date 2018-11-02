@@ -65,8 +65,6 @@ void portada_initSprites() {
 
 	Portada_DATA->sprites[1] = SPR_addSprite(&portada_press, 160 - 64, 480, TILE_ATTR(PAL2, TRUE, FALSE, FALSE));
 	SPR_setAnim(Portada_DATA->sprites[1], 0);
-
-	SPR_update();
 }
 
 // ================ FINALIZE ================ //

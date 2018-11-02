@@ -4,9 +4,14 @@
 #include "../util/rect.h"
 
 /**
- * Posiciona y dibuja todos los tiles
+ * Reserva memoria, y posiciona y dibuja todos los tiles
  */
-void viewport_reset(Vector2 initialPoisition, Rect limits);
+void viewport_initialize(Vector2 initialPoisition, Rect limits);
+
+/**
+ * Libera memoria.
+ */
+void viewport_finalize();
 
 /**
  * Posiciona la vista en las coordenadas indicadas
@@ -17,6 +22,16 @@ void viewport_moveX(s16 x);
  * Posiciona la vista en las coordenadas indicadas
  */
 void viewport_moveY(s16 y);
+
+/**
+ * Refresca scroll del Plan A
+ */
+void viewport_planeARefresh();
+
+/**
+ * Refresca scroll del Plan B
+ */
+void viewport_planeBRefresh();
 
 /**
  * Obtiene posicion horizontal.

@@ -36,8 +36,10 @@ void ingamePlatforms_update() {
 	ingamePlatforms_moveViewport(IngamePlatforms_DATA->playerSpritePTR);
 	ingamePlatforms_applySprites();
 	ingamePlatforms_updateSceneAnimation();
-	hud_updateScore(getFPS());
 	//hud_updateScore(IngamePlatforms_DATA->playerSpritePTR->position.x/80);
+	viewport_planeARefresh();
+	viewport_planeBRefresh();
+	hud_updateScore(getFPS());
 }
 
 void ingamePlatforms_initialize() {

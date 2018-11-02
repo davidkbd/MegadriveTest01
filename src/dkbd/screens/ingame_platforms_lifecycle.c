@@ -88,9 +88,7 @@ void ingamePlatforms_initSprites() {
 
 	IngamePlatforms_DATA->sprites[0].sprite = SPR_addSprite(&testingame_player, 0, 0, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
 
-	SPR_update();
-
-	viewport_reset(vector2(0, 0), rect(0, 0, (128-40) * 160, (128-14) * 160));
+	viewport_initialize(vector2(0, 0), rect(0, 0, (128-40) * 160, (128-14) * 160));
 	viewport_setOnSpriteReplaceCallback(ingamePlatforms_onViewportSprite);
 }
 
@@ -112,6 +110,7 @@ void ingamePlatforms_finalizeGraphics() {
 
 void ingamePlatforms_finalizeMemory() {
 	MEM_free(IngamePlatforms_DATA);
+	viewport_finalize();
 }
 
 ////////////////////////////////////////////////////////
