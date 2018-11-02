@@ -22,6 +22,7 @@ void ingamePlatforms_initializeSpikes(IngameSprite *s, s16 x, s16 y);
 // ================ INIT ================ //
 
 void ingamePlatforms_initUI() {
+	VDP_setScrollingMode(HSCROLL_LINE, VSCROLL_PLANE);
 	//Esto posiciona el window abajo pero mejor vamos a hacer un hud con sprites
 	//VDP_setWindowHPos(FALSE, 0);
 	//VDP_setWindowVPos(TRUE, 25);
@@ -66,11 +67,11 @@ void ingamePlatforms_initPalete() {
 }
 
 void ingamePlatforms_initBackgrounds() {
-	VDP_loadTileData(ingame_floor_tile.tiles,      G_TILEINDEX_FLOOR,        ingame_floor_tile.numTile,   FALSE);
-	VDP_loadTileData(ingame_floor2_tile.tiles,     G_TILEINDEX_FLOOR2,       ingame_floor2_tile.numTile,   FALSE);
+	VDP_loadTileData(ingame_floor_tile.tiles,      G_TILEINDEX_FLOOR,        ingame_floor_tile.numTile,       FALSE);
+	VDP_loadTileData(ingame_floor2_tile.tiles,     G_TILEINDEX_FLOOR2,       ingame_floor2_tile.numTile,      FALSE);
 	VDP_loadTileData(ingame_background_tile.tiles, G_TILEINDEX_BACKGROUND,   ingame_background_tile.numTile,  FALSE);
 
-	VDP_loadTileData(ingame_wall_tile.tiles,       G_TILEINDEX_WALL,   ingame_background_tile.numTile,  FALSE);
+	VDP_loadTileData(ingame_wall_tile.tiles,       G_TILEINDEX_WALL,         ingame_background_tile.numTile,  FALSE);
 
 	VDP_drawImageEx(PLAN_B, &planb_level01, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, G_TILEINDEX_PLANB), 0, 0, TRUE, FALSE);
 }
@@ -115,25 +116,12 @@ void ingamePlatforms_finalizeMemory() {
 
 ////////////////////////////////////////////////////////
 
-
 void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	IngamePlatforms_DATA->playerSpritePTR = &(IngamePlatforms_DATA->sprites[0]);
 	IngameSprite *s = IngamePlatforms_DATA->playerSpritePTR;
-	s->isStatic = FALSE;
-	s->spriteDef = &testingame_player;
 	s->position.x = x * 80;
 	s->position.y = y * 80;
-	s->size.x = 240;
-	s->size.y = 320;
-	s->xCenter = 120;
-	s->collider.pos1.x = s->position.x -120;
-	s->collider.pos1.y = s->position.y -200;
-	s->collider.pos2.x = s->position.x +120;
-	s->collider.pos2.y = s->position.y +0;
-	s->footsCollider.pos1.x = s->position.x -40;
-	s->footsCollider.pos1.y = s->position.y -40;
-	s->footsCollider.pos2.x = s->position.x +40;
-	s->footsCollider.pos2.y = s->position.y +0;
+	s->type = &INGAMESPRITE_PLAYER_TYPE;
 	s->data = 0;
 	s->update = ingamePlatforms_onPlayerUpdate;
 }
@@ -141,22 +129,9 @@ void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 void ingamePlatforms_initializeJumper(IngameSprite *s, s16 x, s16 y) {
 	s->sprite = 0;
 	//s->alwaysOnTop = TRUE;
-	s->isStatic = TRUE;
-	s->palette = PAL2;
-	s->spriteDef = &jumper;
 	s->position.x = x * 80;
 	s->position.y = y * 80;
-	s->size.x = 240;
-	s->size.y = 240;
-	s->xCenter = 120;
-	s->collider.pos1.x = s->position.x -80;
-	s->collider.pos1.y = s->position.y -160;
-	s->collider.pos2.x = s->position.x +80;
-	s->collider.pos2.y = s->position.y +0;
-	s->footsCollider.pos1.x = s->position.x -120;
-	s->footsCollider.pos1.y = s->position.y -60;
-	s->footsCollider.pos2.x = s->position.x +120;
-	s->footsCollider.pos2.y = s->position.y +0;
+	s->type = &INGAMESPRITE_JUMPER_TYPE;
 	s->data = 0;
 	s->update = ingamePlatforms_onJumperUpdate;
 }
@@ -164,22 +139,9 @@ void ingamePlatforms_initializeJumper(IngameSprite *s, s16 x, s16 y) {
 void ingamePlatforms_initializeSpikes(IngameSprite *s, s16 x, s16 y) {
 	s->sprite = 0;
 	//s->alwaysOnTop = TRUE;
-	s->isStatic = TRUE;
-	s->palette = PAL2;
-	s->spriteDef = &spikes;
 	s->position.x = x * 80;
 	s->position.y = y * 80;
-	s->size.x = 240;
-	s->size.y = 240;
-	s->xCenter = 120;
-	s->collider.pos1.x = s->position.x -80;
-	s->collider.pos1.y = s->position.y -160;
-	s->collider.pos2.x = s->position.x +80;
-	s->collider.pos2.y = s->position.y +0;
-	s->footsCollider.pos1.x = s->position.x -120;
-	s->footsCollider.pos1.y = s->position.y -60;
-	s->footsCollider.pos2.x = s->position.x +120;
-	s->footsCollider.pos2.y = s->position.y +0;
+	s->type = &INGAMESPRITE_SPIKES_TYPE;
 	s->data = 0;
 	s->update = ingamePlatforms_onInanimatedUpdate;
 }

@@ -72,5 +72,8 @@ u8 ingamePlatforms_isPressingDown();
 u8 ingamePlatforms_isPressingJump();
 u8 ingamePlatforms_isPressingAction();
 
+// Callback cuando el viewport encuentra sprites a crear
 void ingamePlatforms_onViewportSprite(u8 spriteId, s16 x, s16 y);
+
+// Callback de actualizacion del sprite del jugador
 void ingamePlatforms_onPlayerUpdate(IngameSprite *sprite);

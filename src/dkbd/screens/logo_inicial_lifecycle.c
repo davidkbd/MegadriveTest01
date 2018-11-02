@@ -9,10 +9,11 @@
 // ================ INIT ================ //
 
 void logoInicial_initUI() {
+	VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
 	VDP_setHorizontalScroll(PLAN_A, 0);
 	VDP_setHorizontalScroll(PLAN_B, 0);
-	VDP_setWindowHPos(FALSE, 0);
-	VDP_setWindowVPos(FALSE, 0);
+	//VDP_setWindowHPos(FALSE, 0);
+	//VDP_setWindowVPos(FALSE, 0);
 }
 
 void logoInicial_initMemory() {

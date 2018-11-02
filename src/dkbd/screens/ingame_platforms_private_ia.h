@@ -5,3 +5,4 @@
 void ingamePlatforms_onInanimatedUpdate(IngameSprite *s);
 
 void ingamePlatforms_onJumperUpdate(IngameSprite *s);
+void ingamePlatforms_onSpikesUpdate(IngameSprite *s);

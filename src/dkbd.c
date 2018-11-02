@@ -22,19 +22,17 @@ int dkbd() {
 	SYS_disableInts();
 	//SYS_enableInts();
 
-	VDP_setScrollingMode(HSCROLL_LINE, VSCROLL_PLANE);
-
 	VDP_setScreenWidth320();
 	VDP_setScreenHeight224();
 
 	SPR_init(16, 256, 256);
 	SYS_enableInts();
 
-	VDP_setWindowAddress(0xD000);
-	VDP_setAPlanAddress(0xC000);
-	VDP_setBPlanAddress(0xE000);
-	VDP_setSpriteListAddress(0xF000);
-	VDP_setHScrollTableAddress(0xF800);
+	//VDP_setWindowAddress(0xD000);
+	//VDP_setAPlanAddress(0xC000);
+	//VDP_setBPlanAddress(0xE000);
+	//VDP_setSpriteListAddress(0xF000);
+	//VDP_setHScrollTableAddress(0xF800);
 	
 //	
 //	Circulo c = {2800,320,160,160};

@@ -69,7 +69,7 @@ u8 map_getOnTop(u8 tileId) {
 
 u8 map_calculateWidth() {
 	for (u8 x = 0; x < MAP_WIDTH; ++x) {
-		if (Map_DATA->data[0][x] == 127) {
+		if (Map_DATA->data[0][x] == MAP_END_ITEM) {
 			return x + 1;
 		}
 	}
@@ -78,7 +78,7 @@ u8 map_calculateWidth() {
 
 u8 map_calculateHeight() {
 	for (u8 y = 0; y < MAP_HEIGHT; ++y) {
-		if (Map_DATA->data[y][0] == 127) {
+		if (Map_DATA->data[y][0] == MAP_END_ITEM) {
 			return y + 1;
 		}
 	}

@@ -3,7 +3,7 @@
 /**
  * Metodo update de loop por defecto
  */
-void lifecycle_repeats_delayed();
+void lifecycle_default();
 /**
  * Limpia pantalla
  */

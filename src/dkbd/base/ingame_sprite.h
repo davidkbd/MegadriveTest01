@@ -1,5 +1,7 @@
 #include <genesis.h>
 
+#include "ingame_sprite_type.h"
+
 #include "../util/vector2.h"
 #include "../util/rect.h"
 
@@ -7,21 +9,23 @@
 #define INGAMESPRITE_H_
 
 struct IngameSprite_st {
-	const SpriteDefinition *spriteDef;
-	u8 isStatic;
-	u8 palette;
+	const IngameSprite_Type *type;
+	// En principio siempre es false, el hud es el que tiene que estar siempre on top
 	u8 alwaysOnTop;
+	// Instancia del sprite
 	Sprite* sprite;
+	// Posicion absoluta
 	Vector2 position;
+	// Posicion respecto al viewport
 	Vector2 posInViewport;
+	// Velocidad de movimiento
 	Vector2 speed;
-	Vector2 size; // Visualmente, utilizado para saber si cargar o destruir al hacer scroll
+	// Tocando suelo
 	u8 onFloor;
+	// Al borde de una plataforma
 	s8 onPlatformBorder;
+	// Empujando
 	s8 pushing;
-	u8 xCenter;
-	Rect collider;
-	Rect footsCollider;
 	//0xFFFF
 	u16 data;
 	//Callback de actualizacion
@@ -30,16 +34,16 @@ struct IngameSprite_st {
 typedef struct IngameSprite_st IngameSprite;
 #endif
 
-
 void ingameSprite_moveTo(IngameSprite *sprite, s16 x, s16 y);
 void ingameSprite_moveX(IngameSprite *sprite, s16 x);
 void ingameSprite_moveY(IngameSprite *sprite, s16 y);
-u8 ingameSprite_isEnabled(IngameSprite *sprite);
-u8 ingameSprite_isDisabled(IngameSprite *sprite);
-void ingameSprite_enable(IngameSprite *sprite);
-void ingameSprite_disable(IngameSprite *sprite);
-u8 ingameSprite_isInVieport(IngameSprite *sprite);
-u8 ingameSprite_isOutOfViewport(IngameSprite *sprite);
+u8   ingameSprite_isStatic(IngameSprite *sprite);
+u8   ingameSprite_isEnabled(IngameSprite *sprite);
+u8   ingameSprite_isDisabled(IngameSprite *sprite);
 void ingameSprite_applyPosition(IngameSprite *sprite);
-s8 ingameSprite_comparePosition(IngameSprite *sprite1, IngameSprite *sprite2);
+s8   ingameSprite_compareXPosition(IngameSprite *sprite1, IngameSprite *sprite2);
+void ingameSprite_updatePosInViewport(IngameSprite *sprite);
+void ingameSprite_enableOrDisableByViewport(IngameSprite *sprite);
+Rect ingameSprite_calculeCollider(IngameSprite *sprite);
+Rect ingameSprite_calculateFootsCollider(IngameSprite *sprite);
 

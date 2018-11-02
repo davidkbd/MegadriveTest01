@@ -6,12 +6,12 @@
 #include "../io/joy_handlers.h"
 
 void lifecycle_resetUpdater() {
-	lifecycle_update = lifecycle_repeats_delayed;
+	lifecycle_update = lifecycle_default;
 }
 
 // ============================ PRIVATE ============================ //
 
-void lifecycle_repeats_delayed() {
+void lifecycle_default() {
 	eventTimerHandler_update();
 }
 

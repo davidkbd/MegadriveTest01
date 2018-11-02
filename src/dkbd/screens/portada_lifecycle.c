@@ -9,10 +9,11 @@
 // ================ INIT ================ //
 
 void portada_initUI() {
+	VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
 	VDP_setHorizontalScroll(PLAN_A, 0);
 	VDP_setHorizontalScroll(PLAN_B, 0);
-	VDP_setWindowHPos(FALSE, 0);
-	VDP_setWindowVPos(FALSE, 0);
+	//VDP_setWindowHPos(FALSE, 0);
+	//VDP_setWindowVPos(FALSE, 0);
 }
 
 void portada_initMemory() {
@@ -54,7 +55,6 @@ void portada_initSprites() {
 	Portada_DATA->tileYesNoIndex = Portada_DATA->tileUserIndex;
 	VDP_loadTileData(portada_yesno_tile.tiles, Portada_DATA->tileYesNoIndex, portada_yesno_tile.numTile, FALSE);
 	Portada_DATA->tileUserIndex += portada_yesno_tile.numTile;
-
 
 	Portada_DATA->tileDifficultyIndex = Portada_DATA->tileUserIndex;
 	VDP_loadTileData(portada_difficulty_tile.tiles, Portada_DATA->tileDifficultyIndex, portada_difficulty_tile.numTile, FALSE);
