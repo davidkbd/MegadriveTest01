@@ -8,6 +8,7 @@ SPRITE testingame_player "sprite/player.png" 3 4 FAST 2
 SPRITE hud_time "sprite/hud_time.png" 5 2 FAST NONE
 SPRITE hud_score "sprite/hud_score.png" 5 2 FAST NONE
 SPRITE hud_animals "sprite/hud_animals.png" 6 2 FAST NONE
+SPRITE hud_lifes "sprite/hud_lifes.png" 4 2 FAST NONE
 
 SPRITE jumper "sprite/jumper.png" 3 3 FAST NONE
 SPRITE spikes "sprite/spikes.png" 3 3 FAST NONE

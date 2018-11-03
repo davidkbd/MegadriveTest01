@@ -18,7 +18,12 @@ void hud_updateTimer();
 /**
  * Actualiza valor y cambia elementos visuales
  */
-void hud_updateScore(u16 score);
+void hud_updateScore();
+
+/**
+ * Actualiza valores y cambia elementos visuales
+ */
+void hud_updateLifes();
 
 /**
  * Devuelve el tiempo actual (segundos)
@@ -29,8 +34,3 @@ u32 hud_getTimeSeconds();
  * Devuelve el tiempo inicial (milisegundos)
  */
 u32 hud_getInitialTimeMS();
-
-/**
- * Devuelve score
- */
-u16 hud_getScore();

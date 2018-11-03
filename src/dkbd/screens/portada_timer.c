@@ -30,6 +30,7 @@ void portada_beginExit() {
 	eventTimerHandler_addSlot(300, portada_onExitEndGraphics);
 	eventTimerHandler_addSlot(350, portada_onExitCompleted);
 	eventTimerHandler_enable();
+	screensGlobal_initialize();
 	JOY_setEventHandler( &disabledJoyHandler );
 }
 

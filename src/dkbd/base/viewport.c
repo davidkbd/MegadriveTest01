@@ -38,6 +38,7 @@ struct Viewport_DATA_st {
 	s16 hzScrollLinesPlanB[VIEWPORT_HSCROLL_LINES_SIZE];
 	// Cuando al hacer scroll aparece un sprite, se llama al callback
 	void (*onSpriteReplaceCallback)(u8 spriteId, s16 x, s16 y);
+	void (*callback3dfxPtr)();
 } * Viewport_DATA;
 
 void viewport_refreshCurrentViewport();
@@ -62,13 +63,19 @@ void viewport_updateLastYPosition();
 void viewport_vint();
 void viewport_ocean3dfx();
 
-void (*viewport_3dfxPtr)();
 
-void viewport_initialize(Vector2 initialPoisition, Rect limits) {
+void viewport_initialize(Vector2 initialPoisition, Rect limits, void (*callback)(u8 spriteId, s16 x, s16 y)) {
 	Viewport_DATA = MEM_alloc(sizeof(struct Viewport_DATA_st));
 
-	Viewport_DATA->onSpriteReplaceCallback = 0;
-	viewport_3dfxPtr = viewport_ocean3dfx;
+	s16 *arrA = Viewport_DATA->hzScrollLinesPlanA;
+	s16 *arrB = Viewport_DATA->hzScrollLinesPlanB;
+	for (u8 line = 0; line < VIEWPORT_HSCROLL_LINES_SIZE; ++line) {
+		arrA[line] = 0;
+		arrB[line] = 0;
+	}
+
+	Viewport_DATA->onSpriteReplaceCallback = callback;
+	Viewport_DATA->callback3dfxPtr = viewport_ocean3dfx;
 	Viewport_DATA->limits.pos1.x = -limits.pos1.x;
 	Viewport_DATA->limits.pos2.x = -limits.pos2.x;
 	Viewport_DATA->limits.pos1.y = limits.pos1.y;
@@ -85,8 +92,7 @@ void viewport_initialize(Vector2 initialPoisition, Rect limits) {
 
 	viewport_updateLastXPosition();
 	viewport_updateLastYPosition();
-//
-//	viewport_3dfxPtr();
+	Viewport_DATA->callback3dfxPtr();
 
 	SYS_enableInts();
 	SYS_setVIntCallback(&viewport_vint);
@@ -94,6 +100,7 @@ void viewport_initialize(Vector2 initialPoisition, Rect limits) {
 
 void viewport_finalize() {
 	MEM_free(Viewport_DATA);
+	Viewport_DATA = 0;
 }
 
 void viewport_moveX(s16 x) {
@@ -105,7 +112,6 @@ void viewport_moveX(s16 x) {
 	viewport_calculateCurrentXPosition();
 	viewport_drawXTiles();
 	viewport_updateLastXPosition();
-//	viewport_3dfxPtr();
 }
 
 void viewport_moveY(s16 y) {
@@ -127,7 +133,7 @@ void viewport_planeARefresh() {
 }
 
 void viewport_planeBRefresh() {
-	viewport_3dfxPtr();
+	Viewport_DATA->callback3dfxPtr();
 }
 
 s16 viewport_getCurrentX() {
@@ -136,10 +142,6 @@ s16 viewport_getCurrentX() {
 
 s16 viewport_getCurrentY() {
 	return Viewport_DATA->rawPosition.y;
-}
-
-void viewport_setOnSpriteReplaceCallback(void (*callback)(u8 spriteId, s16 x, s16 y)) {
-	Viewport_DATA->onSpriteReplaceCallback = callback;
 }
 
 void viewport_refreshCurrentViewport() {
@@ -168,10 +170,6 @@ void viewport_putPlanATile(s16 x, s16 y) {
 }
 
 void viewport_putSprite(s16 x, s16 y) {
-	if (Viewport_DATA->onSpriteReplaceCallback == 0) {
-		KLog("WARNING, el callback esta desactivado, no deberia");
-		return;
-	}
 	u8 spriteId = map_getSprite(x, y);
 	if (spriteId != 0) {
 		Viewport_DATA->onSpriteReplaceCallback(spriteId, (x+1) * 160, (y+1) * 160);
@@ -253,10 +251,12 @@ void viewport_updateLastYPosition() {
 }
 
 void viewport_vint() {
-	VDP_setHorizontalScrollLine(PLAN_A, 0, Viewport_DATA->hzScrollLinesPlanA, VIEWPORT_HSCROLL_LINES_SIZE, FALSE);
-	VDP_setHorizontalScrollLine(PLAN_B, 0, Viewport_DATA->hzScrollLinesPlanB, VIEWPORT_HSCROLL_LINES_SIZE, FALSE);
-	VDP_setVerticalScroll(PLAN_A, Viewport_DATA->planAPosition.y);
-	VDP_setVerticalScroll(PLAN_B, Viewport_DATA->planBPosition.y);
+	if (Viewport_DATA) {
+		VDP_setHorizontalScrollLine(PLAN_A, 0, Viewport_DATA->hzScrollLinesPlanA, VIEWPORT_HSCROLL_LINES_SIZE, FALSE);
+		VDP_setHorizontalScrollLine(PLAN_B, 0, Viewport_DATA->hzScrollLinesPlanB, VIEWPORT_HSCROLL_LINES_SIZE, FALSE);
+		VDP_setVerticalScroll(PLAN_A, Viewport_DATA->planAPosition.y);
+		VDP_setVerticalScroll(PLAN_B, Viewport_DATA->planBPosition.y);
+	}
 }
 
 void viewport_ocean3dfx() {

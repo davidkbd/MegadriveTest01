@@ -18,7 +18,7 @@ void lifecycle_default() {
 void lifecycle_clearPlans() {
 	VDP_clearPlan(PLAN_A, TRUE);
 	VDP_clearPlan(PLAN_B, TRUE);
-	VDP_clearPlan(PLAN_WINDOW, TRUE);
+	//VDP_clearPlan(PLAN_WINDOW, TRUE);
 	VDP_clearTextArea(0, 0, 39, 27);
 }
 

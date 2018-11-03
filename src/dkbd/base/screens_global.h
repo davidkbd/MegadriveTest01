@@ -1,3 +1,5 @@
+#include <genesis.h>
+
 // =========================== UI =========================== //
 
 #define G_TILEINDEX_CHARSET 0x05A0
@@ -38,6 +40,11 @@
 #define G_TILEINDEX_HUD_ITEMS5_B 0x04bd
 #define G_TILEINDEX_HUD_ITEMS6_B 0x04bf
 
+#define G_TILEINDEX_HUD_LIFES1   0x04c4
+#define G_TILEINDEX_HUD_LIFES2   0x04c6
+#define G_TILEINDEX_HUD_LIFES1_B 0x04c5
+#define G_TILEINDEX_HUD_LIFES2_B 0x04c7
+
 // =========================== SCENE  =========================== //
 
 // Anterior al primer tile, de tal forma que G_TILEINDEX_MAP + (tile size) = G_TILEINDEX_FLOOR
@@ -48,3 +55,23 @@
 #define G_TILEINDEX_WALL       0x0120
 #define G_TILEINDEX_PITFALLS   0x0140
 #define G_TILEINDEX_PLANB      0x0200
+
+void screensGlobal_initialize();
+
+void screensGlobal_finalize();
+
+void screensGlobal_setCurrentStage(u8 p);
+
+void screensGlobal_setScore(u16 p) ;
+
+void screensGlobal_setLifes(u8 p);
+
+u8 screensGlobal_getCurrentStage();
+
+u16 screensGlobal_getScore();
+
+u8 screensGlobal_getLifes();
+
+const u8** screensGlobal_getMapTiles();
+
+const u8** screensGlobal_getMapSprites();

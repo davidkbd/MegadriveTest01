@@ -1,6 +1,7 @@
 #include "lifecycle.h"
 #include "lifecycle_private.h"
 
+#include "screens_global.h"
 #include "../screens/logo_inicial.h"
 #include "../screens/portada.h"
 #include "../screens/ingame_platforms.h"
@@ -62,6 +63,7 @@ void lifecycle_openScreen_portada() {
 }
 
 void lifecycle_openScreen_ingame_platforms() {
+	//screensGlobal_initialize();
 	lifecycle_changeScreen(ingamePlatforms_initialize, ingamePlatforms_update);
 	lifecycle_configureControls(
 			ingamePlatforms_onKeyPressStartFunction,

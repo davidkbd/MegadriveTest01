@@ -30,7 +30,6 @@ void ingamePlatforms_getColliderPositions(Rect *collider, Vector2 *posTop, Vecto
 void ingamePlatforms_update() {
 	++IngamePlatforms_DATA->screenData.frameCount;
 	eventTimerHandler_update();
-	hud_updateTimer();
 	ingamePlatforms_updateControls();
 	ingamePlatforms_updateSprites();
 	ingamePlatforms_moveViewport(IngamePlatforms_DATA->playerSpritePTR);
@@ -39,7 +38,11 @@ void ingamePlatforms_update() {
 	//hud_updateScore(IngamePlatforms_DATA->playerSpritePTR->position.x/80);
 	viewport_planeARefresh();
 	viewport_planeBRefresh();
-	hud_updateScore(getFPS());
+//screensGlobal_setScore(getFPS());
+//screensGlobal_setLifes(getFPS());
+	hud_updateTimer();
+	hud_updateLifes();
+	hud_updateScore();
 }
 
 void ingamePlatforms_initialize() {

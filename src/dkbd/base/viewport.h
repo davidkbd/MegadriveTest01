@@ -6,7 +6,7 @@
 /**
  * Reserva memoria, y posiciona y dibuja todos los tiles
  */
-void viewport_initialize(Vector2 initialPoisition, Rect limits);
+void viewport_initialize(Vector2 initialPoisition, Rect limits, void (*callback)(u8 spriteId, s16 x, s16 y));
 
 /**
  * Libera memoria.
@@ -42,8 +42,3 @@ s16 viewport_getCurrentX();
  * Obtiene posicion vertical.
  */
 s16 viewport_getCurrentY();
-
-/**
- * Cuando al hacer scroll aparece un sprite, se llama al callback
- */
-void viewport_setOnSpriteReplaceCallback(void (*callback)(u8 spriteId, s16 x, s16 y));

@@ -8,8 +8,6 @@
 #include "../io/joy_handlers.h"
 #include "../util/palette.h"
 #include "../util/map.h"
-#include "../maps/level01.h"
-#include "../maps/level01_sprites.h"
 
 #include "../../../res/sprite.h"
 #include "../../../res/gfx.h"
@@ -35,9 +33,12 @@ void ingamePlatforms_initMemory() {
 }
 
 void ingamePlatforms_initData() {
-	map_load(level01, level01sprites);
+	map_load(
+			screensGlobal_getMapTiles(),
+			screensGlobal_getMapSprites());
 	IngamePlatforms_DATA->screenData.frameCount = 0;
 	IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
+	IngamePlatforms_DATA->screenData.viewportOffset.x = IngamePlatforms_DATA->screenData.viewportOffset.y = 0;
 	IngamePlatforms_DATA->gravity = 6;
 	hud_reset();
 
@@ -51,6 +52,11 @@ void ingamePlatforms_initData() {
 	ingamePlatforms_initializeSpikes(&(IngamePlatforms_DATA->sprites[4]), -200, -200);
 	ingamePlatforms_initializeSpikes(&(IngamePlatforms_DATA->sprites[5]), -200, -200);
 	ingamePlatforms_initializeSpikes(&(IngamePlatforms_DATA->sprites[6]), -200, -200);
+
+for (u8 i=7; i<16; ++i) {
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[i]), -200, -200);
+}
+
 }
 
 void ingamePlatforms_initSound() {
@@ -74,6 +80,11 @@ void ingamePlatforms_initBackgrounds() {
 	VDP_loadTileData(ingame_wall_tile.tiles,       G_TILEINDEX_WALL,         ingame_background_tile.numTile,  FALSE);
 
 	VDP_drawImageEx(PLAN_B, &planb_level01, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, G_TILEINDEX_PLANB), 0, 0, TRUE, FALSE);
+
+	viewport_initialize(
+			vector2(0, 0),
+			rect(0, 0, (128-40) * 160, (128-14) * 160),
+			ingamePlatforms_onViewportSprite);
 }
 
 void ingamePlatforms_initSprites() {
@@ -86,10 +97,11 @@ void ingamePlatforms_initSprites() {
 	IngamePlatforms_DATA->hudAnimalsSprite.sprite = SPR_addSprite(&hud_animals, 265, 202, TILE_ATTR(PAL3, TRUE, FALSE, FALSE));
 	SPR_setAlwaysOnTop(IngamePlatforms_DATA->hudAnimalsSprite.sprite, TRUE);
 
+	IngamePlatforms_DATA->hudLifesSprite.sprite = SPR_addSprite(&hud_lifes, 5, 202, TILE_ATTR(PAL3, TRUE, FALSE, FALSE));
+	SPR_setAlwaysOnTop(IngamePlatforms_DATA->hudLifesSprite.sprite, TRUE);
+
 	IngamePlatforms_DATA->sprites[0].sprite = SPR_addSprite(&testingame_player, 0, 0, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
 
-	viewport_initialize(vector2(0, 0), rect(0, 0, (128-40) * 160, (128-14) * 160));
-	viewport_setOnSpriteReplaceCallback(ingamePlatforms_onViewportSprite);
 }
 
 // ================ FINALIZE ================ //
@@ -101,6 +113,7 @@ void ingamePlatforms_finalizeGraphics() {
 	SPR_releaseSprite(IngamePlatforms_DATA->hudTimeSprite.sprite);
 	SPR_releaseSprite(IngamePlatforms_DATA->hudAnimalsSprite.sprite);
 	SPR_releaseSprite(IngamePlatforms_DATA->hudScoreSprite.sprite);
+	SPR_releaseSprite(IngamePlatforms_DATA->hudLifesSprite.sprite);
 	
 	for (u8 i=0; i < IngamePlatforms_NUM_SPRITES; ++i) {
 		SPR_releaseSprite(IngamePlatforms_DATA->sprites[i].sprite);
@@ -120,6 +133,7 @@ void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	IngameSprite *s = IngamePlatforms_DATA->playerSpritePTR;
 	s->position.x = x * 80;
 	s->position.y = y * 80;
+	s->speed.x = s->speed.y = 0;
 	s->type = &INGAMESPRITE_PLAYER_TYPE;
 	s->data = 0;
 	s->update = ingamePlatforms_onPlayerUpdate;
@@ -130,6 +144,7 @@ void ingamePlatforms_initializeJumper(IngameSprite *s, s16 x, s16 y) {
 	//s->alwaysOnTop = TRUE;
 	s->position.x = x * 80;
 	s->position.y = y * 80;
+	s->speed.x = s->speed.y = 0;
 	s->type = &INGAMESPRITE_JUMPER_TYPE;
 	s->data = 0;
 	s->update = ingamePlatforms_onJumperUpdate;
@@ -140,7 +155,8 @@ void ingamePlatforms_initializeSpikes(IngameSprite *s, s16 x, s16 y) {
 	//s->alwaysOnTop = TRUE;
 	s->position.x = x * 80;
 	s->position.y = y * 80;
+	s->speed.x = s->speed.y = 0;
 	s->type = &INGAMESPRITE_SPIKES_TYPE;
 	s->data = 0;
-	s->update = ingamePlatforms_onInanimatedUpdate;
+	s->update = ingamePlatforms_onSpikesUpdate;
 }

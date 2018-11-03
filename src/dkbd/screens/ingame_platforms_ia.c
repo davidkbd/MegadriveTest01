@@ -44,7 +44,7 @@ void ingamePlatforms_onJumperUpdate(IngameSprite *s) {
 
 void ingamePlatforms_onSpikesUpdate(IngameSprite *s) {
 	IngameSprite *player = IngamePlatforms_DATA->playerSpritePTR;
-	if (player->speed.y > 0 && ingamePlatforms_iaIsNear(player, s)) {
+	if (ingamePlatforms_iaIsNear(player, s)) {
 		Rect playerFootsCollider = ingameSprite_calculateFootsCollider(player);
 		Rect jumperFootsCollider = ingameSprite_calculateFootsCollider(s);
 		Rect jumperCollider      = ingameSprite_calculeCollider(s);
@@ -55,7 +55,7 @@ void ingamePlatforms_onSpikesUpdate(IngameSprite *s) {
 			playerFootsCollider.pos2.x += displace;
 		}
 		if (player->speed.y > 0 && collision_checkRectVsRect(&jumperCollider, &playerFootsCollider)) {
-			// DIE
+			ingamePlatforms_beginExit();
 		}
 	}
 }

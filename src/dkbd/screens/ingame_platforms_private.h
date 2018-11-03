@@ -19,7 +19,7 @@
 #define IngamePlatforms_DISABLEKEY_JUMP   0b11101111
 #define IngamePlatforms_DISABLEKEY_ACTION 0b11011111
 
-#define IngamePlatforms_NUM_SPRITES 10
+#define IngamePlatforms_NUM_SPRITES 16
 
 #define INGAME_PLATFORMS_MAX_X_SPEED 25
 #define INGAME_PLATFORMS_JUMP_FORCE -70
@@ -41,6 +41,7 @@ struct IngamePlatforms_ScreenData {
 	IngameSprite hudTimeSprite;
 	IngameSprite hudAnimalsSprite;
 	IngameSprite hudScoreSprite;
+	IngameSprite hudLifesSprite;
 
 	IngameSprite *playerSpritePTR;
 	IngameSprite sprites[IngamePlatforms_NUM_SPRITES];

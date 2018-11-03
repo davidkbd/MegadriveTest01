@@ -52,8 +52,8 @@ int dkbd() {
 	lifecycle_resetUpdater();
 	
 	//lifecycle_openScreen_logoInicial();
-	//lifecycle_openScreen_portada();
-	lifecycle_openScreen_ingame_platforms();
+	lifecycle_openScreen_portada();
+	//lifecycle_openScreen_ingame_platforms();
 	//GAME_PERSISTENT_DATA.player.checkPointsCount = 5;
 	//lifecycle_playGame();
 	while (1) {
