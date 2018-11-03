@@ -73,7 +73,6 @@ void portada_finalizeGraphics() {
 	for (int i=0; i<Portada_NUM_SPRITES; ++i) {
 		SPR_releaseSprite(Portada_DATA->sprites[i]);
 	}
-	VDP_clearTextArea(0, 0, 39, 27);
 }
 
 void portada_finalizeMemory() {

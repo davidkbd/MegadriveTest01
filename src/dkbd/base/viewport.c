@@ -151,17 +151,21 @@ void viewport_refreshCurrentViewport() {
 }
 
 void viewport_refreshColumn(s16 x) {
+	SYS_disableInts();
 	for (s16 y = Viewport_DATA->currentPositionInTiles.pos1.y; y <= Viewport_DATA->currentPositionInTiles.pos2.y; ++y) {
 		viewport_putPlanATile(x, y);
 		viewport_putSprite(x, y);
 	}
+	SYS_enableInts();
 }
 
 void viewport_refreshRow(s16 y) {
+	SYS_disableInts();
 	for (s16 x = Viewport_DATA->currentPositionInTiles.pos1.x; x <= Viewport_DATA->currentPositionInTiles.pos2.x; ++x) {
 		viewport_putPlanATile(x, y);
 		viewport_putSprite(x, y);
 	}
+	SYS_enableInts();
 }
 
 void viewport_putPlanATile(s16 x, s16 y) {
@@ -219,25 +223,21 @@ void viewport_calculateCurrentYPosition() {
 }
 
 void viewport_drawXTiles() {
-	SYS_disableInts();
 	if (viewport_isMovingLeft()) {
 		viewport_refreshColumn(Viewport_DATA->currentPositionInTiles.pos1.x);
 	}
 	if (viewport_isMovingRight()) {
 		viewport_refreshColumn(Viewport_DATA->currentPositionInTiles.pos2.x);
 	}
-	SYS_enableInts();
 }
 
 void viewport_drawYTiles() {
-	SYS_disableInts();
 	if (viewport_isMovingUp()) {
 		viewport_refreshRow(Viewport_DATA->currentPositionInTiles.pos1.y);
 	}
 	if (viewport_isMovingDown()) {
 		viewport_refreshRow(Viewport_DATA->currentPositionInTiles.pos2.y);
 	}
-	SYS_enableInts();
 }
 
 void viewport_updateLastXPosition() {

@@ -40,10 +40,16 @@
 #define G_TILEINDEX_HUD_ITEMS5_B 0x04bd
 #define G_TILEINDEX_HUD_ITEMS6_B 0x04bf
 
+#define G_TILEINDEX_HUD_LIFES    0x04c0
 #define G_TILEINDEX_HUD_LIFES1   0x04c4
 #define G_TILEINDEX_HUD_LIFES2   0x04c6
 #define G_TILEINDEX_HUD_LIFES1_B 0x04c5
 #define G_TILEINDEX_HUD_LIFES2_B 0x04c7
+
+
+#define G_TILEINDEX_PLAYER      0x04c8
+
+#define G_TILEINDEX_SPRITES     0x04a4
 
 // =========================== SCENE  =========================== //
 

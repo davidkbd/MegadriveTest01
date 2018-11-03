@@ -17,8 +17,8 @@ void ingamePlatforms_onExitCompleted();
 void ingamePlatforms_beginStart() {
 	eventTimerHandler_reset();
 	eventTimerHandler_addSlot(0,   ingamePlatforms_onStartBegin);
-	eventTimerHandler_addSlot(50,  ingamePlatforms_onStartPrepared);
-	eventTimerHandler_addSlot(100, ingamePlatforms_onStartCompleted);
+	eventTimerHandler_addSlot(40,  ingamePlatforms_onStartPrepared);
+	eventTimerHandler_addSlot(50,  ingamePlatforms_onStartCompleted);
 	eventTimerHandler_enable();
 }
 
@@ -26,8 +26,8 @@ void ingamePlatforms_beginExit() {
 	lifecycle_resetUpdater();
 	eventTimerHandler_reset();
 	eventTimerHandler_addSlot(50,  ingamePlatforms_onExitBegin);
-	eventTimerHandler_addSlot(300, ingamePlatforms_onExitMemory);
-	eventTimerHandler_addSlot(350, ingamePlatforms_onExitCompleted);
+	eventTimerHandler_addSlot(120, ingamePlatforms_onExitMemory);
+	eventTimerHandler_addSlot(200, ingamePlatforms_onExitCompleted);
 	eventTimerHandler_enable();
 	JOY_setEventHandler( &disabledJoyHandler );
 }

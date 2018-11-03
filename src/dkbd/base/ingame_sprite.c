@@ -2,6 +2,8 @@
 
 #include "viewport.h"
 
+#include "screens_global.h"
+
 void ingameSprite_enable(IngameSprite *sprite);
 void ingameSprite_disable(IngameSprite *sprite);
 u8 ingameSprite_isInVieport(IngameSprite *sprite);
@@ -82,7 +84,10 @@ Rect ingameSprite_calculateFootsCollider(IngameSprite *sprite) {
 }
 
 void ingameSprite_enable(IngameSprite *sprite) {
-	sprite->sprite = SPR_addSprite(sprite->type->spriteDef, 0, 0, TILE_ATTR(sprite->type->palette, TRUE, FALSE, FALSE));
+	u8 spriteId = sprite->spriteId;
+	u16 tileIndex = G_TILEINDEX_SPRITES + spriteId * 12;
+//	sprite->sprite = SPR_addSprite(sprite->type->spriteDef, 0, 0, TILE_ATTR_FULL(sprite->type->palette, TRUE, FALSE, FALSE, tileIndex));
+	sprite->sprite = SPR_addSpriteEx(sprite->type->spriteDef, 0, 0, TILE_ATTR_FULL(sprite->type->palette, TRUE, FALSE, FALSE, tileIndex), spriteId, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 	//SPR_setAlwaysOnTop(sprite->sprite, sprite->alwaysOnTop);
 }
 

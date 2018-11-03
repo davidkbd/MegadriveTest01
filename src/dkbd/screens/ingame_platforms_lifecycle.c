@@ -14,8 +14,8 @@
 #include "../base/viewport.h"
 
 void ingamePlatforms_initializePlayer(s16 x, s16 y);
-void ingamePlatforms_initializeJumper(IngameSprite *s, s16 x, s16 y);
-void ingamePlatforms_initializeSpikes(IngameSprite *s, s16 x, s16 y);
+void ingamePlatforms_initializeJumper(IngameSprite *s, u8 spriteId);
+void ingamePlatforms_initializeSpikes(IngameSprite *s, u8 spriteId);
 
 // ================ INIT ================ //
 
@@ -36,6 +36,11 @@ void ingamePlatforms_initData() {
 	map_load(
 			screensGlobal_getMapTiles(),
 			screensGlobal_getMapSprites());
+
+	for (u8 i=0; i< IngamePlatforms_NUM_SPRITES; ++i) {
+		IngamePlatforms_DATA->sprites[i].sprite = 0;
+	}
+
 	IngamePlatforms_DATA->screenData.frameCount = 0;
 	IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
 	IngamePlatforms_DATA->screenData.viewportOffset.x = IngamePlatforms_DATA->screenData.viewportOffset.y = 0;
@@ -45,16 +50,16 @@ void ingamePlatforms_initData() {
 	ingamePlatforms_initializePlayer(5, 5);
 
 	//Jumpers
-	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[1]), 4, 44);
-	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[2]), 35, 28);
-	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[3]), 39, 28);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[1]), 5);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[2]), 6);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[3]), 7);
 	//Spikes
-	ingamePlatforms_initializeSpikes(&(IngamePlatforms_DATA->sprites[4]), -200, -200);
-	ingamePlatforms_initializeSpikes(&(IngamePlatforms_DATA->sprites[5]), -200, -200);
-	ingamePlatforms_initializeSpikes(&(IngamePlatforms_DATA->sprites[6]), -200, -200);
+	ingamePlatforms_initializeSpikes(&(IngamePlatforms_DATA->sprites[4]), 8);
+	ingamePlatforms_initializeSpikes(&(IngamePlatforms_DATA->sprites[5]), 9);
+	ingamePlatforms_initializeSpikes(&(IngamePlatforms_DATA->sprites[6]), 10);
 
 for (u8 i=7; i<16; ++i) {
-	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[i]), -200, -200);
+	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[i]), i+10);
 }
 
 }
@@ -88,19 +93,19 @@ void ingamePlatforms_initBackgrounds() {
 }
 
 void ingamePlatforms_initSprites() {
-	IngamePlatforms_DATA->hudTimeSprite.sprite = SPR_addSprite(&hud_time, 5, 3, TILE_ATTR(PAL3, TRUE, FALSE, FALSE));
+	IngamePlatforms_DATA->hudTimeSprite.sprite = SPR_addSpriteEx(&hud_time, 5, 3, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_TIME1), 0, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 	SPR_setAlwaysOnTop(IngamePlatforms_DATA->hudTimeSprite.sprite, TRUE);
 
-	IngamePlatforms_DATA->hudScoreSprite.sprite = SPR_addSprite(&hud_score, 5, 19, TILE_ATTR(PAL3, TRUE, FALSE, FALSE));
+	IngamePlatforms_DATA->hudScoreSprite.sprite = SPR_addSpriteEx(&hud_score, 5, 19, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_SCORE1), 1, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 	SPR_setAlwaysOnTop(IngamePlatforms_DATA->hudScoreSprite.sprite, TRUE);
 
-	IngamePlatforms_DATA->hudAnimalsSprite.sprite = SPR_addSprite(&hud_animals, 265, 202, TILE_ATTR(PAL3, TRUE, FALSE, FALSE));
+	IngamePlatforms_DATA->hudAnimalsSprite.sprite = SPR_addSpriteEx(&hud_animals, 265, 202, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_ITEMS1), 2, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 	SPR_setAlwaysOnTop(IngamePlatforms_DATA->hudAnimalsSprite.sprite, TRUE);
 
-	IngamePlatforms_DATA->hudLifesSprite.sprite = SPR_addSprite(&hud_lifes, 5, 202, TILE_ATTR(PAL3, TRUE, FALSE, FALSE));
+	IngamePlatforms_DATA->hudLifesSprite.sprite = SPR_addSpriteEx(&hud_lifes, 5, 202, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_LIFES), 3, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 	SPR_setAlwaysOnTop(IngamePlatforms_DATA->hudLifesSprite.sprite, TRUE);
 
-	IngamePlatforms_DATA->sprites[0].sprite = SPR_addSprite(&testingame_player, 0, 0, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
+	IngamePlatforms_DATA->sprites[0].sprite = SPR_addSpriteEx(&testingame_player, 0, 0, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, G_TILEINDEX_PLAYER), 4, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 
 }
 
@@ -131,6 +136,7 @@ void ingamePlatforms_finalizeMemory() {
 void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	IngamePlatforms_DATA->playerSpritePTR = &(IngamePlatforms_DATA->sprites[0]);
 	IngameSprite *s = IngamePlatforms_DATA->playerSpritePTR;
+	s->spriteId = 4;
 	s->position.x = x * 80;
 	s->position.y = y * 80;
 	s->speed.x = s->speed.y = 0;
@@ -139,22 +145,24 @@ void ingamePlatforms_initializePlayer(s16 x, s16 y) {
 	s->update = ingamePlatforms_onPlayerUpdate;
 }
 
-void ingamePlatforms_initializeJumper(IngameSprite *s, s16 x, s16 y) {
+void ingamePlatforms_initializeJumper(IngameSprite *s, u8 spriteId) {
 	s->sprite = 0;
 	//s->alwaysOnTop = TRUE;
-	s->position.x = x * 80;
-	s->position.y = y * 80;
+	s->spriteId = spriteId;
+	s->position.x = -600;
+	s->position.y = -600;
 	s->speed.x = s->speed.y = 0;
 	s->type = &INGAMESPRITE_JUMPER_TYPE;
 	s->data = 0;
 	s->update = ingamePlatforms_onJumperUpdate;
 }
 
-void ingamePlatforms_initializeSpikes(IngameSprite *s, s16 x, s16 y) {
+void ingamePlatforms_initializeSpikes(IngameSprite *s, u8 spriteId) {
 	s->sprite = 0;
 	//s->alwaysOnTop = TRUE;
-	s->position.x = x * 80;
-	s->position.y = y * 80;
+	s->spriteId = spriteId;
+	s->position.x = -600;
+	s->position.y = -600;
 	s->speed.x = s->speed.y = 0;
 	s->type = &INGAMESPRITE_SPIKES_TYPE;
 	s->data = 0;

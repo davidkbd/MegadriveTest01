@@ -9,6 +9,7 @@
 #define INGAMESPRITE_H_
 
 struct IngameSprite_st {
+	u8 spriteId;
 	const IngameSprite_Type *type;
 	// En principio siempre es false, el hud es el que tiene que estar siempre on top
 	u8 alwaysOnTop;
