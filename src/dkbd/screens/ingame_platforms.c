@@ -101,7 +101,7 @@ void ingamePlatforms_applyMapRestrictions(IngameSprite *sprite) {
 	Vector2 posBottomRight;
 	Rect posInCell;
 	s16 midY = (sprite->position.y - sprite->type->yCenter) / 160;
-	Rect spriteCollider = ingameSprite_calculeCollider(sprite);
+	Rect spriteCollider = ingameSprite_calculateCollider(sprite);
 	ingamePlatforms_getColliderPositions(&spriteCollider, &posTopLeft, &posBottomRight, &posInCell);
 	u16 restrictionUL    = map_getRestriction(posTopLeft.x, posTopLeft.y);
 	u16 restrictionUR    = map_getRestriction(posBottomRight.x, posTopLeft.y);
@@ -237,6 +237,7 @@ void ingamePlatforms_getColliderPositions(Rect *collider, Vector2 *posTopLeft, V
 }
 
 void ingamePlatforms_onViewportSprite(u8 spriteId, s16 x, s16 y) {
+KLog_U3("s", spriteId, "x", x, " y", y);
 	ingameSprite_moveTo(&(IngamePlatforms_DATA->sprites[spriteId]), x, y);
 }
 

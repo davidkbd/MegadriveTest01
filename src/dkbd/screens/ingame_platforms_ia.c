@@ -20,7 +20,7 @@ void ingamePlatforms_onJumperUpdate(IngameSprite *s) {
 	if (ingamePlatforms_iaIsNear(player, s)) {
 		Rect playerFootsCollider = ingameSprite_calculateFootsCollider(player);
 		Rect jumperFootsCollider = ingameSprite_calculateFootsCollider(s);
-		Rect jumperCollider      = ingameSprite_calculeCollider(s);
+		Rect jumperCollider      = ingameSprite_calculateCollider(s);
 		while (collision_checkRectVsRect(&playerFootsCollider, &jumperFootsCollider)) {
 			s8 displace = (ingameSprite_compareXPosition(player, s) < 0)? -1 : 1;
 			ingameSprite_moveX(player, displace);
@@ -46,15 +46,29 @@ void ingamePlatforms_onSpikesUpdate(IngameSprite *s) {
 	IngameSprite *player = IngamePlatforms_DATA->playerSpritePTR;
 	if (ingamePlatforms_iaIsNear(player, s)) {
 		Rect playerFootsCollider = ingameSprite_calculateFootsCollider(player);
-		Rect jumperFootsCollider = ingameSprite_calculateFootsCollider(s);
-		Rect jumperCollider      = ingameSprite_calculeCollider(s);
-		while (collision_checkRectVsRect(&playerFootsCollider, &jumperFootsCollider)) {
+		Rect spikesFootsCollider = ingameSprite_calculateFootsCollider(s);
+		Rect spikesCollider      = ingameSprite_calculateCollider(s);
+		while (collision_checkRectVsRect(&playerFootsCollider, &spikesFootsCollider)) {
 			s8 displace = (ingameSprite_compareXPosition(player, s) < 0)? -1 : 1;
 			ingameSprite_moveX(player, displace);
 			playerFootsCollider.pos1.x += displace;
 			playerFootsCollider.pos2.x += displace;
 		}
-		if (player->speed.y > 0 && collision_checkRectVsRect(&jumperCollider, &playerFootsCollider)) {
+		if (player->speed.y > 0 && collision_checkRectVsRect(&spikesCollider, &playerFootsCollider)) {
+			ingamePlatforms_beginExit();
+		}
+	}
+}
+
+void ingamePlatforms_onLevelDoorUpdate(IngameSprite *s) {
+	IngameSprite *player = IngamePlatforms_DATA->playerSpritePTR;
+	if (ingamePlatforms_iaIsNear(player, s)) {
+		Rect playerCollider = ingameSprite_calculateCollider(player);
+		Rect doorCollider = ingameSprite_calculateCollider(s);
+		if (collision_checkRectVsRect(&playerCollider, &doorCollider)) {
+			s->data = s->position.x / 160;
+			s->data = s->data << 4;
+			s->data += s->position.y / 160;
 			ingamePlatforms_beginExit();
 		}
 	}

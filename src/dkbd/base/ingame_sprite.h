@@ -11,8 +11,6 @@
 struct IngameSprite_st {
 	u8 spriteId;
 	const IngameSprite_Type *type;
-	// En principio siempre es false, el hud es el que tiene que estar siempre on top
-	u8 alwaysOnTop;
 	// Instancia del sprite
 	Sprite* sprite;
 	// Posicion absoluta
@@ -45,6 +43,6 @@ void ingameSprite_applyPosition(IngameSprite *sprite);
 s8   ingameSprite_compareXPosition(IngameSprite *sprite1, IngameSprite *sprite2);
 void ingameSprite_updatePosInViewport(IngameSprite *sprite);
 void ingameSprite_enableOrDisableByViewport(IngameSprite *sprite);
-Rect ingameSprite_calculeCollider(IngameSprite *sprite);
+Rect ingameSprite_calculateCollider(IngameSprite *sprite);
 Rect ingameSprite_calculateFootsCollider(IngameSprite *sprite);
 

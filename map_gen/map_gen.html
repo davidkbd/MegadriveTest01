@@ -100,6 +100,8 @@
 				e.src = 'tiles/'+ id +'.png';
 				e.className = 'item';
 				e.setAttribute('id', 'item_' + id);
+				e.setAttribute('alt', decimalToHexString(id));
+				e.setAttribute('title', decimalToHexString(id));
 				e.setAttribute('itemId', id);
 				e.onerror = function(e) { this.setAttribute('id',''); this.setAttribute('itemId',''); }
 				ITEMS.appendChild(e);

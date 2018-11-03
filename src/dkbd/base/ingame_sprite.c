@@ -23,7 +23,7 @@ void ingameSprite_moveY(IngameSprite *sprite, s16 y) {
 }
 
 u8 ingameSprite_isStatic(IngameSprite *sprite) {
-	return sprite->type->isStatic == 0;
+	return sprite->type->isStatic;
 }
 
 u8 ingameSprite_isEnabled(IngameSprite *sprite) {
@@ -65,7 +65,7 @@ void ingameSprite_enableOrDisableByViewport(IngameSprite *sprite) {
 	}
 }
 
-Rect ingameSprite_calculeCollider(IngameSprite *sprite) {
+Rect ingameSprite_calculateCollider(IngameSprite *sprite) {
 	Rect r;
 	r.pos1.x = sprite->type->collider.pos1.x + sprite->position.x;
 	r.pos1.y = sprite->type->collider.pos1.y + sprite->position.y;
@@ -87,8 +87,7 @@ void ingameSprite_enable(IngameSprite *sprite) {
 	u8 spriteId = sprite->spriteId;
 	u16 tileIndex = G_TILEINDEX_SPRITES + spriteId * 12;
 //	sprite->sprite = SPR_addSprite(sprite->type->spriteDef, 0, 0, TILE_ATTR_FULL(sprite->type->palette, TRUE, FALSE, FALSE, tileIndex));
-	sprite->sprite = SPR_addSpriteEx(sprite->type->spriteDef, 0, 0, TILE_ATTR_FULL(sprite->type->palette, TRUE, FALSE, FALSE, tileIndex), spriteId, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
-	//SPR_setAlwaysOnTop(sprite->sprite, sprite->alwaysOnTop);
+	sprite->sprite = SPR_addSpriteEx(sprite->type->spriteDef, 0, 0, TILE_ATTR_FULL(sprite->type->palette, FALSE, FALSE, FALSE, tileIndex), spriteId, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 }
 
 void ingameSprite_disable(IngameSprite *sprite) {

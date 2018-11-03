@@ -40,11 +40,15 @@ u8 map_getHeight() {
 }
 
 u8 map_getPlanA(u8 x, u8 y) {
+	x = limits_s16(x, 0, map_getWidth()-1);
+	y = limits_s16(y, 0, map_getHeight()-1);
 	return Map_DATA->data[y][x];
 }
 
 u8 map_getSprite(u8 x, u8 y) {
-	u8 s = Map_DATA->sprites[y][x];
+	x = limits_s16(x, 0, map_getWidth()-1);
+	y = limits_s16(y, 0, map_getHeight()-1);
+	const u8 s = Map_DATA->sprites[y][x];
 	if (s < 160) {
 		return 0;
 	}

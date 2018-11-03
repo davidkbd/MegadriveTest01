@@ -11,7 +11,6 @@ void ingamePlatforms_onStartBegin();
 void ingamePlatforms_onStartPrepared();
 void ingamePlatforms_onStartCompleted();
 void ingamePlatforms_onExitBegin();
-void ingamePlatforms_onExitMemory();
 void ingamePlatforms_onExitCompleted();
 
 void ingamePlatforms_beginStart() {
@@ -26,8 +25,7 @@ void ingamePlatforms_beginExit() {
 	lifecycle_resetUpdater();
 	eventTimerHandler_reset();
 	eventTimerHandler_addSlot(50,  ingamePlatforms_onExitBegin);
-	eventTimerHandler_addSlot(120, ingamePlatforms_onExitMemory);
-	eventTimerHandler_addSlot(200, ingamePlatforms_onExitCompleted);
+	eventTimerHandler_addSlot(150, ingamePlatforms_onExitCompleted);
 	eventTimerHandler_enable();
 	JOY_setEventHandler( &disabledJoyHandler );
 }
@@ -50,17 +48,21 @@ void ingamePlatforms_onExitBegin() {
 	ingamePlatforms_finalizeSound();
 }
 
-void ingamePlatforms_onExitMemory() {
+void ingamePlatforms_onExitCompleted() {
+	u16 levelDoorData = IngamePlatforms_DATA->sprites[16].data;
 	ingamePlatforms_finalizeGraphics();
 	ingamePlatforms_finalizeMemory();
-}
-
-void ingamePlatforms_onExitCompleted() {
 	if (screensGlobal_getLifes() == 0) {
 		screensGlobal_finalize();
 		lifecycle_openScreen_logoInicial();
-	} else {
+		return;
+	}
+
+	if (levelDoorData == 0) {
 		screensGlobal_setLifes(screensGlobal_getLifes() - 1);
 		lifecycle_openScreen_ingame_platforms();
+		return;
 	}
+
+	lifecycle_openScreen_ingame_platforms();
 }

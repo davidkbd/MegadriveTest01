@@ -145,14 +145,18 @@ s16 viewport_getCurrentY() {
 }
 
 void viewport_refreshCurrentViewport() {
-	for (s16 i = Viewport_DATA->currentPositionInTiles.pos1.x; i <= Viewport_DATA->currentPositionInTiles.pos2.x; ++i) {
+	s16 min = Viewport_DATA->currentPositionInTiles.pos1.x;
+	s16 max = Viewport_DATA->currentPositionInTiles.pos2.x;
+	for (s16 i = min; i <= max; ++i) {
 		viewport_refreshColumn(i);
 	}
 }
 
 void viewport_refreshColumn(s16 x) {
 	SYS_disableInts();
-	for (s16 y = Viewport_DATA->currentPositionInTiles.pos1.y; y <= Viewport_DATA->currentPositionInTiles.pos2.y; ++y) {
+	s16 min = Viewport_DATA->currentPositionInTiles.pos1.y;
+	s16 max = Viewport_DATA->currentPositionInTiles.pos2.y;
+	for (s16 y = min; y <= max; ++y) {
 		viewport_putPlanATile(x, y);
 		viewport_putSprite(x, y);
 	}
@@ -161,7 +165,9 @@ void viewport_refreshColumn(s16 x) {
 
 void viewport_refreshRow(s16 y) {
 	SYS_disableInts();
-	for (s16 x = Viewport_DATA->currentPositionInTiles.pos1.x; x <= Viewport_DATA->currentPositionInTiles.pos2.x; ++x) {
+	s16 min = Viewport_DATA->currentPositionInTiles.pos1.x;
+	s16 max = Viewport_DATA->currentPositionInTiles.pos2.x;
+	for (s16 x = min; x <= max; ++x) {
 		viewport_putPlanATile(x, y);
 		viewport_putSprite(x, y);
 	}
@@ -170,11 +176,12 @@ void viewport_refreshRow(s16 y) {
 
 void viewport_putPlanATile(s16 x, s16 y) {
 	u8 tileId = map_getPlanA(x, y);
-	tiles_putMapTile(tileId, x, y, FALSE);
+	u8 onTop = map_getOnTop(tileId);
+	tiles_putMapTile(tileId, x, y, onTop);
 }
 
 void viewport_putSprite(s16 x, s16 y) {
-	u8 spriteId = map_getSprite(x, y);
+	const u8 spriteId = map_getSprite(x, y);
 	if (spriteId != 0) {
 		Viewport_DATA->onSpriteReplaceCallback(spriteId, (x+1) * 160, (y+1) * 160);
 	}

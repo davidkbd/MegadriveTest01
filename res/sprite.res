@@ -12,3 +12,4 @@ SPRITE hud_lifes "sprite/hud_lifes.png" 4 2 FAST NONE
 
 SPRITE jumper "sprite/jumper.png" 3 3 FAST NONE
 SPRITE spikes "sprite/spikes.png" 3 3 FAST NONE
+SPRITE leveldoor "sprite/leveldoor.png" 3 4 FAST NONE
