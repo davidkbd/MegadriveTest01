@@ -6,11 +6,6 @@
 void hud_reset();
 
 /**
- * Actualiza valores al estado inicial
- */
-void hud_init();
-
-/**
  * Actualiza valores y cambia elementos visuales
  */
 void hud_updateTimer();

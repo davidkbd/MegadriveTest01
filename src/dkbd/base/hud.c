@@ -23,7 +23,7 @@ void hud_onLifes(u8* digits, u8 length);
 void hud_putScoreDigit(u8 digitPos, u8* digits, u8 numberLenght, u16 tileId1, u16 tileId2);
 
 void hud_reset() {
-	Hud_DATA.initialTimeMS = 0;
+	Hud_DATA.initialTimeMS = getTimeAsFix32(FALSE);
 	Hud_DATA.secondsCount = 0;
 	Hud_DATA.cachedLifes = Hud_DATA.cachedScore = 0;
 	
@@ -38,24 +38,16 @@ void hud_reset() {
 	}
 }
 
-void hud_init() {
-	Hud_DATA.initialTimeMS = getTimeAsFix32(FALSE);
-	Hud_DATA.secondsCount = 0;
-	Hud_DATA.cachedLifes = Hud_DATA.cachedScore = 0;
-}
-
 void hud_updateTimer() {
-	if (Hud_DATA.initialTimeMS != 0) {
-		u32 timeMillis = getTimeAsFix32(FALSE);
-		u32 timeSecs = timeMillis / 1000;
-		if (Hud_DATA.secondsCount != timeSecs) {
-			Hud_DATA.secondsCount = timeSecs - Hud_DATA.initialTimeMS / 1000;
-			numbers_toTimeMmss(hud_onTime, Hud_DATA.secondsCount);
-		}
-		if (Hud_DATA.secondsCount > 539) {
-			palette_loadHud((timeMillis / 2) % 10);
-			palette_apply();
-		}
+	u32 timeMillis = getTimeAsFix32(FALSE);
+	u32 timeSecs = timeMillis / 1000;
+	if (Hud_DATA.secondsCount != timeSecs) {
+		Hud_DATA.secondsCount = timeSecs - Hud_DATA.initialTimeMS / 1000;
+		numbers_toTimeMmss(hud_onTime, Hud_DATA.secondsCount);
+	}
+	if (Hud_DATA.secondsCount > 539) {
+		palette_loadHud((timeMillis / 2) % 10);
+		palette_apply();
 	}
 }
 
@@ -68,7 +60,7 @@ void hud_updateScore() {
 }
 
 void hud_updateLifes() {
-	u16 lifes = screensGlobal_getLifes();
+	u8 lifes = screensGlobal_getLifes();
 	if (Hud_DATA.cachedLifes != lifes) {
 		Hud_DATA.cachedLifes = lifes;
 		numbers_toDigitBaseN(hud_onLifes, 10, lifes);
@@ -120,7 +112,7 @@ void hud_onScore(u8* digits, u8 length) {
 }
 
 void hud_onLifes(u8* digits, u8 length) {
-	if (Hud_DATA.lifesDigits[1] != digits[1]) {
+	if (length > 1 && Hud_DATA.lifesDigits[1] != digits[1]) {
 		u8 pos = digits[1] * 16;
 		VDP_loadTileData(&(hud_nums_tile.tiles[pos]),     G_TILEINDEX_HUD_LIFES1,   1, FALSE);
 		VDP_loadTileData(&(hud_nums_tile.tiles[pos + 8]), G_TILEINDEX_HUD_LIFES1_B, 1, FALSE);

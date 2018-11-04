@@ -28,6 +28,14 @@ void ingamePlatforms_applyGravity(IngameSprite *sprite);
 void ingamePlatforms_getColliderPositions(Rect *collider, Vector2 *posTop, Vector2 *posBottom, Rect *posInCell);
 
 void ingamePlatforms_update() {
+	IngamePlatforms_DATA->ingame_updatePtr();
+}
+
+void ingamePlatforms_update_titleScreen() {
+	eventTimerHandler_update();
+}
+
+void ingamePlatforms_update_ingame() {
 	++IngamePlatforms_DATA->screenData.frameCount;
 	eventTimerHandler_update();
 	ingamePlatforms_updateControls();
@@ -36,7 +44,7 @@ void ingamePlatforms_update() {
 	ingamePlatforms_applySprites();
 	ingamePlatforms_updateSceneAnimation();
 	//hud_updateScore(IngamePlatforms_DATA->playerSpritePTR->position.x/80);
-screensGlobal_setScore(getFPS());
+screensGlobal_setScore(IngamePlatforms_DATA->screenData.frameCount);
 //screensGlobal_setLifes(getFPS());
 	viewport_planeARefresh();
 	viewport_planeBRefresh();

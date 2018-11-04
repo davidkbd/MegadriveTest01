@@ -30,6 +30,7 @@
 #define INGAME_PLATFORMS_PRIVATE_H
 
 struct IngamePlatforms_ScreenData {
+	void (*ingame_updatePtr)();
 	struct ScreenData {
 		u16 frameCount;
 		u8 sceneAnimationFrame;
@@ -50,6 +51,8 @@ struct IngamePlatforms_ScreenData* IngamePlatforms_DATA;
 
 #endif
 
+void ingamePlatforms_update_titleScreen();
+void ingamePlatforms_update_ingame();
 void ingamePlatforms_initUI();
 void ingamePlatforms_initMemory();
 void ingamePlatforms_initData();

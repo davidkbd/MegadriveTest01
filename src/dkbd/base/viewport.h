@@ -9,6 +9,16 @@
 void viewport_initialize(const Vector2 *initialPoisition, Rect limits, void (*callback)(u8 spriteId, s16 x, s16 y));
 
 /**
+ * Pinta todo el contenido visible
+ */
+void viewport_refreshCurrentViewport();
+
+/**
+ * Devuelve TRUE si estamos mostrando title screen
+ */
+u8 viewport_isTitleScreenActive();
+
+/**
  * Libera memoria.
  */
 void viewport_finalize();

@@ -25,6 +25,7 @@
  * Datos del viewport
  */
 struct Viewport_DATA_st {
+	u8 titleScreen;
 	// Scroll
 	Vector2 rawPosition;
 	Vector2 planAPosition;
@@ -41,7 +42,6 @@ struct Viewport_DATA_st {
 	void (*callback3dfxPtr)();
 } * Viewport_DATA;
 
-void viewport_refreshCurrentViewport();
 void viewport_refreshColumn(s16 x);
 void viewport_refreshRow(s16 y);
 void viewport_putPlanATile(s16 x, s16 y);
@@ -74,6 +74,7 @@ void viewport_initialize(const Vector2 *initialPoisition, Rect limits, void (*ca
 		arrB[line] = 0;
 	}
 
+	Viewport_DATA->titleScreen = FALSE;
 	Viewport_DATA->onSpriteReplaceCallback = callback;
 	Viewport_DATA->callback3dfxPtr = viewport_ocean3dfx;
 	Viewport_DATA->limits.pos1.x = -limits.pos1.x;
@@ -99,6 +100,27 @@ void viewport_initialize(const Vector2 *initialPoisition, Rect limits, void (*ca
 
 	SYS_enableInts();
 	SYS_setVIntCallback(&viewport_vint);
+}
+
+void viewport_refreshCurrentViewport() {
+	Viewport_DATA->titleScreen = FALSE;
+	s16 min = Viewport_DATA->currentPositionInTiles.pos1.x;
+	s16 max = Viewport_DATA->currentPositionInTiles.pos2.x;
+	for (s16 i = min; i <= max; ++i) {
+		viewport_refreshColumn(i);
+	}
+}
+
+void viewport_titleScreen() {
+	Viewport_DATA->titleScreen = TRUE;
+	s16 limitLeft = Viewport_DATA->currentPositionInTiles.pos1.x + 4;
+	u16 tileId;
+	for (s16 y = 0; y < 64; ++y) {
+		for (s16 x = 0; x < 64; ++x) {
+			tileId = (x<limitLeft) ? 1 : 2;
+			VDP_setTileMapXY(PLAN_A, TILE_ATTR_FULL(PAL2, TRUE, 0, 0, tileId), x, y);
+		}
+	}
 }
 
 void viewport_finalize() {
@@ -145,14 +167,6 @@ s16 viewport_getCurrentX() {
 
 s16 viewport_getCurrentY() {
 	return Viewport_DATA->rawPosition.y;
-}
-
-void viewport_refreshCurrentViewport() {
-	s16 min = Viewport_DATA->currentPositionInTiles.pos1.x;
-	s16 max = Viewport_DATA->currentPositionInTiles.pos2.x;
-	for (s16 i = min; i <= max; ++i) {
-		viewport_refreshColumn(i);
-	}
 }
 
 void viewport_refreshColumn(s16 x) {
@@ -233,6 +247,9 @@ void viewport_calculateCurrentYPosition() {
 }
 
 void viewport_drawXTiles() {
+	if (Viewport_DATA->titleScreen) {
+		return;
+	}
 	if (viewport_isMovingLeft()) {
 		viewport_refreshColumn(Viewport_DATA->currentPositionInTiles.pos1.x);
 	}
@@ -242,6 +259,9 @@ void viewport_drawXTiles() {
 }
 
 void viewport_drawYTiles() {
+	if (Viewport_DATA->titleScreen) {
+		return;
+	}
 	if (viewport_isMovingUp()) {
 		viewport_refreshRow(Viewport_DATA->currentPositionInTiles.pos1.y);
 	}
@@ -261,7 +281,7 @@ void viewport_updateLastYPosition() {
 }
 
 void viewport_vint() {
-	if (Viewport_DATA) {
+	if (Viewport_DATA && !Viewport_DATA->titleScreen) {
 		VDP_setHorizontalScrollLine(PLAN_A, 0, Viewport_DATA->hzScrollLinesPlanA, VIEWPORT_HSCROLL_LINES_SIZE, FALSE);
 		VDP_setHorizontalScrollLine(PLAN_B, 0, Viewport_DATA->hzScrollLinesPlanB, VIEWPORT_HSCROLL_LINES_SIZE, FALSE);
 		VDP_setVerticalScroll(PLAN_A, Viewport_DATA->planAPosition.y);

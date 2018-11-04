@@ -33,6 +33,7 @@ void ingamePlatforms_initMemory() {
 }
 
 void ingamePlatforms_initData() {
+	IngamePlatforms_DATA->ingame_updatePtr = ingamePlatforms_update_titleScreen;
 
 	map_load(
 			ScreensGlobal_SCREENS[0].map,
@@ -46,7 +47,6 @@ void ingamePlatforms_initData() {
 	IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
 	IngamePlatforms_DATA->screenData.viewportOffset.x = IngamePlatforms_DATA->screenData.viewportOffset.y = 1600;
 	IngamePlatforms_DATA->gravity = 6;
-	hud_reset();
 
 	ingamePlatforms_initializePlayer(ScreensGlobal_SCREENS[0].initialPosition);
 
@@ -96,14 +96,11 @@ void ingamePlatforms_initBackgrounds() {
 			&(ScreensGlobal_SCREENS[0].initialPosition),
 			rect(0, 0, (128-40) * 160, (128-14) * 160),
 			ingamePlatforms_onViewportSprite);
+	viewport_titleScreen();
 }
 
 void ingamePlatforms_initSprites() {
-	IngamePlatforms_DATA->hudTimeSprite.sprite = SPR_addSpriteEx(&hud_time, 5, 3, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_TIME1), 0, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
-	IngamePlatforms_DATA->hudScoreSprite.sprite = SPR_addSpriteEx(&hud_score, 5, 19, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_SCORE1), 1, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
-	IngamePlatforms_DATA->hudAnimalsSprite.sprite = SPR_addSpriteEx(&hud_animals, 265, 202, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_ITEMS1), 2, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
-	IngamePlatforms_DATA->hudLifesSprite.sprite = SPR_addSpriteEx(&hud_lifes, 5, 202, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_LIFES), 3, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
-	IngamePlatforms_DATA->sprites[0].sprite = SPR_addSpriteEx(&testingame_player, 0, 0, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, G_TILEINDEX_PLAYER), 4, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
+	IngamePlatforms_DATA->sprites[0].sprite       = SPR_addSpriteEx(&testingame_player, 0, 0, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, G_TILEINDEX_PLAYER), 4, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 }
 
 // ================ FINALIZE ================ //
