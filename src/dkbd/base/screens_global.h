@@ -1,5 +1,30 @@
 #include <genesis.h>
 
+#include "../util/vector2.h"
+#include "../util/map.h"
+#include "../maps/level01.h"
+#include "../maps/level01_sprites.h"
+
+#ifndef SCREENS_GLOBAL_H_
+#define SCREENS_GLOBAL_H_
+
+struct ScreensGlobal_Screen_st {
+	const u8 **map;
+	const u8 **sprites;
+	const char name[16];
+	const Vector2 initialPosition;
+};
+typedef struct ScreensGlobal_Screen_st ScreensGlobal_Screen;
+
+static const ScreensGlobal_Screen ScreensGlobal_SCREENS[4] = {
+		{ .map = level01, .sprites = level01sprites, .name = "Cosa", .initialPosition = {3600, 1000}},
+		{ .map = level01, .sprites = level01sprites, .name = "Cosa", .initialPosition = {600, 1000}},
+		{ .map = level01, .sprites = level01sprites, .name = "Cosa", .initialPosition = {1200, 20000}}
+};
+
+#endif
+
+
 // =========================== UI =========================== //
 
 #define G_TILEINDEX_CHARSET 0x05A0
@@ -77,7 +102,3 @@ u8 screensGlobal_getCurrentStage();
 u16 screensGlobal_getScore();
 
 u8 screensGlobal_getLifes();
-
-const u8** screensGlobal_getMapTiles();
-
-const u8** screensGlobal_getMapSprites();

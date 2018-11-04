@@ -13,7 +13,7 @@
 #include "../../../res/gfx.h"
 #include "../base/viewport.h"
 
-void ingamePlatforms_initializePlayer(s16 x, s16 y);
+void ingamePlatforms_initializePlayer(Vector2 initialPosition);
 void ingamePlatforms_initializeJumper(IngameSprite *s, u8 spriteId);
 void ingamePlatforms_initializeSpikes(IngameSprite *s, u8 spriteId);
 void ingamePlatforms_initializeLevelDoor(IngameSprite *s, u8 spriteId);
@@ -33,9 +33,10 @@ void ingamePlatforms_initMemory() {
 }
 
 void ingamePlatforms_initData() {
+
 	map_load(
-			screensGlobal_getMapTiles(),
-			screensGlobal_getMapSprites());
+			ScreensGlobal_SCREENS[0].map,
+			ScreensGlobal_SCREENS[0].sprites);
 
 	for (u8 i=0; i< IngamePlatforms_NUM_SPRITES; ++i) {
 		IngamePlatforms_DATA->sprites[i].sprite = 0;
@@ -43,11 +44,11 @@ void ingamePlatforms_initData() {
 
 	IngamePlatforms_DATA->screenData.frameCount = 0;
 	IngamePlatforms_DATA->screenData.sceneAnimationFrame = 0;
-	IngamePlatforms_DATA->screenData.viewportOffset.x = IngamePlatforms_DATA->screenData.viewportOffset.y = 0;
+	IngamePlatforms_DATA->screenData.viewportOffset.x = IngamePlatforms_DATA->screenData.viewportOffset.y = 1600;
 	IngamePlatforms_DATA->gravity = 6;
 	hud_reset();
 
-	ingamePlatforms_initializePlayer(10, 5);
+	ingamePlatforms_initializePlayer(ScreensGlobal_SCREENS[0].initialPosition);
 
 	//Jumpers
 	ingamePlatforms_initializeJumper(&(IngamePlatforms_DATA->sprites[1]), 5);
@@ -92,7 +93,7 @@ void ingamePlatforms_initBackgrounds() {
 	SYS_enableInts();
 
 	viewport_initialize(
-			vector2(10, 10),
+			&(ScreensGlobal_SCREENS[0].initialPosition),
 			rect(0, 0, (128-40) * 160, (128-14) * 160),
 			ingamePlatforms_onViewportSprite);
 }
@@ -129,12 +130,12 @@ void ingamePlatforms_finalizeMemory() {
 
 ////////////////////////////////////////////////////////
 
-void ingamePlatforms_initializePlayer(s16 x, s16 y) {
+void ingamePlatforms_initializePlayer(Vector2 initialPosition) {
 	IngamePlatforms_DATA->playerSpritePTR = &(IngamePlatforms_DATA->sprites[0]);
 	IngameSprite *s = IngamePlatforms_DATA->playerSpritePTR;
 	s->spriteId = 4;
-	s->position.x = x * 80;
-	s->position.y = y * 80;
+	s->position.x = initialPosition.x;
+	s->position.y = initialPosition.y;
 	s->speed.x = 0;
 	s->speed.y = 0;
 	s->type = &INGAMESPRITE_PLAYER_TYPE;

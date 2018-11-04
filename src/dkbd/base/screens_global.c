@@ -56,11 +56,3 @@ u8 screensGlobal_getLifes() {
 	return ScreensGlobal_DATA->lifes;
 }
 
-const u8** screensGlobal_getMapTiles() {
-	return level01;
-}
-
-const u8** screensGlobal_getMapSprites() {
-	return level01sprites;
-}
-

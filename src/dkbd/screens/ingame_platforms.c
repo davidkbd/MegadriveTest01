@@ -237,7 +237,6 @@ void ingamePlatforms_getColliderPositions(Rect *collider, Vector2 *posTopLeft, V
 }
 
 void ingamePlatforms_onViewportSprite(u8 spriteId, s16 x, s16 y) {
-KLog_U3("s", spriteId, "x", x, " y", y);
 	ingameSprite_moveTo(&(IngamePlatforms_DATA->sprites[spriteId]), x, y);
 }
 

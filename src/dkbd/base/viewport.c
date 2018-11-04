@@ -64,7 +64,7 @@ void viewport_vint();
 void viewport_ocean3dfx();
 
 
-void viewport_initialize(Vector2 initialPoisition, Rect limits, void (*callback)(u8 spriteId, s16 x, s16 y)) {
+void viewport_initialize(const Vector2 *initialPoisition, Rect limits, void (*callback)(u8 spriteId, s16 x, s16 y)) {
 	Viewport_DATA = MEM_alloc(sizeof(struct Viewport_DATA_st));
 
 	s16 *arrA = Viewport_DATA->hzScrollLinesPlanA;
@@ -74,15 +74,16 @@ void viewport_initialize(Vector2 initialPoisition, Rect limits, void (*callback)
 		arrB[line] = 0;
 	}
 
-	Viewport_DATA->rawPosition.x = initialPoisition.x;
-	Viewport_DATA->rawPosition.y = initialPoisition.y;
-
 	Viewport_DATA->onSpriteReplaceCallback = callback;
 	Viewport_DATA->callback3dfxPtr = viewport_ocean3dfx;
 	Viewport_DATA->limits.pos1.x = -limits.pos1.x;
 	Viewport_DATA->limits.pos2.x = -limits.pos2.x;
 	Viewport_DATA->limits.pos1.y = limits.pos1.y;
 	Viewport_DATA->limits.pos2.y = limits.pos2.y;
+	Viewport_DATA->rawPosition.x = -(initialPoisition->x - VIEWPORT_WIDTH * 5);
+	Viewport_DATA->rawPosition.y = initialPoisition->y - VIEWPORT_HEIGHT * 5;
+	Viewport_DATA->rawPosition.x = limits_s16(Viewport_DATA->rawPosition.x, Viewport_DATA->limits.pos2.x, Viewport_DATA->limits.pos1.x);
+	Viewport_DATA->rawPosition.y = limits_s16(Viewport_DATA->rawPosition.y, Viewport_DATA->limits.pos1.y, Viewport_DATA->limits.pos2.y);
 
 	viewport_calculatePlanAXPosition();
 	viewport_calculatePlanBXPosition();
@@ -90,7 +91,6 @@ void viewport_initialize(Vector2 initialPoisition, Rect limits, void (*callback)
 	viewport_calculatePlanAYPosition();
 	viewport_calculatePlanBYPosition();
 	viewport_calculateCurrentYPosition();
-
 	viewport_refreshCurrentViewport();
 
 	viewport_updateLastXPosition();
