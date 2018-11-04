@@ -7,6 +7,7 @@
 
 #include "../base/event_timer_handler.h"
 #include "../base/hud.h"
+#include "../base/title_screen.h"
 #include "../base/viewport.h"
 #include "../util/map.h"
 #include "../util/limits.h"
@@ -33,6 +34,8 @@ void ingamePlatforms_update() {
 
 void ingamePlatforms_update_titleScreen() {
 	eventTimerHandler_update();
+	titleScreen_update();
+	KLog("Hola");
 }
 
 void ingamePlatforms_update_ingame() {

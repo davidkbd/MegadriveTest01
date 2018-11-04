@@ -11,6 +11,7 @@
 
 #include "../../../res/sprite.h"
 #include "../../../res/gfx.h"
+#include "../base/title_screen.h"
 #include "../base/viewport.h"
 
 void ingamePlatforms_initializePlayer(Vector2 initialPosition);
@@ -97,6 +98,7 @@ void ingamePlatforms_initBackgrounds() {
 			rect(0, 0, (128-40) * 160, (128-14) * 160),
 			ingamePlatforms_onViewportSprite);
 	viewport_titleScreen();
+	titleScreen_initialize(ScreensGlobal_SCREENS[0].name);
 }
 
 void ingamePlatforms_initSprites() {

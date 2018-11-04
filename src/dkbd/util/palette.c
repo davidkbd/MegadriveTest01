@@ -51,7 +51,7 @@ void palette_apply() {
 }
 
 void palette_fadeIn() {
-	VDP_fadeIn(0, 63, palette_array, 120, FALSE);
+	VDP_fadeIn(0, 63, palette_array, 120, TRUE);
 }
 
 void palette_loadScreen(u8 screenId) {

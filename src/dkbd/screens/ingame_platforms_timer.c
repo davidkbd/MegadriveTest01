@@ -9,7 +9,6 @@
 #include "../util/palette.h"
 
 void ingamePlatforms_onStartBegin();
-void ingamePlatforms_onStartPrepared();
 void ingamePlatforms_onStartCompleted();
 void ingamePlatforms_onExitBegin();
 void ingamePlatforms_onExitCompleted();
@@ -17,8 +16,7 @@ void ingamePlatforms_onExitCompleted();
 void ingamePlatforms_beginStart() {
 	eventTimerHandler_reset();
 	eventTimerHandler_addSlot(0,   ingamePlatforms_onStartBegin);
-	eventTimerHandler_addSlot(40,  ingamePlatforms_onStartPrepared);
-	eventTimerHandler_addSlot(50,  ingamePlatforms_onStartCompleted);
+	eventTimerHandler_addSlot(160, ingamePlatforms_onStartCompleted);
 	eventTimerHandler_enable();
 }
 
@@ -33,10 +31,6 @@ void ingamePlatforms_beginExit() {
 
 void ingamePlatforms_onStartBegin() {
 	palette_fadeIn();
-}
-
-void ingamePlatforms_onStartPrepared() {
-	// Se puede usar para lanzar algo, algun titulo o algo...
 }
 
 void ingamePlatforms_onStartCompleted() {
