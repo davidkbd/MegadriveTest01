@@ -74,6 +74,9 @@ void viewport_initialize(Vector2 initialPoisition, Rect limits, void (*callback)
 		arrB[line] = 0;
 	}
 
+	Viewport_DATA->rawPosition.x = initialPoisition.x;
+	Viewport_DATA->rawPosition.y = initialPoisition.y;
+
 	Viewport_DATA->onSpriteReplaceCallback = callback;
 	Viewport_DATA->callback3dfxPtr = viewport_ocean3dfx;
 	Viewport_DATA->limits.pos1.x = -limits.pos1.x;
