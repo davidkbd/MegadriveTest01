@@ -52,6 +52,7 @@ struct IngamePlatforms_ScreenData* IngamePlatforms_DATA;
 #endif
 
 void ingamePlatforms_update_titleScreen();
+void ingamePlatforms_update_postTitleScreen();
 void ingamePlatforms_update_ingame();
 void ingamePlatforms_initUI();
 void ingamePlatforms_initMemory();

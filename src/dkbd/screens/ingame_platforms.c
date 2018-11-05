@@ -33,9 +33,15 @@ void ingamePlatforms_update() {
 }
 
 void ingamePlatforms_update_titleScreen() {
+	++IngamePlatforms_DATA->screenData.frameCount;
 	eventTimerHandler_update();
 	titleScreen_update();
-	KLog("Hola");
+	viewport_updateTitleScreenEffect(IngamePlatforms_DATA->screenData.frameCount);
+}
+
+void ingamePlatforms_update_postTitleScreen() {
+	ingamePlatforms_update_ingame();
+	titleScreen_update();
 }
 
 void ingamePlatforms_update_ingame() {

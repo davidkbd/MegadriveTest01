@@ -10,21 +10,23 @@
 
 void ingamePlatforms_onStartBegin();
 void ingamePlatforms_onStartCompleted();
+void ingamePlatforms_onStartFinished();
 void ingamePlatforms_onExitBegin();
 void ingamePlatforms_onExitCompleted();
 
 void ingamePlatforms_beginStart() {
 	eventTimerHandler_reset();
 	eventTimerHandler_addSlot(0,   ingamePlatforms_onStartBegin);
-	eventTimerHandler_addSlot(160, ingamePlatforms_onStartCompleted);
+	eventTimerHandler_addSlot(200, ingamePlatforms_onStartCompleted);
+	eventTimerHandler_addSlot(260, ingamePlatforms_onStartFinished);
 	eventTimerHandler_enable();
 }
 
 void ingamePlatforms_beginExit() {
 	lifecycle_resetUpdater();
 	eventTimerHandler_reset();
-	eventTimerHandler_addSlot(50,  ingamePlatforms_onExitBegin);
-	eventTimerHandler_addSlot(150, ingamePlatforms_onExitCompleted);
+	eventTimerHandler_addSlot(5,  ingamePlatforms_onExitBegin);
+	eventTimerHandler_addSlot(50, ingamePlatforms_onExitCompleted);
 	eventTimerHandler_enable();
 	JOY_setEventHandler( &disabledJoyHandler );
 }
@@ -41,6 +43,10 @@ void ingamePlatforms_onStartCompleted() {
 	IngamePlatforms_DATA->hudScoreSprite.sprite   = SPR_addSpriteEx(&hud_score,   5,   19,  TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_SCORE1), 1, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 	IngamePlatforms_DATA->hudAnimalsSprite.sprite = SPR_addSpriteEx(&hud_animals, 265, 202, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_ITEMS1), 2, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 	IngamePlatforms_DATA->hudLifesSprite.sprite   = SPR_addSpriteEx(&hud_lifes,   5,   202, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_LIFES),  3, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
+	IngamePlatforms_DATA->ingame_updatePtr = ingamePlatforms_update_postTitleScreen;
+}
+
+void ingamePlatforms_onStartFinished() {
 	IngamePlatforms_DATA->ingame_updatePtr = ingamePlatforms_update_ingame;
 }
 

@@ -113,14 +113,34 @@ void viewport_refreshCurrentViewport() {
 
 void viewport_titleScreen() {
 	Viewport_DATA->titleScreen = TRUE;
-	s16 limitLeft = Viewport_DATA->currentPositionInTiles.pos1.x + 4;
+	s16 limitLeft = 13;
+	s16 limitRight = 60;
 	u16 tileId;
 	for (s16 y = 0; y < 64; ++y) {
 		for (s16 x = 0; x < 64; ++x) {
-			tileId = (x<limitLeft) ? 1 : 2;
+			if (x < limitLeft || x > limitRight) {
+				tileId = 1;
+			} else if (x == limitLeft) {
+				tileId = 0x131;
+			} else {
+				tileId = 2;
+			}
 			VDP_setTileMapXY(PLAN_A, TILE_ATTR_FULL(PAL2, TRUE, 0, 0, tileId), x, y);
 		}
 	}
+}
+
+void viewport_updateTitleScreenEffect(u16 timer) {
+	for (u8 i=0; i<VIEWPORT_HSCROLL_LINES_SIZE; ++i) {
+		if (timer < 190) {
+			Viewport_DATA->hzScrollLinesPlanA[i] = sinFix16((timer/3 + i)*40) / 15;
+		} else {
+			s16 ponderacion = timer - 190;
+			Viewport_DATA->hzScrollLinesPlanA[i] = (sinFix16((timer/3 + i + ponderacion) * 40) * math_pow(2, timer - 180)) / 15;
+		}
+	}
+	VDP_setHorizontalScrollLine(PLAN_A, 0, Viewport_DATA->hzScrollLinesPlanA, VIEWPORT_HSCROLL_LINES_SIZE, FALSE);
+	VDP_setVerticalScroll(PLAN_A, Viewport_DATA->planAPosition.y);
 }
 
 void viewport_finalize() {

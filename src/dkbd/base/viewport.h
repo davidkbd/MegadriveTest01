@@ -13,6 +13,10 @@ void viewport_initialize(const Vector2 *initialPoisition, Rect limits, void (*ca
  */
 void viewport_refreshCurrentViewport();
 
+void viewport_titleScreen();
+
+void viewport_updateTitleScreenEffect(u16 timer);
+
 /**
  * Devuelve TRUE si estamos mostrando title screen
  */
