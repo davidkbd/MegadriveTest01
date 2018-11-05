@@ -5,6 +5,7 @@ void palette_write(u8 pal, u16* data);
 void palette_putColor(u8 pal, u16 colorIndex, u16 color);
 void palette_apply();
 void palette_fadeIn();
+void palette_fastFadeIn();
 
 void palette_loadScreen(u8 screenId);
 void palette_loadHud(u8 status);

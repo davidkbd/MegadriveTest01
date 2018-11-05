@@ -54,6 +54,10 @@ void palette_fadeIn() {
 	VDP_fadeIn(0, 63, palette_array, 120, TRUE);
 }
 
+void palette_fastFadeIn() {
+	VDP_fadeIn(0, 63, palette_array, 2, FALSE);
+}
+
 void palette_loadScreen(u8 screenId) {
 	switch (screenId) {
 		case 0: palette_loadGreenHill(); break;

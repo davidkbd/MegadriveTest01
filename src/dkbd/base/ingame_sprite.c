@@ -36,7 +36,7 @@ u8 ingameSprite_isDisabled(IngameSprite *sprite) {
 
 void ingameSprite_applyPosition(IngameSprite *sprite) {
 	s16 x = (sprite->posInViewport.x - sprite->type->xCenter) / 10;
-	s16 y = (sprite->posInViewport.y - sprite->type->size.y) / 10;
+	s16 y = (sprite->posInViewport.y - sprite->type->size.y) / 10 + 1;
 	SPR_setPosition(sprite->sprite, x, y);
 }
 

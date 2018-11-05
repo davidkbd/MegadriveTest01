@@ -32,7 +32,7 @@ void ingamePlatforms_beginExit() {
 }
 
 void ingamePlatforms_onStartBegin() {
-	palette_fadeIn();
+	palette_fastFadeIn();
 }
 
 void ingamePlatforms_onStartCompleted() {

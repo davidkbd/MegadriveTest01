@@ -36,7 +36,7 @@ void ingamePlatforms_update_titleScreen() {
 	++IngamePlatforms_DATA->screenData.frameCount;
 	eventTimerHandler_update();
 	titleScreen_update();
-	viewport_updateTitleScreenEffect(IngamePlatforms_DATA->screenData.frameCount);
+	viewport_updateTitleScreen(IngamePlatforms_DATA->screenData.frameCount);
 }
 
 void ingamePlatforms_update_postTitleScreen() {

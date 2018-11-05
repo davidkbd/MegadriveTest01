@@ -196,9 +196,9 @@ void ingamePlatforms_controlViewport() {
 			viewportOffset->x += 20;
 		}
 	}
-	if (ingamePlatforms_isPressingDown()) {
+	if (s->onFloor && ingamePlatforms_isPressingDown()) {
 		viewportOffset->y = 500;
-	} else if (ingamePlatforms_isPressingUp()) {
+	} else if (s->onFloor && ingamePlatforms_isPressingUp()) {
 		viewportOffset->y = 2000;
 	} else {
 		//1200 seria el centro

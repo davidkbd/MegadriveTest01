@@ -15,7 +15,7 @@ void titleScreen_initialize(const char *text) {
 	for (u8 i = 0; i < 10; ++i) {
 		TitleScreen_DATA->positions[i] = 50;
 		TitleScreen_DATA->letters[i] = SPR_addSpriteEx(&title_letter,
-				0,
+				-20,
 				0,
 				TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, G_TILEINDEX_LETTERS+i*4),
 				79 - i,
