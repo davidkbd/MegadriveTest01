@@ -52,14 +52,17 @@ void ingamePlatforms_update_ingame() {
 	ingamePlatforms_moveViewport(IngamePlatforms_DATA->playerSpritePTR);
 	ingamePlatforms_applySprites();
 	ingamePlatforms_updateSceneAnimation();
-	//hud_updateScore(IngamePlatforms_DATA->playerSpritePTR->position.x/80);
-screensGlobal_setScore(IngamePlatforms_DATA->screenData.frameCount);
-//screensGlobal_setLifes(getFPS());
 	viewport_planeARefresh();
 	viewport_planeBRefresh();
 	hud_updateTimer();
 	hud_updateLifes();
 	hud_updateScore();
+}
+
+void ingamePlatforms_update_pause() {
+	eventTimerHandler_update();
+	ingamePlatforms_updatePauseControls();
+	hud_updateTimer();
 }
 
 void ingamePlatforms_initialize() {
@@ -251,6 +254,26 @@ void ingamePlatforms_getColliderPositions(Rect *collider, Vector2 *posTopLeft, V
 	posInCell->pos1.y = collider->pos1.y % 160;
 	posInCell->pos2.x = collider->pos2.x % 160;
 	posInCell->pos2.y = collider->pos2.y % 160;
+}
+
+void ingamePlatforms_togglePause() {
+	if (IngamePlatforms_DATA->ingame_updatePtr == ingamePlatforms_update_ingame) {
+		IngamePlatforms_DATA->ingame_updatePtr = ingamePlatforms_update_pause;
+		VDP_setWindowHPos(FALSE, 0);
+		VDP_setWindowVPos(TRUE,  0);
+		//SPR_setPosition(IngamePlatforms_DATA->hudTimeSprite.sprite,  G_SPR_POSITION_HUD_TIME_X,  -64);
+		SPR_setPosition(IngamePlatforms_DATA->hudScoreSprite.sprite, G_SPR_POSITION_HUD_SCORE_X, -64);
+		SPR_setPosition(IngamePlatforms_DATA->hudLifesSprite.sprite, G_SPR_POSITION_HUD_LIFES_X, -64);
+		viewport_pause();
+	} else if (IngamePlatforms_DATA->ingame_updatePtr == ingamePlatforms_update_pause) {
+		IngamePlatforms_DATA->ingame_updatePtr = ingamePlatforms_update_ingame;
+		VDP_setWindowHPos(FALSE, 0);
+		VDP_setWindowVPos(FALSE, 0);
+		viewport_refreshCurrentViewport();
+		SPR_setPosition(IngamePlatforms_DATA->hudTimeSprite.sprite,  G_SPR_POSITION_HUD_TIME_X, G_SPR_POSITION_HUD_TIME_Y);
+		SPR_setPosition(IngamePlatforms_DATA->hudScoreSprite.sprite, G_SPR_POSITION_HUD_SCORE_X, G_SPR_POSITION_HUD_SCORE_Y);
+		SPR_setPosition(IngamePlatforms_DATA->hudLifesSprite.sprite, G_SPR_POSITION_HUD_LIFES_X, G_SPR_POSITION_HUD_LIFES_Y);
+	}
 }
 
 void ingamePlatforms_onViewportSprite(u8 spriteId, s16 x, s16 y) {

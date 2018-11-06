@@ -15,6 +15,8 @@ void viewport_refreshCurrentViewport();
 
 void viewport_titleScreen();
 
+void viewport_pause();
+
 void viewport_updateTitleScreen(u16 timer);
 
 /**

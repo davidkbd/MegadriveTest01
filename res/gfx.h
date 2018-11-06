@@ -6,6 +6,7 @@ extern const TileSet portada_menu_tile;
 extern const TileSet portada_yesno_tile;
 extern const TileSet portada_difficulty_tile;
 extern const Image portada_opts_palete;
+extern const Image pausa_screen;
 extern const Image planb_level01;
 extern const TileSet hud_nums_tile;
 extern const TileSet ingame_hud_tile;
@@ -13,6 +14,10 @@ extern const TileSet ingame_floor_tile;
 extern const TileSet ingame_floor2_tile;
 extern const TileSet ingame_background_tile;
 extern const TileSet ingame_background2_tile;
+extern const TileSet ingame_background3_tile;
+extern const TileSet ingame_background4_tile;
+extern const TileSet ingame_background5_tile;
+extern const TileSet ingame_background6_tile;
 extern const TileSet ingame_wall_tile;
 
 #endif // _RES_GFX_H_

@@ -12,7 +12,6 @@ void ingamePlatforms_releaseAction();
 void ingamePlatforms_controlViewport();
 
 void ingamePlatforms_onKeyPressStartFunction(u16 joy) {
-	ingamePlatforms_beginExit();
 }
 
 void ingamePlatforms_onKeyPressAFunction(u16 joy) {
@@ -63,6 +62,7 @@ void ingamePlatforms_onKeyPressRightFunction(u16 joy) {
 }
 
 void ingamePlatforms_onKeyReleaseStartFunction(u16 joy) {
+	ingamePlatforms_togglePause();
 }
 
 void ingamePlatforms_onKeyReleaseAFunction(u16 joy) {
@@ -73,7 +73,7 @@ void ingamePlatforms_onKeyReleaseBFunction(u16 joy) {
 	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_JUMP;
 }
 
-void ingamePlatforms_onKeyReleaseCFunction(u16 joy) {
+void ingamePlatforms_onKeyReleaseCFunction( u16 joy) {
 	IngamePlatforms_DATA->playerSpritePTR->data &= IngamePlatforms_DISABLEKEY_ACTION;
 }
 
@@ -114,6 +114,10 @@ void ingamePlatforms_updateControls() {
 		player->speed.y = INGAME_PLATFORMS_JUMP_FORCE;
 		player->data &= IngamePlatforms_DISABLEKEY_JUMP;
 	}
+}
+
+void ingamePlatforms_updatePauseControls() {
+
 }
 
 u8 ingamePlatforms_isPressingUp() {

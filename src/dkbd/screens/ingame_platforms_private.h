@@ -54,6 +54,7 @@ struct IngamePlatforms_ScreenData* IngamePlatforms_DATA;
 void ingamePlatforms_update_titleScreen();
 void ingamePlatforms_update_postTitleScreen();
 void ingamePlatforms_update_ingame();
+void ingamePlatforms_update_pause();
 void ingamePlatforms_initUI();
 void ingamePlatforms_initMemory();
 void ingamePlatforms_initData();
@@ -64,11 +65,14 @@ void ingamePlatforms_initSprites();
 void ingamePlatforms_finalizeSound();
 void ingamePlatforms_finalizeGraphics();
 void ingamePlatforms_finalizeMemory();
+void ingamePlatforms_togglePause();
 
 void ingamePlatforms_beginStart();
 void ingamePlatforms_beginExit();
 
 void ingamePlatforms_updateControls();
+void ingamePlatforms_updatePauseControls();
+
 
 u8 ingamePlatforms_isPressingUp();
 u8 ingamePlatforms_isPressingLeft();

@@ -1,11 +1,14 @@
 #include "viewport.h"
 
+#include "screens_global.h"
 #include "../util/limits.h"
 #include "../util/vector2.h"
 #include "../util/rect.h"
 #include "../util/tiles.h"
 #include "../util/map.h"
 #include "../util/math.h"
+
+#include "../../../res/gfx.h"
 
 #define VIEWPORT_TILEWIDTH 16
 #define VIEWPORT_TILEHEIGHT 16
@@ -26,7 +29,7 @@
  * Datos del viewport
  */
 struct Viewport_DATA_st {
-	u8 titleScreen;
+	u8 pausa;
 	// Scroll
 	Vector2 rawPosition;
 	Vector2 planAPosition;
@@ -75,7 +78,7 @@ void viewport_initialize(const Vector2 *initialPoisition, Rect limits, void (*ca
 		arrB[line] = 0;
 	}
 
-	Viewport_DATA->titleScreen = FALSE;
+	Viewport_DATA->pausa = FALSE;
 	Viewport_DATA->onSpriteReplaceCallback = callback;
 	Viewport_DATA->callback3dfxPtr = viewport_ocean3dfx;
 	Viewport_DATA->limits.pos1.x = -limits.pos1.x;
@@ -104,7 +107,7 @@ void viewport_initialize(const Vector2 *initialPoisition, Rect limits, void (*ca
 }
 
 void viewport_refreshCurrentViewport() {
-	Viewport_DATA->titleScreen = FALSE;
+	Viewport_DATA->pausa = FALSE;
 	s16 min = Viewport_DATA->currentPositionInTiles.pos1.x;
 	s16 max = Viewport_DATA->currentPositionInTiles.pos2.x;
 	for (s16 i = min; i <= max; ++i) {
@@ -113,12 +116,18 @@ void viewport_refreshCurrentViewport() {
 }
 
 void viewport_titleScreen() {
-	Viewport_DATA->titleScreen = TRUE;
+	Viewport_DATA->pausa = TRUE;
 	for (s16 y = 0; y < 64; ++y) {
 		for (s16 x = 0; x < 64; ++x) {
 			VDP_setTileMapXY(PLAN_A, TILE_ATTR_FULL(PAL2, TRUE, 0, 0, (x < 60) ? 2 : 1), x, y);
 		}
 	}
+}
+
+void viewport_pause() {
+	Viewport_DATA->pausa = TRUE;
+	VDP_drawImageEx(PLAN_WINDOW, &pausa_screen, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, G_TILEINDEX_PAUSASCREEN), 0, 0, FALSE, FALSE);
+
 }
 
 void viewport_updateTitleScreen(u16 timer) {
@@ -272,7 +281,7 @@ void viewport_calculateCurrentYPosition() {
 }
 
 void viewport_drawXTiles() {
-	if (Viewport_DATA->titleScreen) {
+	if (Viewport_DATA->pausa) {
 		return;
 	}
 	if (viewport_isMovingLeft()) {
@@ -284,7 +293,7 @@ void viewport_drawXTiles() {
 }
 
 void viewport_drawYTiles() {
-	if (Viewport_DATA->titleScreen) {
+	if (Viewport_DATA->pausa) {
 		return;
 	}
 	if (viewport_isMovingUp()) {
@@ -306,7 +315,7 @@ void viewport_updateLastYPosition() {
 }
 
 void viewport_vint() {
-	if (Viewport_DATA && !Viewport_DATA->titleScreen) {
+	if (Viewport_DATA && !Viewport_DATA->pausa) {
 		VDP_setHorizontalScrollLine(PLAN_A, 0, Viewport_DATA->hzScrollLinesPlanA, VIEWPORT_HSCROLL_LINES_SIZE, FALSE);
 		VDP_setHorizontalScrollLine(PLAN_B, 0, Viewport_DATA->hzScrollLinesPlanB, VIEWPORT_HSCROLL_LINES_SIZE, FALSE);
 		VDP_setVerticalScroll(PLAN_A, Viewport_DATA->planAPosition.y);

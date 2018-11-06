@@ -39,10 +39,9 @@ void ingamePlatforms_onStartCompleted() {
 	hud_reset();
 	JOY_setEventHandler( &ingameKeyJoyHandler );
 	viewport_refreshCurrentViewport();
-	IngamePlatforms_DATA->hudTimeSprite.sprite    = SPR_addSpriteEx(&hud_time,    5,   3,   TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_TIME1),  0, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
-	IngamePlatforms_DATA->hudScoreSprite.sprite   = SPR_addSpriteEx(&hud_score,   5,   19,  TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_SCORE1), 1, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
-	IngamePlatforms_DATA->hudAnimalsSprite.sprite = SPR_addSpriteEx(&hud_animals, 265, 202, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_ITEMS1), 2, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
-	IngamePlatforms_DATA->hudLifesSprite.sprite   = SPR_addSpriteEx(&hud_lifes,   5,   202, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_LIFES),  3, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
+	IngamePlatforms_DATA->hudTimeSprite.sprite    = SPR_addSpriteEx(&hud_time,  G_SPR_POSITION_HUD_TIME_X,  G_SPR_POSITION_HUD_TIME_Y,  TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_TIME1),  0, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
+	IngamePlatforms_DATA->hudScoreSprite.sprite   = SPR_addSpriteEx(&hud_score, G_SPR_POSITION_HUD_SCORE_X, G_SPR_POSITION_HUD_SCORE_Y, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_SCORE1), 1, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
+	IngamePlatforms_DATA->hudLifesSprite.sprite   = SPR_addSpriteEx(&hud_lifes, G_SPR_POSITION_HUD_LIFES_X, G_SPR_POSITION_HUD_LIFES_Y, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, G_TILEINDEX_HUD_LIFES),  3, SPR_FLAG_AUTO_TILE_UPLOAD | SPR_FLAG_AUTO_SPRITE_ALLOC);
 	IngamePlatforms_DATA->ingame_updatePtr = ingamePlatforms_update_postTitleScreen;
 }
 
