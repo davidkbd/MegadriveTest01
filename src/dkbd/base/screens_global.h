@@ -33,15 +33,6 @@ static const ScreensGlobal_Screen ScreensGlobal_SCREENS[4] = {
 
 // =========================== HUD =========================== //
 
-#define G_TILEINDEX_HUD_TIME1    0x04a0
-#define G_TILEINDEX_HUD_TIME2    0x04a2
-#define G_TILEINDEX_HUD_TIME3    0x04a6
-#define G_TILEINDEX_HUD_TIME4    0x04a8
-#define G_TILEINDEX_HUD_TIME1_B  0x04a1
-#define G_TILEINDEX_HUD_TIME2_B  0x04a3
-#define G_TILEINDEX_HUD_TIME3_B  0x04a7
-#define G_TILEINDEX_HUD_TIME4_B  0x04a9
-
 #define G_TILEINDEX_HUD_SCORE1   0x04aa
 #define G_TILEINDEX_HUD_SCORE2   0x04ac
 #define G_TILEINDEX_HUD_SCORE3   0x04ae
@@ -82,10 +73,8 @@ static const ScreensGlobal_Screen ScreensGlobal_SCREENS[4] = {
 #define G_TILEINDEX_PLANB       0x0320
 
 
-#define G_SPR_POSITION_HUD_TIME_X 5
-#define G_SPR_POSITION_HUD_TIME_Y 3
 #define G_SPR_POSITION_HUD_SCORE_X 5
-#define G_SPR_POSITION_HUD_SCORE_Y 19
+#define G_SPR_POSITION_HUD_SCORE_Y 5
 #define G_SPR_POSITION_HUD_LIFES_X 5
 #define G_SPR_POSITION_HUD_LIFES_Y 202
 

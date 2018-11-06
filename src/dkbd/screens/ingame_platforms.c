@@ -54,7 +54,6 @@ void ingamePlatforms_update_ingame() {
 	ingamePlatforms_updateSceneAnimation();
 	viewport_planeARefresh();
 	viewport_planeBRefresh();
-	hud_updateTimer();
 	hud_updateLifes();
 	hud_updateScore();
 }
@@ -62,7 +61,6 @@ void ingamePlatforms_update_ingame() {
 void ingamePlatforms_update_pause() {
 	eventTimerHandler_update();
 	ingamePlatforms_updatePauseControls();
-	hud_updateTimer();
 }
 
 void ingamePlatforms_initialize() {
@@ -261,7 +259,6 @@ void ingamePlatforms_togglePause() {
 		IngamePlatforms_DATA->ingame_updatePtr = ingamePlatforms_update_pause;
 		VDP_setWindowHPos(FALSE, 0);
 		VDP_setWindowVPos(TRUE,  0);
-		//SPR_setPosition(IngamePlatforms_DATA->hudTimeSprite.sprite,  G_SPR_POSITION_HUD_TIME_X,  -64);
 		SPR_setPosition(IngamePlatforms_DATA->hudScoreSprite.sprite, G_SPR_POSITION_HUD_SCORE_X, -64);
 		SPR_setPosition(IngamePlatforms_DATA->hudLifesSprite.sprite, G_SPR_POSITION_HUD_LIFES_X, -64);
 		viewport_pause();
@@ -270,7 +267,6 @@ void ingamePlatforms_togglePause() {
 		VDP_setWindowHPos(FALSE, 0);
 		VDP_setWindowVPos(FALSE, 0);
 		viewport_refreshCurrentViewport();
-		SPR_setPosition(IngamePlatforms_DATA->hudTimeSprite.sprite,  G_SPR_POSITION_HUD_TIME_X, G_SPR_POSITION_HUD_TIME_Y);
 		SPR_setPosition(IngamePlatforms_DATA->hudScoreSprite.sprite, G_SPR_POSITION_HUD_SCORE_X, G_SPR_POSITION_HUD_SCORE_Y);
 		SPR_setPosition(IngamePlatforms_DATA->hudLifesSprite.sprite, G_SPR_POSITION_HUD_LIFES_X, G_SPR_POSITION_HUD_LIFES_Y);
 	}
