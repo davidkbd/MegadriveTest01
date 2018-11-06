@@ -84,11 +84,11 @@ void ingamePlatforms_initPalete() {
 
 void ingamePlatforms_initBackgrounds() {
 	SYS_disableInts();
-	VDP_loadTileData(ingame_floor_tile.tiles,      G_TILEINDEX_FLOOR,        ingame_floor_tile.numTile,       FALSE);
-	VDP_loadTileData(ingame_floor2_tile.tiles,     G_TILEINDEX_FLOOR2,       ingame_floor2_tile.numTile,      FALSE);
-	VDP_loadTileData(ingame_background_tile.tiles, G_TILEINDEX_BACKGROUND,   ingame_background_tile.numTile,  FALSE);
-
-	VDP_loadTileData(ingame_wall_tile.tiles,       G_TILEINDEX_WALL,         ingame_background_tile.numTile,  FALSE);
+	VDP_loadTileData(ingame_floor_tile.tiles,       G_TILEINDEX_FLOOR,         ingame_floor_tile.numTile,        FALSE);
+	VDP_loadTileData(ingame_floor2_tile.tiles,      G_TILEINDEX_FLOOR2,        ingame_floor2_tile.numTile,       FALSE);
+	VDP_loadTileData(ingame_background_tile.tiles,  G_TILEINDEX_BACKGROUND,    ingame_background_tile.numTile,   FALSE);
+	VDP_loadTileData(ingame_background2_tile.tiles, G_TILEINDEX_BACKGROUND2,   ingame_background2_tile.numTile,  FALSE);
+	VDP_loadTileData(ingame_wall_tile.tiles,        G_TILEINDEX_WALL,          ingame_wall_tile.numTile,         FALSE);
 
 	VDP_drawImageEx(PLAN_B, &planb_level01, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, G_TILEINDEX_PLANB), 0, 0, FALSE, FALSE);
 	SYS_enableInts();

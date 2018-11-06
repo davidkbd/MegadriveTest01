@@ -13,5 +13,6 @@ TILESET ingame_hud_tile "gfx/ingame_hud.png" NONE
 TILESET ingame_floor_tile "gfx/ingame_floor.png" NONE
 TILESET ingame_floor2_tile "gfx/ingame_floor2.png" NONE
 TILESET ingame_background_tile "gfx/ingame_background.png" NONE
+TILESET ingame_background2_tile "gfx/ingame_background2.png" NONE
 TILESET ingame_wall_tile "gfx/ingame_wall.png" NONE
 

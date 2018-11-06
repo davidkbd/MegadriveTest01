@@ -89,11 +89,11 @@ void palette_loadGreenHill() {
 	//Roca
 	palette_putColor(PAL0, 10, 0x666);
 	palette_putColor(PAL0, 11, 0xAAA);
-	//Unused
-	palette_putColor(PAL0, 12, 0x000);
-	palette_putColor(PAL0, 13, 0x000);
-	palette_putColor(PAL0, 14, 0x000);
-	palette_putColor(PAL0, 15, 0x000);
+	//Madera
+	palette_putColor(PAL0, 12, 0x005);
+	palette_putColor(PAL0, 13, 0x259);
+	palette_putColor(PAL0, 14, 0x27b);
+	palette_putColor(PAL0, 15, 0x7fb);
 
 
 	palette_write(PAL1, planb_level01.palette->data);

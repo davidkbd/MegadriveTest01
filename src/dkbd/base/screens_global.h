@@ -80,13 +80,13 @@ static const ScreensGlobal_Screen ScreensGlobal_SCREENS[4] = {
 // =========================== SCENE  =========================== //
 
 // Anterior al primer tile, de tal forma que G_TILEINDEX_MAP + (tile size) = G_TILEINDEX_FLOOR
-#define G_TILEINDEX_MAP        0x001C
-#define G_TILEINDEX_FLOOR      0x0020
-#define G_TILEINDEX_FLOOR2     0x0060
-#define G_TILEINDEX_BACKGROUND 0x00A0
-#define G_TILEINDEX_WALL       0x0120
-#define G_TILEINDEX_PITFALLS   0x0140
-#define G_TILEINDEX_PLANB      0x0200
+#define G_TILEINDEX_MAP         0x001C
+#define G_TILEINDEX_FLOOR       0x0020
+#define G_TILEINDEX_FLOOR2      0x0060
+#define G_TILEINDEX_BACKGROUND  0x00A0
+#define G_TILEINDEX_BACKGROUND2 0x00E0
+#define G_TILEINDEX_WALL        0x0120
+#define G_TILEINDEX_PLANB       0x0200
 
 void screensGlobal_initialize();
 
