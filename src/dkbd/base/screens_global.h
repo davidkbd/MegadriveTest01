@@ -17,8 +17,8 @@ struct ScreensGlobal_Screen_st {
 typedef struct ScreensGlobal_Screen_st ScreensGlobal_Screen;
 
 static const ScreensGlobal_Screen ScreensGlobal_SCREENS[4] = {
-		{ .map = level01, .sprites = level01sprites, .name = "green hill", .initialPosition = {3600, 1000}},
-		{ .map = level01, .sprites = level01sprites, .name = "green hill", .initialPosition = {600, 1000}},
+		//{ .map = level01, .sprites = level01sprites, .name = "green hill", .initialPosition = {3600, 1000}},
+		{ .map = level01, .sprites = level01sprites, .name = "green hill", .initialPosition = {900, 1000}},
 		{ .map = level01, .sprites = level01sprites, .name = "green hill", .initialPosition = {1200, 20000}}
 };
 
@@ -59,15 +59,7 @@ static const ScreensGlobal_Screen ScreensGlobal_SCREENS[4] = {
 
 // Anterior al primer tile, de tal forma que G_TILEINDEX_MAP + (tile size) = G_TILEINDEX_FLOOR
 #define G_TILEINDEX_MAP         0x001C
-#define G_TILEINDEX_FLOOR       0x0020
-#define G_TILEINDEX_FLOOR2      0x0060
-#define G_TILEINDEX_WALL        0x00A0
-#define G_TILEINDEX_BACKGROUND  0x00E0
-#define G_TILEINDEX_BACKGROUND2 0x0120
-#define G_TILEINDEX_BACKGROUND3 0x0160
-#define G_TILEINDEX_BACKGROUND4 0x01A0
-#define G_TILEINDEX_BACKGROUND5 0x01E0
-#define G_TILEINDEX_BACKGROUND6 0x0220
+#define G_TILEINDEX_PLANA       0x0020
 
 #define G_TILEINDEX_PAUSASCREEN 0x0260
 #define G_TILEINDEX_PLANB       0x0320

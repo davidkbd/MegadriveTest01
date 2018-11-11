@@ -78,7 +78,7 @@
 				ITEMS = document.getElementById('items');
 				M1 = document.getElementById('m1');
 				
-				TYPE_ITEMS_COUNT = 201;
+				TYPE_ITEMS_COUNT = 185;
 				XPM_WIDTH = M1.width / 16;
 				XPM_HEIGHT = M1.height / 16;
 				
@@ -98,6 +98,8 @@
 				M1.onmousedown = onM1MouseDown;
 				M1.onmouseup = onM1MouseUp;
 				M1.onmousemove = onM1MouseMove;
+				CURSOR1.onmouseup = onM1MouseUp;
+				CURSOR2.onmouseup = onM1MouseUp;
 			}
 			
 			function createItem(id) {
@@ -117,7 +119,9 @@
 				SELECTED_ITEM = e.target;
 				for (var i = 0; i < ITEMS.childNodes.length; ++i) {
 					var item = ITEMS.childNodes[i];
-					item.style.borderColor = '#000';
+					if (item.nodeName === 'IMG') {
+						item.style.borderColor = '#000';
+					}
 				}
 				SELECTED_ITEM.style.borderColor = '#ff0';
 			}
@@ -136,7 +140,14 @@
 					SELECTED_ITEM.style.borderColor = '#ff0';
 				} else {
 					IS_DRAWING = true;
-					putItem(posx, posy, SELECTED_ITEM);
+					for (var j=0; j<document.getElementById('heightBrush').value; ++j) {
+						for (var i=0; i<document.getElementById('widthBrush').value; ++i) {
+							var itemid=SELECTED_ITEM.getAttribute('itemid');
+							
+							var item =(itemid==0)? SELECTED_ITEM : document.getElementById('item_' + (parseInt(itemid) + i + j*16));
+							putItem(posx + (i), posy +(j), item);
+						}
+					}
 					writeXpm();
 				}
 				e.preventDefault();
@@ -147,7 +158,15 @@
 				if (IS_DRAWING) {
 					var posx = Math.floor(coords.x / 16);
 					var posy = Math.floor(coords.y / 16);
-					putItem(posx, posy, SELECTED_ITEM);
+					for (var j=0; j<document.getElementById('heightBrush').value; ++j) {
+						for (var i=0; i<document.getElementById('widthBrush').value; ++i) {
+							var itemid=SELECTED_ITEM.getAttribute('itemid');
+							
+							var item =(itemid==0)? SELECTED_ITEM : document.getElementById('item_' + (parseInt(itemid) + i + j*16));
+							putItem(posx + (i), posy +(j), item);
+						}
+					}
+
 				}
 				var qx = Math.floor((coords.x - 7 + M1.offsetLeft) / 16) * 16 + 7;
 				var qy = Math.floor((coords.y + 8 + M1.offsetTop) / 16) * 16 - 6;
@@ -209,9 +228,9 @@ static const u8 '+ LEVEL_NAME +'[128][128] = {\n';
 					for (var x = 0; x < 128; ++x) {
 						var n = DATA[y][x];
 						txt += '0x';
-						if (n < 16) {
-							txt += '0';
-						}
+						//if (n < 16) {
+						//	txt += '0';
+						//}
 						txt += decimalToHexString(n);
 						if (x != lastx) {
 							txt += ',';
@@ -239,7 +258,21 @@ static const u8 '+ LEVEL_NAME +'[128][128] = {\n';
 	</head>
 	<body onload="init();">
 		<canvas id="m1" width="2048" height="2048"></canvas>
-		<div id="items"></div>
+		<div id="items">
+			<select id="widthBrush">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+			</select>
+			x
+			<select id="heightBrush">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+			</select>
+		</div>
 		<div id="codeContainer">
 			<textarea id="code"></textarea>
 			<button onclick="loadXpm()">Load</button>

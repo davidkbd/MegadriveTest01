@@ -9,14 +9,6 @@ extern const Image portada_opts_palete;
 extern const Image pausa_screen;
 extern const TileSet hud_nums_tile;
 extern const Image planb_level01;
-extern const TileSet ingame_floor_tile;
-extern const TileSet ingame_floor2_tile;
-extern const TileSet ingame_background_tile;
-extern const TileSet ingame_background2_tile;
-extern const TileSet ingame_background3_tile;
-extern const TileSet ingame_background4_tile;
-extern const TileSet ingame_background5_tile;
-extern const TileSet ingame_background6_tile;
-extern const TileSet ingame_wall_tile;
+extern const TileSet plana_level01;
 
 #endif // _RES_GFX_H_
